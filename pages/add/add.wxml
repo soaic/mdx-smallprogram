@@ -1,2 +1,15 @@
-<!--pages/add/add.wxml-->
-<text>pages/add/add.wxml</text>
+<!--add.wxml-->
+<view class="container">
+
+
+    <movable-area style="height: 500px; width: 400px; background: white;">
+    
+      <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+
+      <movable-view style="height: 6px; width: 6px; background: blue;" x="{{x}}" y="{{y}}" bindchange="viewMoveChange" direction="all" bindlongtap='viewMovableClick'/>
+
+      <movable-view style="height: 6px; width: 6px; background: blue;" x="{{x1}}" y="{{y1}}" bindchange="viewMoveChange"  direction="all" bindlongtap='viewMovableClick'/>
+
+  </movable-area>
+
+</view>

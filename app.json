@@ -1,15 +1,35 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/logs/logs",
     "pages/main/main",
     "pages/add/add",
-    "pages/setting/setting"
+    "pages/setting/setting",
+    "pages/index/index",
+    "pages/logs/logs"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "MDX Audio",
     "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/main/main",
+        "text": "主页",
+        "iconPath": "/images/menu_home.png",
+        "selectedIconPath": "/images/menu_home.png"
+      },
+      {
+        "pagePath": "pages/setting/setting",
+        "text": "菜单",
+        "iconPath": "/images/menu_settings.png",
+        "selectedIconPath": "/images/menu_settings.png"
+      }
+    ],
+    "color": "#666666",
+    "selectedColor": "#004d40",
+    "borderStyle": "black",
+    "backgroundColor":"#FFFFFF"
   }
 }

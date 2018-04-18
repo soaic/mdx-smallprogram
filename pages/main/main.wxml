@@ -1,2 +1,17 @@
 <!--pages/main.wxml-->
-<text>pages/main.wxml</text>
+<view class='root_view'>
+  <view class='grid_view'>
+    <block wx:for="{{patternsData}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
+      <view class='grid_item' style="margin-bottom:10px" bindtouchstart="bindTouchStart" 
+    bindtouchend="bindTouchEnd" bindtap="onItemClick" bindlongtap="onItemLongClick" id="{{item.position}}">
+        <view class='item_view' style='width:{{item_width}}px;height:{{item_width}}px;margin:10px;border-color:{{selectPosition == item.position ? "white" : "gray"}}'>
+          <image class='item_image' src='/images/{{item.icon}}.png' style="width:{{image_width}}px;height:{{image_height}}px;"></image>
+        </view>
+        <text class='item_text'>{{item.name_zh_cn}}</text>
+      </view>
+    </block>
+  </view>
+
+
+
+</view>
