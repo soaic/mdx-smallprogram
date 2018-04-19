@@ -3,6 +3,20 @@ import patterns from '../../config/patterns.js' ;
 
 let that = this;
 let startTime, endTime;
+
+
+function initData(){
+  var patt = patterns.getDefaultPatterns();
+  for(var i = 0; i < patt.length; i++){
+    wx.setStorage({
+      key: 'patterns'+(i+1),
+      data: patt[i],
+    })
+  };
+
+
+}
+
 Page({
 
   /**
@@ -37,6 +51,7 @@ Page({
     })  
 
     //初始化数据
+    initData();
     that.setData({
       patternsData: patterns.getDefaultPatterns()
     })
