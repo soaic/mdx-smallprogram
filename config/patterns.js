@@ -800,10 +800,77 @@ var patterns = {
   "timeStamp": "2016-10-08 23:33:14"
 }
 
-function getDefaultPatterns(){
-  return patterns.patterns;
+
+var localData = [];
+
+function initData() {
+  var patts = wx.getStorageSync("patterns");
+  if (!patts && patts.length <=0) {
+    wx.setStorage({
+      key: 'patterns',
+      data: patterns.patterns
+    });
+    localData = patterns.patterns;
+  }else{
+    localData = patts;
+  }
 }
 
+function getData(position){
+  for (var i = 0; i < localData.length; i++) {
+    if (localData[i].position == position) {
+      return localData[i];
+    }
+  }
+}
+
+function getAllData(){
+  if (localData.length == 0){
+    initData();
+  }
+  return localData;
+}
+
+function addData(json){
+  localData.push(json);
+  wx.setStorage({
+    key: 'patterns',
+    data: localData,
+  })
+}
+
+function removeData(position){
+  for (var i = 0; i< localData.length; i++){
+    if(localData[i].position == position){
+      localData.splice(i, 1);
+      break;
+    }
+  }
+  wx.setStorage({
+    key: 'patterns',
+    data: localData,
+  })
+}
+
+function updataData(position,json){
+  for (var i = 0; i < localData.length; i++) {
+    if (localData[i].position == position) {
+      localData[i] = json;
+      break;
+    }
+  }
+  wx.setStorage({
+    key: 'patterns',
+    data: localData,
+  })
+}
+
+
+
 module.exports = {
-  getDefaultPatterns: getDefaultPatterns
+  getData: getData,
+  getAllData: getAllData,
+  removeData: removeData,
+  updataData: updataData,
+  addData: addData,
 }

@@ -1,5 +1,5 @@
 <!--add.wxml-->
-<view class="container">
+<view >
 
 
     <movable-area style="height: 500px; width: 400px; background: white;">

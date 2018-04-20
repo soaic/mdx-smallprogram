@@ -1,7 +1,10 @@
 import * as echarts from '../../ec-canvas/echarts';
 import biqfilter from '../../utils/biqfilter.js';
+import patterns from '../../config/patterns.js';
+
 const app = getApp();
 var that;
+let patternData;
 function initChart(canvas, width, height) {
   const chart = echarts.init(canvas, null, {
     width: width,
@@ -110,9 +113,8 @@ Page({
   },
   onLoad: function (option){
     that = this;
-    
-  },
-  onReady() {
+    patternData = patterns.getData(option.position);
+    console.log(patternData);
   },
   viewMoveChange: function(e){
     var x = e.detail.x;

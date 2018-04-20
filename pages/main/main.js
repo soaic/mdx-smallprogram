@@ -1,22 +1,8 @@
 // pages/main.js
 import patterns from '../../config/patterns.js' ;
+import util from '../../utils/util.js';
 
 let that = this;
-let startTime, endTime;
-
-
-function initData(){
-  var patt = patterns.getDefaultPatterns();
-  for(var i = 0; i < patt.length; i++){
-    wx.setStorage({
-      key: 'patterns'+(i+1),
-      data: patt[i],
-    })
-  };
-
-
-}
-
 Page({
 
   /**
@@ -27,8 +13,12 @@ Page({
     item_height: 0,
     image_width: 0,
     image_height : 0,
-    patternsData: [],
-    selectPosition: 0
+    patternsData: patterns.getAllData(),
+    selectPosition: 0,
+    selectLongPosition: 0,
+    animationBottom: {},
+    bottomDisplay: 'none',
+
   },
 
   /**
@@ -50,11 +40,12 @@ Page({
       }
     })  
 
-    //初始化数据
-    initData();
-    that.setData({
-      patternsData: patterns.getDefaultPatterns()
+    var animation = wx.createAnimation({
+      duration: 1000,
+      timingFunction: "ease",
     })
+
+    that.animation = animation
   },
 
   /**
@@ -64,21 +55,45 @@ Page({
   
   },
   onItemClick: function(e){
-    //处理与长按冲突问题
-    if (that.endTime - that.startTime < 350) {
-      that.setData({
-        selectPosition: e.currentTarget.id
-      });
-    }
-  },
-  bindTouchStart: function (e) {
-    that.startTime = e.timeStamp;
-  },
-  bindTouchEnd: function (e) {
-    that.endTime = e.timeStamp;
+    that.setData({
+      selectPosition: e.currentTarget.id
+    });
   },
   onItemLongClick: function(e){
     //长按
-    
+    //this.animation.translate(100, 100).step({ duration: 1000 })
+    that.setData({
+      // animationBottom: animation.export()
+      bottomDisplay: 'show',
+      selectLongPosition: e.currentTarget.id
+    })
+  },
+  onMoveClick: function(e){
+    that.setData({
+      bottomDisplay: 'none'
+    })
+  },
+  onModifyClick: function(e){
+    that.setData({
+      bottomDisplay: 'none'
+    });
+    util.intentPage('../add/add?position=' + e.currentTarget.id);
+  },
+  onDeleteClick: function (e) {
+    that.setData({
+      bottomDisplay: 'none'
+    });
+    var name = patterns.getData(e.currentTarget.id).name_zh_cn;
+    wx.showModal({
+      content: '确定要删除 \'' + name+'\' 音效吗？',
+      success: function (res) {
+        if (res.confirm) {
+          patterns.removeData(e.currentTarget.id)
+          that.setData({
+            patternsData: patterns.getAllData()
+          });
+        }
+      } 
+    })
   }
 })
