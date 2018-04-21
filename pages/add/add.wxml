@@ -1,15 +1,12 @@
 <!--add.wxml-->
-<view >
-
-
-    <movable-area style="height: 500px; width: 400px; background: white;">
-    
-      <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
-
-      <movable-view style="height: 6px; width: 6px; background: blue;" x="{{x}}" y="{{y}}" bindchange="viewMoveChange" direction="all" bindlongtap='viewMovableClick'/>
-
-      <movable-view style="height: 6px; width: 6px; background: blue;" x="{{x1}}" y="{{y1}}" bindchange="viewMoveChange"  direction="all" bindlongtap='viewMovableClick'/>
-
+<view class='container'>
+  <view style="z-index: 1;height: 500px; width: 100%;position:absolute;">
+    <ec-canvas id="mychart-dom-line-all" canvas-id="mychart-line-all" ec="{{ ecAll }}"></ec-canvas>
+  </view>
+  <movable-area style="z-index: 2;height: 500px; width: 100%;position:absolute;">
+    <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+    <block wx:for="{{peakingEQList}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
+      <movable-view class="ctrlView" style="height: 16px; width: 16px; " x="{{item.x}}" y="{{item.y}}" bindchange="viewMoveChange" direction="all" bindlongpress='viewMovableClick'></movable-view>
+    </block>
   </movable-area>
-
 </view>
