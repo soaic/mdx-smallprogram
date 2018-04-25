@@ -8,6 +8,35 @@ page{
   background-color: #375045;
 }
 
+.h{
+  display: flex;
+  flex-direction: row;
+}
 
+.v{
+  display: flex;
+  flex-direction: column;
+}
+
+.a{
+  position: absolute;
+}
+
+.r{
+  position: relative;
+}
+
+.center_h{
+  align-items: center;
+}
+
+.center_v{
+  justify-content: center;
+}
+
+.center{
+  align-items: center;
+  justify-content: center;
+}
 
 

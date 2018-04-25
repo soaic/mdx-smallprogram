@@ -1,5 +1,5 @@
 import * as echarts from '../../ec-canvas/echarts';
-import biqfilter from '../../utils/biqfilter.js';
+import BiQuadFilter from '../../utils/biqfilter.js';
 import patterns from '../../config/patterns.js';
 
 const MinFreq = 20;
@@ -10,6 +10,7 @@ const MinGain = -10;
 const MaxGain = 10;
 const SampleFreq = 44100;
 const ViewHeight = 500;
+const BIQType = 3;
 
 const app = getApp();
 var that;
@@ -64,27 +65,43 @@ Page({
     });
   },
   viewMoveChange: function(e){
-    var x = e.detail.x;
-    var y = e.detail.y;
-    drawLine(x + 8, y + 8, 1.0);
-  },
-  viewMovableClick: function(e){
-    var x = e.detail.x;
-    var y = e.detail.y;
-    drawLine(x + 8, y + 8, 1.0);
+    var x = e.detail.x + 8;
+    var y = e.detail.y + 8;
+    drawLine(x, y, 1.0);
+    var index = e.target.dataset.id;
+    var data = that.data.peakingEQList;
+    for (var i = 0; i < data.length; i++){
+      if(data[i].index == index){
+        var item = data[i];
+        item.x = x;
+        item.y = y;
+        item.frequency = getFreqByPointX(item.x);
+        item.gain = getGainByPointY(item.y);
+        data[i] = item;
+        break;
+      }
+    }
   }
 });
 
 function getAllOption(){
   var data = that.data.peakingEQList;
-  var dataAll = [];
+  var dataTemp = [];
   for (var i = 0; i < data.length; i++) {
-    var item = [];
-    item.push(data[i].x*(MaxFreq / windowWidth));
-    item.push(data[i].gain);
-    dataAll.push(item);
+    var biqArray = getBIQArrayDataByPointXY(data[i].x, data[i].y, data[i].quality);
+    for(var j = 0; j< biqArray.length; j++){
+      if (dataTemp[j] && dataTemp[j].length == 2){
+        dataTemp[j][1] = dataTemp[j][1] + biqArray[j][1]
+        
+      }else{
+        var tempItem = [];
+        tempItem.push(biqArray[j][0]);
+        tempItem.push(biqArray[j][1]);
+        dataTemp.push(tempItem);
+      }
+    }
   }
-  return dataAll;
+  return dataTemp;
 }
 
 function setOption(chart, data) {
@@ -171,60 +188,96 @@ function setOptionAll(chart, data) {
     },
     splitLine: {
       lineStyle: {
-        color: "#FFFFFF"
+        color: '#FFFFFF'
       }
     },
     series: [{
       name: 'A商品',
       type: 'line',
-      smooth: true,
+      smooth: false,
       data: data,
       symbol: 'none',
-      areaStyle: {}
+      areaStyle: {},
+      lineStyle: {
+        color: '#FFFFFF',
+        width: 1,
+        type: 'solid'
+      }
     }]
   };
   chart.setOption(option);
 }
 
 function drawLine(x, y, q) {
-  var pointY;
-  if (y < 0) {
-    pointY = MaxGain;
-  } else if (y >= 0 && y < ViewHeight / 2) {
-    pointY = Math.abs(y / (ViewHeight / MaxGain / 2) - MaxGain);
-  } else if (y >= ViewHeight / 2 && y < ViewHeight) {
-    pointY = (ViewHeight / 2 - y) / (ViewHeight / MaxGain / 2)
-  } else {
-    pointY = MinGain;
-  }
-  
-  var log_result = biqfilter.biqfilter(3, x * (MaxFreq / windowWidth), SampleFreq, q, pointY);
+  var dataArray = getBIQArrayDataByPointXY(x, y, q);
+  setOption(that.chart, dataArray);
+  setOptionAll(that.chartAll, getAllOption());
+}
+
+
+function getBIQArrayDataByPointXY(x, y, q){
+  var mGain = getGainByPointY(y);
+  var mFreq = getFreqByPointX(x, false);
+  BiQuadFilter.biqfilter.create(BIQType, mFreq, SampleFreq, q, mGain);
   var dataArray = new Array();
   for (var i = 0; i < MaxFreq; i = i + 100) {
-    var result = log_result(i);
+    var PointY = BiQuadFilter.biqfilter.log_result(i);
     let da = new Array();
     da.push(i);
-    da.push(result);
+    da.push(PointY);
     dataArray.push(da);
   }
-  setOption(that.chart, dataArray);
+  return dataArray;
+}
+
+function getFreqByPointX(x, isReal){
+  if (isReal){
+    var percent = x  / windowWidth;
+    var logv = percent * (Math.log10(MaxFreq) - Math.log10(MinFreq)) + Math.log10(MinFreq);
+    return Math.pow(10, logv);
+  }else{
+    return x * MaxFreq / windowWidth;
+  }
+}
+
+function getPointXByFreq(freq){
+  var percentF = (Math.log10(freq) - Math.log10(MinFreq)) / (Math.log10(MaxFreq) - Math.log10(MinFreq));
+  return  windowWidth * percentF;
+}
+
+function getGainByPointY(y){
+  var mGain;
+  if (y < 0) {
+    mGain = MaxGain;
+  } else if (y >= 0 && y < ViewHeight / 2) {
+    mGain = Math.abs(y / (ViewHeight / MaxGain / 2) - MaxGain);
+  } else if (y >= ViewHeight / 2 && y < ViewHeight) {
+    mGain = (ViewHeight / 2 - y) / (ViewHeight / MaxGain / 2)
+  } else {
+    mGain = MinGain;
+  }
+  return mGain;
+}
+
+function getPointYByGain(gain){
+  var y;
+  if (gain >= MaxGain) {
+    y = 0;
+  } else if (gain < MaxGain && gain >= 0) {
+    y = (ViewHeight / 2) - (ViewHeight / MaxGain / 2) * gain;
+  } else if (gain < 0 && gain >= MinGain) {
+    y = Math.abs(ViewHeight / MaxGain / 2 * gain) + (ViewHeight / 2)
+  } else {
+    y = ViewHeight;
+  }
+  return y;
 }
 
 function getPatternXYData(data) {
   for (var i = 0; i < data.length; i++) {
     var item = data[i];
-    var percentF = (Math.log10(item.frequency) - Math.log10(MinFreq)) / (Math.log10(MaxFreq) - Math.log10(MinFreq));
-    var x = windowWidth * percentF;
-    item.x = x;
-    if (item.gain >= MaxGain) {
-      item.y = 0;
-    } else if (item.gain < MaxGain && item.gain >= 0) {
-      item.y = (ViewHeight / 2) - (ViewHeight / MaxGain / 2) * item.gain;
-    } else if (item.gain < 0 && item.gain >= MinGain) {
-      item.y = Math.abs(ViewHeight / MaxGain / 2 * item.gain) + (ViewHeight / 2)
-    } else {
-      item.y = ViewHeight;
-    }
+    item.x = getPointXByFreq(item.frequency);
+    item.y = getPointYByGain(item.gain);
     data[i] = item;
   }
   return data;
