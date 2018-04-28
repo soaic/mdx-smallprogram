@@ -192,7 +192,6 @@ function setOptionAll(chart, data) {
       }
     },
     series: [{
-      name: 'A商品',
       type: 'line',
       smooth: false,
       data: data,
