@@ -21,7 +21,6 @@ ec-canvas {
 }
 
 .ctrlView{
-  background-color: white;
   border-radius: 90px;
   border: 1px solid white;
 }

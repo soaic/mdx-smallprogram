@@ -27,6 +27,7 @@ Page({
     }
   },
   data: {
+    ctrlViewIndex : '-1',
     peakingEQList : [],
     ec: {
       onInit: function (canvas, width, height) {
@@ -81,6 +82,18 @@ Page({
         break;
       }
     }
+  },
+  onCtrlViewClick: function(e){
+    var index = e.currentTarget.id;
+    console.log(index)
+    that.setData({
+      ctrlViewIndex: index
+    })
+  },
+  test: function(e){
+    that.setData({
+      ctrlViewIndex: '-1'
+    })
   }
 });
 
