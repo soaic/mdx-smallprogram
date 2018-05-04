@@ -110,6 +110,9 @@ Page({
     that.setData({
       topX: y
     })
+  },
+  touchMove: function(e) {
+    console.log(event)
   }
 });
 

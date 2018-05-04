@@ -1,0 +1,24 @@
+<!-- 我的音效 -->
+<view class='contion_tip'>设备已连接，你可以开始设置你的设备了!</view>
+<view class='grid_view'>
+  <block wx:for="{{patternsData}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
+    <view class='grid_item' style="margin-bottom:10px" bindtap="onItemClick" bindlongpress="onItemLongClick" id="{{item.position}}">
+      <view class='item_view' style='width:{{item_width}}px;height:{{item_width}}px;}}'>
+        <image class='item_image' src='/images/{{item.icon}}.png' style="width:{{image_width}}px;height:{{image_height}}px;"></image>
+      </view>
+      <text class='item_text'>{{item.name_zh_cn}}</text>
+    </view>
+  </block>
+</view>
+
+<view class='bottom_operation_view' style='display:{{bottomDisplay}}' animation="{{animationBottom}}">
+    <view id='{{selectLongPosition}}' bindtap='onMoveClick'>
+      <image src='/images/edit_move.png' style='width:50px;height:50px;' />
+    </view>
+    <view id='{{selectLongPosition}}' bindtap='onModifyClick' style='padding-left:20px;padding-right:20px'>
+      <image src='/images/edit_modify.png' style='width:50px;height:50px;' />
+    </view>
+    <view id='{{selectLongPosition}}' bindtap='onDeleteClick'>
+      <image src='/images/edit_delete.png' style='width:50px;height:50px;' />
+    </view>
+  </view>

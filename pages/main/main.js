@@ -18,7 +18,9 @@ Page({
     selectLongPosition: 0,
     animationBottom: {},
     bottomDisplay: 'none',
-
+    winWidth: 0,
+    winHeight: 0,
+    currentTab: 0
   },
 
   /**
@@ -29,13 +31,15 @@ Page({
     //获取系统信息
     wx.getSystemInfo({
       success: function (res) {
-        //获取宽度
         var windowWidth = res.windowWidth;
+        var windowHeight = res.windowHeight;
         that.setData({
-          item_width: windowWidth / 4 - 26,
+          winWidth: windowWidth,
+          winHeight: windowHeight,
+          item_width: windowWidth / 4 - 5,
           item_height: windowWidth / 4,
           image_width: windowWidth / 4 - 26,
-          image_height: (windowWidth / 4 - 26) * 240 / 230
+          image_height: (windowWidth / 4 - 26) * 188 / 197
         })
       }
     })  
@@ -95,5 +99,17 @@ Page({
         }
       } 
     })
-  }
+  },
+  bindChange: function (e) {
+    that.setData({ currentTab: e.detail.current });
+  }, 
+  swichNav: function (e) {
+    if (that.data.currentTab == e.currentTarget.id) {
+      return false;
+    } else {
+      that.setData({
+        currentTab: e.currentTarget.id
+      })
+    }
+  }  
 })

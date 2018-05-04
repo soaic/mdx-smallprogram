@@ -8,28 +8,8 @@
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
+    "navigationBarBackgroundColor": "#FB3A46",
     "navigationBarTitleText": "MDX Audio",
-    "navigationBarTextStyle": "black"
-  },
-  "tabBar": {
-    "list": [
-      {
-        "pagePath": "pages/main/main",
-        "text": "主页",
-        "iconPath": "/images/menu_home.png",
-        "selectedIconPath": "/images/menu_home.png"
-      },
-      {
-        "pagePath": "pages/setting/setting",
-        "text": "菜单",
-        "iconPath": "/images/menu_settings.png",
-        "selectedIconPath": "/images/menu_settings.png"
-      }
-    ],
-    "color": "#666666",
-    "selectedColor": "#004d40",
-    "borderStyle": "black",
-    "backgroundColor":"#FFFFFF"
+    "navigationBarTextStyle": "white"
   }
 }
