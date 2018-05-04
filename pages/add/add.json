@@ -2,5 +2,6 @@
   "usingComponents": {
     "ec-canvas": "../../ec-canvas/ec-canvas"
   },
-  "navigationBarTitleText": "EQ均衡器曲线"
+  "navigationBarTitleText": "EQ均衡器曲线",
+  "enablePullDownRefresh": false
 }

@@ -27,8 +27,9 @@ Page({
     }
   },
   data: {
-    ctrlViewIndex : '-1',
+    ctrlViewIndex : -1,
     peakingEQList : [],
+    topX: 0,
     ec: {
       onInit: function (canvas, width, height) {
         const chart = echarts.init(canvas, null, {
@@ -37,7 +38,9 @@ Page({
         });
         canvas.setChart(chart);
         that.chart = chart;
-        setOption(chart, []);
+        
+        setOption(chart, getBIQArrayDataByPointXY(21.99999858673136,
+          174.789405, 1.0));
         return chart;
       }
     },
@@ -64,6 +67,7 @@ Page({
     that.setData({
       peakingEQList: data
     });
+    console.log(data)
   },
   viewMoveChange: function(e){
     var x = e.detail.x + 8;
@@ -84,15 +88,27 @@ Page({
     }
   },
   onCtrlViewClick: function(e){
-    var index = e.currentTarget.id;
-    console.log(index)
+    var indexId = e.currentTarget.id;
+    var x = e.detail.x + 8;
+    var y = e.detail.y + 8;
+    drawLine(x, y, 1.0);
     that.setData({
-      ctrlViewIndex: index
+      ctrlViewIndex: indexId
     })
   },
-  test: function(e){
+  onMoveAreaClick: function (e) {
+    setOption(that.chart, []);
     that.setData({
-      ctrlViewIndex: '-1'
+      ctrlViewIndex: -1
+    })
+  },
+  onScaleView: function (e){
+    console.log(e.detail.scale)
+  }, 
+  viewMoveChange1: function (e){
+    var y = e.detail.y ;
+    that.setData({
+      topX: y
     })
   }
 });
@@ -122,16 +138,24 @@ function setOption(chart, data) {
     backgroundColor: "rgba(250, 250, 250, 0)",
     color: ["#fc9b28"],
     animation: false,
+    legend: {
+      zleve: -1,
+      z: -1
+    },
     tooltip: {
       show: false,
-      trigger: 'axis'
+      trigger: 'axis',
+      zleve: -1,
+      z: -1
     },
 
     grid: {
       top: 0,
       right: 0,
       bottom: 0,
-      left: 0
+      left: 0,
+      zleve: -1,
+      z: -1
     },
 
     xAxis: {
@@ -154,14 +178,18 @@ function setOption(chart, data) {
     splitLine: {
       lineStyle: {
         color: "#FFFFFF"
-      }
+      },
+      zleve: -1,
+      z: -1
     },
     series: [{
-      name: 'A商品',
       type: 'line',
       smooth: false,
       data: data,
       symbol: 'none',
+
+      zleve: -1,
+      z: -1
     }]
   };
   chart.setOption(option);
@@ -172,15 +200,25 @@ function setOptionAll(chart, data) {
     backgroundColor: "rgba(250, 250, 250, 0)",
     color: ["#666666"],
     animation: false,
+    legend: {
+      zleve : -1,
+      z : -1
+    },
     tooltip: {
       show: false,
-      trigger: 'axis'
+      trigger: 'axis',
+
+      zleve: -1,
+      z: -1
     },
     grid: {
       top: 0,
       right: 0,
       bottom: 0,
-      left: 0
+      left: 0,
+
+      zleve: -1,
+      z: -1
     },
     xAxis: {
       type: 'category',
@@ -202,19 +240,30 @@ function setOptionAll(chart, data) {
     splitLine: {
       lineStyle: {
         color: '#FFFFFF'
-      }
+      },
+
+      zleve: -1,
+      z: -1
     },
     series: [{
       type: 'line',
       smooth: false,
       data: data,
       symbol: 'none',
-      areaStyle: {},
+      areaStyle: {
+        zleve: -1,
+        z: -1
+      },
       lineStyle: {
         color: '#FFFFFF',
         width: 1,
-        type: 'solid'
-      }
+        type: 'solid',
+
+        zleve: -1,
+        z: -1
+      },
+      zleve: -1,
+      z: -1
     }]
   };
   chart.setOption(option);
