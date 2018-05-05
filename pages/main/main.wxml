@@ -33,4 +33,19 @@
     </swiper-item>
   </swiper>
 
+  <view class='a h center_v' style="bottom:40px; width:100%">
+    <view class='a' style='width:88px;height:56px;'>
+      <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_left.png'></image>
+      <text class='a h center' style='z-index:10; width:88px; height:56px; color:white'>首页</text>
+    </view>
+    <view class='a' style='flex:1'>
+      <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_center.png'></image>
+      <text class='a h center' style='z-index:10; width:88px; height:56px; color:white'>详情</text>
+    </view>
+    <view class='a' style='width:88px;height:56px;'>
+      <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_right.png'></image>
+      <view class='a h center' style='z-index:10; width:88px; height:56px; color:white'>商店</view>
+    </view>
+  </view>
+  
 </view>
