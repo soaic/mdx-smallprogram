@@ -15,9 +15,11 @@ Page({
     image_height : 0,
     patternsData: patterns.getAllData(),
     selectPosition: 0,
+    selectName: '',
     selectLongPosition: 0,
     animationBottom: {},
     bottomDisplay: 'none',
+    detailViewDisplay : 'none',
     winWidth: 0,
     winHeight: 0,
     currentTab: 0
@@ -43,13 +45,6 @@ Page({
         })
       }
     })  
-
-    var animation = wx.createAnimation({
-      duration: 1000,
-      timingFunction: "ease",
-    })
-
-    that.animation = animation
   },
 
   /**
@@ -60,26 +55,21 @@ Page({
   },
   onItemClick: function(e){
     that.setData({
-      selectPosition: e.currentTarget.id
+      selectPosition: e.currentTarget.id,
+      selectName: patterns.getData(e.currentTarget.id).name_zh_cn,
+      detailViewDisplay: 'show'
     });
+
+    setTimeout(function(){
+      that.setData({
+        detailViewDisplay: 'none'
+      })
+    },3000);
+
   },
-  onItemLongClick: function(e){
-    //长按
-    //this.animation.translate(100, 100).step({ duration: 1000 })
+  onDetailClick: function(e){
     that.setData({
-      // animationBottom: animation.export()
-      bottomDisplay: 'show',
-      selectLongPosition: e.currentTarget.id
-    })
-  },
-  onMoveClick: function(e){
-    that.setData({
-      bottomDisplay: 'none'
-    })
-  },
-  onModifyClick: function(e){
-    that.setData({
-      bottomDisplay: 'none'
+      detailViewDisplay: 'none'
     });
     util.intentPage('../add/add?position=' + e.currentTarget.id);
   },

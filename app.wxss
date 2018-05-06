@@ -26,11 +26,11 @@ page{
   position: relative;
 }
 
-.center_h{
+.center_v{
   align-items: center;
 }
 
-.center_v{
+.center_h{
   justify-content: center;
 }
 

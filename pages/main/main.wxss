@@ -58,6 +58,6 @@
 
 .contion_tip{ 
   color: #8E8E8E; 
-  font-size: 14px; 
+  font-size: 12px; 
   padding: 10px; 
 }

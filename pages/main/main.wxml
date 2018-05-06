@@ -1,19 +1,19 @@
 <!--pages/main.wxml-->
-<view class='root_view'>
+<view class='root_view' catchtouchmove='true'>
   <view class="h center switch_bar">
-    <view style='flex:1;' class='v center_h' id="0" catchtap="swichNav">
+    <view style='flex:1;' class='v center_v' id="0" catchtap="swichNav">
       <view>我的音效</view>
       <view style="font-size:20px;line-height:10px;height:10px">
         {{currentTab==0?'···':''}}
       </view>
     </view>
-    <view style='flex:1' class='v center_h' id="1" catchtap="swichNav">
+    <view style='flex:1' class='v center_v' id="1" catchtap="swichNav">
       <view>调音师</view>
       <view style="font-size:20px;line-height:10px;height:10px">
         {{currentTab==1?'···':''}}
       </view>
     </view>
-    <view style='flex:1' class='v center_h' id="2" catchtap="swichNav">
+    <view style='flex:1' class='v center_v' id="2" catchtap="swichNav">
       <view>热门音效</view>
       <view style="font-size:20px;line-height:10px;height:10px">
         {{currentTab==2?'···':''}}
@@ -31,21 +31,5 @@
     <swiper-item>
       <include src="page3" />
     </swiper-item>
-  </swiper>
-
-  <view class='a h center_v' style="bottom:40px; width:100%">
-    <view class='a' style='width:88px;height:56px;'>
-      <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_left.png'></image>
-      <text class='a h center' style='z-index:10; width:88px; height:56px; color:white'>首页</text>
-    </view>
-    <view class='a' style='flex:1'>
-      <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_center.png'></image>
-      <text class='a h center' style='z-index:10; width:88px; height:56px; color:white'>详情</text>
-    </view>
-    <view class='a' style='width:88px;height:56px;'>
-      <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_right.png'></image>
-      <view class='a h center' style='z-index:10; width:88px; height:56px; color:white'>商店</view>
-    </view>
-  </view>
-  
+  </swiper>  
 </view>

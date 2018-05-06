@@ -1,43 +1,53 @@
 <!--add.wxml-->
-<view class='container' catchtouchmove='true'>
+<view class='v'>
 
-    <ec-canvas style="height: 500px; width: 100%; position:absolute; z-index: 1; " id="mychart-dom-line-all" canvas-id="mychart-line-all" ec="{{ecAll}}" ></ec-canvas> 
+  <view class='r' style="height: 200px;width:{{winWidth-30}}px;padding-left:15px;padding-right:15px;">
+    <image src='/images/bg_eq.png' mode='center' class='a' style="z-index: 0; width:{{winWidth-30}}px;height:200px;"></image>
+    <ec-canvas class='a' style="height: 200px; width:{{winWidth-30}}px; z-index: 1;" id="mychart-dom-line-all" canvas-id="mychart-line-all" ec="{{ecAll}}"></ec-canvas>
+    <!-- <ec-canvas class='a' style="height: 200px; width:{{winWidth-30}}px; z-index: 2;" id="mychart-dom-line" canvas-id="mychart-line" ec="{{ec}}"></ec-canvas> -->
+  </view>
 
-    <ec-canvas style='position:absolute; z-index: 2; height: 500px; width: 100%;' id="mychart-dom-line" canvas-id="mychart-line" ec="{{ec}}"></ec-canvas>   
+  <view class='r h' style='width:100px;height:20px;margin-left:15px;margin-top:2px;'>
+    <view style='color:#FB3A46; font-size:12px;margin-left:10px;'>100</view>
+    <view style='color:#FB3A46; font-size:12px;margin-left:30px;'>1K</view>
+    <view style='color:#FB3A46; font-size:12px;margin-left:50px;'>10K</view>
+    <view style='color:#FB3A46; font-size:12px;margin-left:100px;'>22K</view>
+  </view>
 
-    <view class='h' style='height: 300px; width: 100%;position:absolute; z-index: 5;'>
-      <view style='width:10px;height:100%;background-color:gray;margin-left:100px;'>
-        <view style='width:100%;height:{{300-topX}}px;background-color:red;margin-top:{{topX}}px'></view>
-      </view>
-      <view style='width:10px;height:100%;margin-left:20px;background-color:gray'></view>
+  <view class='r'>
+    <view class='a h center' style='height: 200px; width:{{winWidth-30}}px;margin-left:15px;margin-right:15px; '>
+      <view class='dashedLine'></view>
     </view>
-  <movable-area catchtap="onMoveAreaClick" style="position:relative; z-index: 99; height: 300px; width: 100%; ">
-      
-       <block wx:for="{{peakingEQList}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
-            
-          <movable-view style='position:relative; z-index: 4;' scale="true" scale-min="0.3" scale-max="3.0" bindscale="onScaleView" catchtap='onCtrlViewClick' id='{{item.index}}' class='a h center' data-id='{{item.index}}' x="{{item.x - 8}}" y="{{item.y - 8}}" bindchange="viewMoveChange" direction="all" >
-            
-            <cover-view class="ctrlViewOutSide a" style="height: 50px; width: 50px;position:absolute; z-index:3; display:{{ctrlViewIndex==item.index?'show':'none'}}"></cover-view> 
-
-            <cover-view class='h center_v a' style="width:60px; height:5px; z-index:2; display:{{ctrlViewIndex==item.index?'show':'none'}}">
-              <cover-view class='ctrlView' style='width:5px;height:5px'></cover-view>
-              <cover-view class='orangeLine' style='margin-top:2.5px; flex:1'></cover-view>
-              <cover-view class='ctrlView' style='width:5px;height:5px'></cover-view>
-            </cover-view>
-
-            <cover-view class="ctrlView a" canvas-id="moveCanvas{{item.index}}" style="position:absolute; height: 16px; width: 16px; z-index:3"></cover-view> 
-
-          </movable-view>
-          
-
-
-
-
-      </block> 
-
-      <!-- <movable-view class="ctrlView a" style='width:20px; height:20px; background-color:#FF0000' direction="vertical" x = '100' y = '0' bindchange="viewMoveChange1">
-
-
-      </movable-view> -->
+    <movable-area catchtap="onMoveAreaClick" class="a" style="height: 200px; width:{{winWidth-30}}px;margin-left:15px;margin-right:15px; ">
+      <block wx:for="{{peakingEQList}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
+        <movable-view class='a' style='z-index: 4;' catchtap='onCtrlViewClick' id='{{item.index}}' class='a h center' data-id='{{item.index}}' x="{{item.x - 4}}" y="{{item.y - 4}}" bindchange="viewMoveChange" direction="all">
+          <view class="ctrlViewOutSide a" style="height: 50px; width: 50px;position:absolute; z-index:3; display:{{ctrlViewIndex==item.index?'show':'none'}}"></view>
+          <view class='h center_v a' style="width:60px; height:5px; z-index:2; display:{{ctrlViewIndex==item.index?'show':'none'}}">
+            <view class='ctrlView' style='width:5px;height:5px'></view>
+            <view class='orangeLine' style='margin-top:2.5px; flex:1'></view>
+            <view class='ctrlView' style='width:5px;height:5px'></view>
+          </view>
+          <view class="ctrlView a" canvas-id="moveCanvas{{item.index}}" style="position:absolute; height: 8px; width: 8px; z-index:3"></view>
+        </movable-view>
+      </block>
     </movable-area>
+  </view>
+
+  <view class='a h center' catchtap='onResetClick' style='bottom:20px;width:88px;height:56px;'>
+    <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_left.png'></image>
+    <text class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>复位</text>
+  </view>
+
+  <view catchtap='onSaveClick' class='a v center_h' style="display:{{saveViewDisplay}};bottom:20px;left:50%;margin-left:-60px;width:120px;height:56px;">
+    <view class='h center' style='width:120px;height:56px;'>
+      <image class='a' style='z-index:9;width:120px;height:56px' src='/images/button_center.png'></image>
+      <text class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>保存</text>
+    </view>
+  </view>
+
+  <view class='a h center' style='bottom:20px;right:0px;width:88px;height:56px;'>
+    <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_right.png'></image>
+    <view class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>对比</view>
+  </view>
+
 </view>

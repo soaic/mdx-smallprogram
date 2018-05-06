@@ -10,7 +10,7 @@ var patterns = {
       "name_zh_tw": "原聲",
       "name_ru": "Саундтрек",
       "name_kr": "어쿠스틱",
-      "icon": "pattern_13",
+      "icon": "pattern_1",
       "position": 0,
       "maxdb": 0,
       "mindb": 0,
@@ -51,25 +51,26 @@ var patterns = {
           "frequency": 1261.9149,
           "gain": 0,
           "quality": 1
-        },
-        {
-          "index": 6,
-          "frequency": 2517.8506,
-          "gain": 0,
-          "quality": 1
-        },
-        {
-          "index": 7,
-          "frequency": 5023.7734,
-          "gain": 0,
-          "quality": 1
-        },
-        {
-          "index": 8,
-          "frequency": 10023.743,
-          "gain": 0,
-          "quality": 1
         }
+        // ,
+        // {
+        //   "index": 6,
+        //   "frequency": 2517.8506,
+        //   "gain": 0,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 7,
+        //   "frequency": 5023.7734,
+        //   "gain": 0,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 8,
+        //   "frequency": 10023.743,
+        //   "gain": 0,
+        //   "quality": 1
+        // }
       ]
     },
     {
@@ -82,7 +83,7 @@ var patterns = {
       "name_zh_tw": "流行",
       "name_ru": "поп",
       "name_kr": "유행",
-      "icon": "pattern_4",
+      "icon": "pattern_2",
       "position": 1,
       "maxdb": 0,
       "mindb": 0,
@@ -123,25 +124,26 @@ var patterns = {
           "frequency": 1002.37445,
           "gain": 2.984356,
           "quality": 1
-        },
-        {
-          "index": 6,
-          "frequency": 2103.3186,
-          "gain": -6.016847,
-          "quality": 1
-        },
-        {
-          "index": 7,
-          "frequency": 4319.2163,
-          "gain": 5.0060167,
-          "quality": 1
-        },
-        {
-          "index": 8,
-          "frequency": 14997.882,
-          "gain": 0.986763,
-          "quality": 0.3
         }
+        // ,
+        // {
+        //   "index": 6,
+        //   "frequency": 2103.3186,
+        //   "gain": -6.016847,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 7,
+        //   "frequency": 4319.2163,
+        //   "gain": 5.0060167,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 8,
+        //   "frequency": 14997.882,
+        //   "gain": 0.986763,
+        //   "quality": 0.3
+        // }
       ]
     },
     {
@@ -154,7 +156,7 @@ var patterns = {
       "name_zh_tw": "搖滾",
       "name_ru": "рок",
       "name_kr": "록",
-      "icon": "pattern_16",
+      "icon": "pattern_3",
       "position": 2,
       "maxdb": 0,
       "mindb": 0,
@@ -195,25 +197,26 @@ var patterns = {
           "frequency": 1046.5984,
           "gain": -2.1092415,
           "quality": 1
-        },
-        {
-          "index": 6,
-          "frequency": 2036.3032,
-          "gain": 2.059021,
-          "quality": 1
-        },
-        {
-          "index": 7,
-          "frequency": 8048.5464,
-          "gain": 4.9811687,
-          "quality": 0.76499987
-        },
-        {
-          "index": 8,
-          "frequency": 16594.328,
-          "gain": 5.1726637,
-          "quality": 1
         }
+        // ,
+        // {
+        //   "index": 6,
+        //   "frequency": 2036.3032,
+        //   "gain": 2.059021,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 7,
+        //   "frequency": 8048.5464,
+        //   "gain": 4.9811687,
+        //   "quality": 0.76499987
+        // },
+        // {
+        //   "index": 8,
+        //   "frequency": 16594.328,
+        //   "gain": 5.1726637,
+        //   "quality": 1
+        // }
       ]
     },
     {
@@ -226,7 +229,7 @@ var patterns = {
       "name_zh_tw": "重低音",
       "name_ru": "бас",
       "name_kr": "무거운 베이스",
-      "icon": "pattern_15",
+      "icon": "pattern_4",
       "position": 3,
       "maxdb": 0,
       "mindb": 0,
@@ -267,25 +270,26 @@ var patterns = {
           "frequency": 1039.0942,
           "gain": -1.9865398,
           "quality": 1
-        },
-        {
-          "index": 6,
-          "frequency": 1985.6602,
-          "gain": 0.9832325,
-          "quality": 1
-        },
-        {
-          "index": 7,
-          "frequency": 4033.8296,
-          "gain": -1.0312996,
-          "quality": 1
-        },
-        {
-          "index": 8,
-          "frequency": 9951.876,
-          "gain": -0.03610134,
-          "quality": 1.4999999
         }
+        // ,
+        // {
+        //   "index": 6,
+        //   "frequency": 1985.6602,
+        //   "gain": 0.9832325,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 7,
+        //   "frequency": 4033.8296,
+        //   "gain": -1.0312996,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 8,
+        //   "frequency": 9951.876,
+        //   "gain": -0.03610134,
+        //   "quality": 1.4999999
+        // }
       ]
     },
     {
@@ -298,7 +302,7 @@ var patterns = {
       "name_zh_tw": "懷舊",
       "name_ru": "ностальгия",
       "name_kr": "옛날을 그리워했어",
-      "icon": "pattern_17",
+      "icon": "pattern_5",
       "position": 4,
       "maxdb": 0,
       "mindb": 0,
@@ -339,25 +343,26 @@ var patterns = {
           "frequency": 2464.0806,
           "gain": -2.4415898,
           "quality": 3
-        },
-        {
-          "index": 6,
-          "frequency": 3418.5552,
-          "gain": 2.66333,
-          "quality": 3
-        },
-        {
-          "index": 7,
-          "frequency": 6234.19,
-          "gain": -0.024946213,
-          "quality": 1
-        },
-        {
-          "index": 8,
-          "frequency": 19362.771,
-          "gain": -1.8956432,
-          "quality": 0.31500006
         }
+        // ,
+        // {
+        //   "index": 6,
+        //   "frequency": 3418.5552,
+        //   "gain": 2.66333,
+        //   "quality": 3
+        // },
+        // {
+        //   "index": 7,
+        //   "frequency": 6234.19,
+        //   "gain": -0.024946213,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 8,
+        //   "frequency": 19362.771,
+        //   "gain": -1.8956432,
+        //   "quality": 0.31500006
+        // }
       ]
     },
     {
@@ -370,7 +375,7 @@ var patterns = {
       "name_zh_tw": "舞曲",
       "name_ru": "танец",
       "name_kr": "댄스",
-      "icon": "pattern_3",
+      "icon": "pattern_6",
       "position": 5,
       "maxdb": 0,
       "mindb": 0,
@@ -411,25 +416,26 @@ var patterns = {
           "frequency": 1013.2519,
           "gain": 2.8720493,
           "quality": 0.94499993
-        },
-        {
-          "index": 6,
-          "frequency": 2000.0002,
-          "gain": 6.291212,
-          "quality": 1
-        },
-        {
-          "index": 7,
-          "frequency": 4019.343,
-          "gain": 3.973199,
-          "quality": 1
-        },
-        {
-          "index": 8,
-          "frequency": 16058.964,
-          "gain": 8.292652,
-          "quality": 0.3080418
         }
+        // ,
+        // {
+        //   "index": 6,
+        //   "frequency": 2000.0002,
+        //   "gain": 6.291212,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 7,
+        //   "frequency": 4019.343,
+        //   "gain": 3.973199,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 8,
+        //   "frequency": 16058.964,
+        //   "gain": 8.292652,
+        //   "quality": 0.3080418
+        // }
       ]
     },
     {
@@ -442,7 +448,7 @@ var patterns = {
       "name_zh_tw": "古典",
       "name_ru": "классической",
       "name_kr": "클래식",
-      "icon": "pattern_2",
+      "icon": "pattern_7",
       "position": 6,
       "maxdb": 0,
       "mindb": 0,
@@ -483,25 +489,26 @@ var patterns = {
           "frequency": 1039.0942,
           "gain": -3.9951868,
           "quality": 1
-        },
-        {
-          "index": 6,
-          "frequency": 2014.4431,
-          "gain": -5.030084,
-          "quality": 1
-        },
-        {
-          "index": 7,
-          "frequency": 4969.8403,
-          "gain": -5.030084,
-          "quality": 1
-        },
-        {
-          "index": 8,
-          "frequency": 10465.982,
-          "gain": -6.0048137,
-          "quality": 0.76223516
         }
+        // ,
+        // {
+        //   "index": 6,
+        //   "frequency": 2014.4431,
+        //   "gain": -5.030084,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 7,
+        //   "frequency": 4969.8403,
+        //   "gain": -5.030084,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 8,
+        //   "frequency": 10465.982,
+        //   "gain": -6.0048137,
+        //   "quality": 0.76223516
+        // }
       ]
     },
     {
@@ -514,7 +521,7 @@ var patterns = {
       "name_zh_tw": "人聲",
       "name_ru": "голос",
       "name_kr": "인기척",
-      "icon": "pattern_11",
+      "icon": "pattern_8",
       "position": 7,
       "maxdb": 0,
       "mindb": 0,
@@ -555,25 +562,26 @@ var patterns = {
           "frequency": 1035.3625,
           "gain": 3.971119,
           "quality": 1
-        },
-        {
-          "index": 6,
-          "frequency": 2021.7036,
-          "gain": 5.9927797,
-          "quality": 1
-        },
-        {
-          "index": 7,
-          "frequency": 4019.343,
-          "gain": 5.9927797,
-          "quality": 1
-        },
-        {
-          "index": 8,
-          "frequency": 9951.876,
-          "gain": 2.0216608,
-          "quality": 1
         }
+        // ,
+        // {
+        //   "index": 6,
+        //   "frequency": 2021.7036,
+        //   "gain": 5.9927797,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 7,
+        //   "frequency": 4019.343,
+        //   "gain": 5.9927797,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 8,
+        //   "frequency": 9951.876,
+        //   "gain": 2.0216608,
+        //   "quality": 1
+        // }
       ]
     },
     {
@@ -627,25 +635,26 @@ var patterns = {
           "frequency": 1261.9149,
           "gain": 0,
           "quality": 1
-        },
-        {
-          "index": 6,
-          "frequency": 2517.8506,
-          "gain": 0,
-          "quality": 1
-        },
-        {
-          "index": 7,
-          "frequency": 9294.319,
-          "gain": 7.5330925,
-          "quality": 1
-        },
-        {
-          "index": 8,
-          "frequency": 10023.743,
-          "gain": 0,
-          "quality": 1
         }
+        // ,
+        // {
+        //   "index": 6,
+        //   "frequency": 2517.8506,
+        //   "gain": 0,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 7,
+        //   "frequency": 9294.319,
+        //   "gain": 7.5330925,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 8,
+        //   "frequency": 10023.743,
+        //   "gain": 0,
+        //   "quality": 1
+        // }
       ]
     },
     {
@@ -658,7 +667,7 @@ var patterns = {
       "name_zh_tw": "遊戲",
       "name_ru": "игра",
       "name_kr": "게임",
-      "icon": "pattern_20",
+      "icon": "pattern_10",
       "position": 12,
       "maxdb": 12.459111,
       "mindb": -4.7667923,
@@ -699,25 +708,26 @@ var patterns = {
           "frequency": 880.60254,
           "gain": -3.1046934,
           "quality": 1
-        },
-        {
-          "index": 6,
-          "frequency": 2517.8506,
-          "gain": 7.894104,
-          "quality": 1
-        },
-        {
-          "index": 7,
-          "frequency": 5023.7734,
-          "gain": 0,
-          "quality": 1
-        },
-        {
-          "index": 8,
-          "frequency": 13757.197,
-          "gain": 9.290012,
-          "quality": 2.04
         }
+        // ,
+        // {
+        //   "index": 6,
+        //   "frequency": 2517.8506,
+        //   "gain": 7.894104,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 7,
+        //   "frequency": 5023.7734,
+        //   "gain": 0,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 8,
+        //   "frequency": 13757.197,
+        //   "gain": 9.290012,
+        //   "quality": 2.04
+        // }
       ]
     },
     {
@@ -730,7 +740,7 @@ var patterns = {
       "name_zh_tw": "兒童",
       "name_ru": "детей",
       "name_kr": "어린이",
-      "icon": "pattern_6",
+      "icon": "pattern_11",
       "position": 13,
       "maxdb": 1e-45,
       "mindb": -16.007286,
@@ -765,31 +775,32 @@ var patterns = {
           "frequency": 1611.6846,
           "gain": -6.9174633,
           "quality": 0.3
-        },
-        {
-          "index": 5,
-          "frequency": 1261.9149,
-          "gain": 0,
-          "quality": 1
-        },
-        {
-          "index": 6,
-          "frequency": 2517.8506,
-          "gain": 0,
-          "quality": 1
-        },
-        {
-          "index": 7,
-          "frequency": 5023.7734,
-          "gain": 0,
-          "quality": 1
-        },
-        {
-          "index": 8,
-          "frequency": 10023.743,
-          "gain": 0,
-          "quality": 1
         }
+        // ,
+        // {
+        //   "index": 5,
+        //   "frequency": 1261.9149,
+        //   "gain": 0,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 6,
+        //   "frequency": 2517.8506,
+        //   "gain": 0,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 7,
+        //   "frequency": 5023.7734,
+        //   "gain": 0,
+        //   "quality": 1
+        // },
+        // {
+        //   "index": 8,
+        //   "frequency": 10023.743,
+        //   "gain": 0,
+        //   "quality": 1
+        // }
       ]
     }
   ],

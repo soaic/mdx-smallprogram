@@ -9,13 +9,14 @@ const MaxQuality = 3.0;
 const MinGain = -10;
 const MaxGain = 10;
 const SampleFreq = 44100;
-const ViewHeight = 500;
+const ViewHeight = 200;
 const BIQType = 3;
 
 const app = getApp();
 var that;
-let patternData;
-let windowWidth;
+var patternData;
+var windowWidth;
+var curPosition;
 
 Page({
   onShareAppMessage: function (res) {
@@ -30,6 +31,8 @@ Page({
     ctrlViewIndex : -1,
     peakingEQList : [],
     topX: 0,
+    winWidth:0,
+    winHeight:0,
     ec: {
       onInit: function (canvas, width, height) {
         const chart = echarts.init(canvas, null, {
@@ -38,9 +41,6 @@ Page({
         });
         canvas.setChart(chart);
         that.chart = chart;
-        
-        setOption(chart, getBIQArrayDataByPointXY(21.99999858673136,
-          174.789405, 1.0));
         return chart;
       }
     },
@@ -59,25 +59,30 @@ Page({
   },
   onLoad: function (option){
     that = this;
-    var res = wx.getSystemInfoSync();
+    let res = wx.getSystemInfoSync();
     //获取屏幕宽度
-    windowWidth = res.windowWidth;
-    patternData = patterns.getData(option.position);
-    var data = getPatternXYData(patternData.peakingEQList);
+    windowWidth = res.windowHeight;
+    curPosition = option.position
+    if (!curPosition){
+      curPosition = 0
+    }
+    patternData = patterns.getData(curPosition);
+    let data = getPatternXYData(patternData.peakingEQList);
     that.setData({
-      peakingEQList: data
+      peakingEQList: data,
+      winWidth: res.windowWidth,
+      winHeight: res.windowHeight
     });
-    console.log(data)
   },
   viewMoveChange: function(e){
-    var x = e.detail.x + 8;
-    var y = e.detail.y + 8;
+    let x = e.detail.x + 4;
+    let y = e.detail.y + 4;
     drawLine(x, y, 1.0);
-    var index = e.target.dataset.id;
-    var data = that.data.peakingEQList;
-    for (var i = 0; i < data.length; i++){
+    let index = e.target.dataset.id;
+    let data = that.data.peakingEQList;
+    for (let i = 0; i < data.length; i++){
       if(data[i].index == index){
-        var item = data[i];
+        let item = data[i];
         item.x = x;
         item.y = y;
         item.frequency = getFreqByPointX(item.x);
@@ -88,31 +93,35 @@ Page({
     }
   },
   onCtrlViewClick: function(e){
-    var indexId = e.currentTarget.id;
-    var x = e.detail.x + 8;
-    var y = e.detail.y + 8;
+    let indexId = e.currentTarget.id;
+    let x = e.detail.x + 4;
+    let y = e.detail.y + 4;
     drawLine(x, y, 1.0);
     that.setData({
       ctrlViewIndex: indexId
     })
   },
   onMoveAreaClick: function (e) {
-    setOption(that.chart, []);
+    //setOption(that.chart, []);
     that.setData({
       ctrlViewIndex: -1
     })
-  },
-  onScaleView: function (e){
-    console.log(e.detail.scale)
   }, 
   viewMoveChange1: function (e){
-    var y = e.detail.y ;
+    let y = e.detail.y ;
     that.setData({
       topX: y
     })
   },
   touchMove: function(e) {
     console.log(event)
+  },
+  onResetClick: function(e){
+    
+    let data = getPatternXYData(patternData.peakingEQList);
+    that.setData({
+      peakingEQList: data
+    });
   }
 });
 
@@ -141,15 +150,9 @@ function setOption(chart, data) {
     backgroundColor: "rgba(250, 250, 250, 0)",
     color: ["#fc9b28"],
     animation: false,
-    legend: {
-      zleve: -1,
-      z: -1
-    },
     tooltip: {
       show: false,
       trigger: 'axis',
-      zleve: -1,
-      z: -1
     },
 
     grid: {
@@ -157,8 +160,6 @@ function setOption(chart, data) {
       right: 0,
       bottom: 0,
       left: 0,
-      zleve: -1,
-      z: -1
     },
 
     xAxis: {
@@ -181,18 +182,13 @@ function setOption(chart, data) {
     splitLine: {
       lineStyle: {
         color: "#FFFFFF"
-      },
-      zleve: -1,
-      z: -1
+      }
     },
     series: [{
       type: 'line',
       smooth: false,
       data: data,
-      symbol: 'none',
-
-      zleve: -1,
-      z: -1
+      symbol: 'none'
     }]
   };
   chart.setOption(option);
@@ -203,25 +199,15 @@ function setOptionAll(chart, data) {
     backgroundColor: "rgba(250, 250, 250, 0)",
     color: ["#666666"],
     animation: false,
-    legend: {
-      zleve : -1,
-      z : -1
-    },
     tooltip: {
       show: false,
       trigger: 'axis',
-
-      zleve: -1,
-      z: -1
     },
     grid: {
       top: 0,
       right: 0,
       bottom: 0,
-      left: 0,
-
-      zleve: -1,
-      z: -1
+      left: 0
     },
     xAxis: {
       type: 'category',
@@ -243,30 +229,19 @@ function setOptionAll(chart, data) {
     splitLine: {
       lineStyle: {
         color: '#FFFFFF'
-      },
-
-      zleve: -1,
-      z: -1
+      }
     },
     series: [{
       type: 'line',
       smooth: false,
       data: data,
       symbol: 'none',
-      areaStyle: {
-        zleve: -1,
-        z: -1
-      },
+      // areaStyle: {},
       lineStyle: {
         color: '#FFFFFF',
-        width: 1,
-        type: 'solid',
-
-        zleve: -1,
-        z: -1
-      },
-      zleve: -1,
-      z: -1
+        width: 2,
+        type: 'solid'
+      }
     }]
   };
   chart.setOption(option);
@@ -274,7 +249,7 @@ function setOptionAll(chart, data) {
 
 function drawLine(x, y, q) {
   var dataArray = getBIQArrayDataByPointXY(x, y, q);
-  setOption(that.chart, dataArray);
+  //setOption(that.chart, dataArray);
   setOptionAll(that.chartAll, getAllOption());
 }
 
