@@ -1,5 +1,5 @@
 <!--pages/main.wxml-->
-<view class='root_view' catchtouchmove='true'>
+<view class='root_view'>
   <view class="h center switch_bar">
     <view style='flex:1;' class='v center_v' id="0" catchtap="swichNav">
       <view>我的音效</view>
@@ -20,16 +20,5 @@
       </view>
     </view>
   </view>
-
-  <swiper current="{{currentTab}}" duration="300" style="height:{{winHeight - 60}}px" bindchange="bindChange">
-    <swiper-item>
-      <include src="page1" />
-    </swiper-item>
-    <swiper-item>
-      <include src="page2" />
-    </swiper-item>
-    <swiper-item>
-      <include src="page3" />
-    </swiper-item>
-  </swiper>  
+  <include src="page1" />
 </view>

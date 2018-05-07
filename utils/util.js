@@ -44,7 +44,33 @@ function intentPage(pageUrl) {
   }
 }
 
+function redirectPage(pageUrl){
+  if (isEmpty(pageUrl)) return 
+  wx.redirectTo({
+    url: pageUrl,
+  })
+}
+
+function getGainFormat(gain){
+  if(gain > 0){
+    return "+"+gain.toFixed(1)
+  }else{
+    return gain.toFixed(1)
+  }
+}
+
+function getFreqFormat(freq){
+  if (freq >= 1000){
+    return (freq / 1000).toFixed(1)+"K";
+  }else{
+    return freq.toFixed(0);
+  }
+}
+
 module.exports = {
   formatTime: formatTime,
-  intentPage: intentPage
+  intentPage: intentPage,
+  getGainFormat: getGainFormat,
+  getFreqFormat: getFreqFormat,
+  redirectPage: redirectPage
 }

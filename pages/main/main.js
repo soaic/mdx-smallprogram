@@ -2,7 +2,10 @@
 import patterns from '../../config/patterns.js' ;
 import util from '../../utils/util.js';
 
-let that = this;
+const app = getApp();
+var that;
+var viewWidth;
+
 Page({
 
   /**
@@ -31,20 +34,19 @@ Page({
   onLoad: function (options) {
     that = this;
     //获取系统信息
-    wx.getSystemInfo({
-      success: function (res) {
-        var windowWidth = res.windowWidth;
-        var windowHeight = res.windowHeight;
-        that.setData({
-          winWidth: windowWidth,
-          winHeight: windowHeight,
-          item_width: windowWidth / 4 - 5,
-          item_height: windowWidth / 4,
-          image_width: windowWidth / 4 - 26,
-          image_height: (windowWidth / 4 - 26) * 188 / 197
-        })
-      }
-    })  
+    let res = wx.getSystemInfoSync();
+    var windowWidth = res.windowWidth;
+    var windowHeight = res.windowHeight;
+    viewWidth = windowWidth - 30;
+    
+    that.setData({
+      winWidth: windowWidth,
+      winHeight: windowHeight,
+      item_width: windowWidth / 4 - 5,
+      item_height: windowWidth / 4,
+      image_width: windowWidth / 4 - 26,
+      image_height: (windowWidth / 4 - 26) * 188 / 197
+    });
   },
 
   /**
@@ -53,26 +55,27 @@ Page({
   onShareAppMessage: function () {
   
   },
+  //音效点击
   onItemClick: function(e){
     that.setData({
       selectPosition: e.currentTarget.id,
       selectName: patterns.getData(e.currentTarget.id).name_zh_cn,
       detailViewDisplay: 'show'
     });
-
     setTimeout(function(){
       that.setData({
         detailViewDisplay: 'none'
       })
     },3000);
-
   },
+  //详情
   onDetailClick: function(e){
     that.setData({
       detailViewDisplay: 'none'
     });
-    util.intentPage('../add/add?position=' + e.currentTarget.id);
+    util.redirectPage('../add/add?position=' + that.data.selectPosition)
   },
+  //删除
   onDeleteClick: function (e) {
     that.setData({
       bottomDisplay: 'none'
@@ -90,16 +93,21 @@ Page({
       } 
     })
   },
+  //页面改变
   bindChange: function (e) {
     that.setData({ currentTab: e.detail.current });
   }, 
+  //导航栏滑动
   swichNav: function (e) {
     if (that.data.currentTab == e.currentTarget.id) {
       return false;
     } else {
-      that.setData({
-        currentTab: e.currentTarget.id
-      })
+      if(e.currentTarget.id == 1){
+        util.redirectPage('../add/add')
+      } else if (e.currentTarget.id == 2){
+
+      }
     }
-  }  
+  }
 })
+

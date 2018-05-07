@@ -1,6 +1,7 @@
 import * as echarts from '../../ec-canvas/echarts';
 import BiQuadFilter from '../../utils/biqfilter.js';
 import patterns from '../../config/patterns.js';
+import util from '../../utils/util.js'
 
 const MinFreq = 20;
 const MaxFreq = 20000;
@@ -15,8 +16,9 @@ const BIQType = 3;
 const app = getApp();
 var that;
 var patternData;
-var windowWidth;
+var viewWidth;
 var curPosition;
+var isRunReset = false;
 
 Page({
   onShareAppMessage: function (res) {
@@ -33,6 +35,9 @@ Page({
     topX: 0,
     winWidth:0,
     winHeight:0,
+    curFreq:'0.0',
+    curQuality:'1.0',
+    curGain:'+0.0',
     ec: {
       onInit: function (canvas, width, height) {
         const chart = echarts.init(canvas, null, {
@@ -61,7 +66,7 @@ Page({
     that = this;
     let res = wx.getSystemInfoSync();
     //获取屏幕宽度
-    windowWidth = res.windowHeight;
+    viewWidth = res.windowWidth - 30;
     curPosition = option.position
     if (!curPosition){
       curPosition = 0
@@ -75,10 +80,17 @@ Page({
     });
   },
   viewMoveChange: function(e){
+    if (isRunReset) return
     let x = e.detail.x + 4;
     let y = e.detail.y + 4;
-    drawLine(x, y, 1.0);
     let index = e.target.dataset.id;
+    if (index != that.data.ctrlViewIndex){
+      that.setData({
+        ctrlViewIndex: index
+      })
+    }
+    drawLine(x, y, 1.0);
+    
     let data = that.data.peakingEQList;
     for (let i = 0; i < data.length; i++){
       if(data[i].index == index){
@@ -87,6 +99,13 @@ Page({
         item.y = y;
         item.frequency = getFreqByPointX(item.x);
         item.gain = getGainByPointY(item.y);
+
+        that.setData({
+          curFreq: util.getFreqFormat(item.frequency),
+          curGain: util.getGainFormat(item.gain),
+          curQuality:'1.0'
+        })
+
         data[i] = item;
         break;
       }
@@ -96,7 +115,6 @@ Page({
     let indexId = e.currentTarget.id;
     let x = e.detail.x + 4;
     let y = e.detail.y + 4;
-    drawLine(x, y, 1.0);
     that.setData({
       ctrlViewIndex: indexId
     })
@@ -107,21 +125,31 @@ Page({
       ctrlViewIndex: -1
     })
   }, 
-  viewMoveChange1: function (e){
-    let y = e.detail.y ;
-    that.setData({
-      topX: y
-    })
-  },
-  touchMove: function(e) {
-    console.log(event)
-  },
   onResetClick: function(e){
-    
-    let data = getPatternXYData(patternData.peakingEQList);
+    isRunReset = true
+    var patternData1 = patterns.getData(curPosition);
+    let data = getPatternXYData(patternData1.peakingEQList);
     that.setData({
       peakingEQList: data
     });
+    setTimeout(function(){
+      isRunReset = false
+    },1000);
+  },
+  onTouchMove: function(e){
+
+  },
+  //导航栏滑动
+  swichNav: function (e) {
+    if (that.data.currentTab == e.currentTarget.id) {
+      return false;
+    } else {
+      if (e.currentTarget.id == 0) {
+        util.redirectPage('../main/main')
+      } else if (e.currentTarget.id == 2) {
+
+      }
+    }
   }
 });
 
@@ -133,7 +161,11 @@ function getAllOption(){
     for(var j = 0; j< biqArray.length; j++){
       if (dataTemp[j] && dataTemp[j].length == 2){
         dataTemp[j][1] = dataTemp[j][1] + biqArray[j][1]
-        
+        // if (dataTemp[j][1]>MaxGain-1){
+        //   dataTemp[j][1] = MaxGain-1
+        // } else if (dataTemp[j][1] < MinGain + 1){
+        //   dataTemp[j][1] = MinGain + 1
+        // }
       }else{
         var tempItem = [];
         tempItem.push(biqArray[j][0]);
@@ -248,9 +280,9 @@ function setOptionAll(chart, data) {
 }
 
 function drawLine(x, y, q) {
-  var dataArray = getBIQArrayDataByPointXY(x, y, q);
-  //setOption(that.chart, dataArray);
-  setOptionAll(that.chartAll, getAllOption());
+    //var dataArray = getBIQArrayDataByPointXY(x, y, q);
+    //setOption(that.chart, dataArray);
+    setOptionAll(that.chartAll, getAllOption());
 }
 
 
@@ -259,7 +291,7 @@ function getBIQArrayDataByPointXY(x, y, q){
   var mFreq = getFreqByPointX(x, false);
   BiQuadFilter.biqfilter.create(BIQType, mFreq, SampleFreq, q, mGain);
   var dataArray = new Array();
-  for (var i = 0; i < MaxFreq; i = i + 100) {
+  for (var i = 0; i < MaxFreq; i = i + 300) {
     var PointY = BiQuadFilter.biqfilter.log_result(i);
     let da = new Array();
     da.push(i);
@@ -271,17 +303,17 @@ function getBIQArrayDataByPointXY(x, y, q){
 
 function getFreqByPointX(x, isReal){
   if (isReal){
-    var percent = x  / windowWidth;
+    var percent = x / viewWidth;
     var logv = percent * (Math.log10(MaxFreq) - Math.log10(MinFreq)) + Math.log10(MinFreq);
     return Math.pow(10, logv);
   }else{
-    return x * MaxFreq / windowWidth;
+    return x * MaxFreq / viewWidth;
   }
 }
 
 function getPointXByFreq(freq){
   var percentF = (Math.log10(freq) - Math.log10(MinFreq)) / (Math.log10(MaxFreq) - Math.log10(MinFreq));
-  return  windowWidth * percentF;
+  return viewWidth * percentF;
 }
 
 function getGainByPointY(y){

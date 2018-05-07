@@ -1,6 +1,28 @@
 <!--add.wxml-->
-<view class='v'>
-
+<view class="h center switch_bar">
+    <view style='flex:1;' class='v center_v' id="0" catchtap="swichNav">
+      <view>我的音效</view>
+      <view style="font-size:20px;line-height:10px;height:10px">
+        
+      </view>
+    </view>
+    <view style='flex:1' class='v center_v' id="1" catchtap="swichNav">
+      <view>调音师</view>
+      <view style="font-size:20px;line-height:10px;height:10px">
+        ···
+      </view>
+    </view>
+    <view style='flex:1' class='v center_v' id="2" catchtap="swichNav">
+      <view>热门音效</view>
+      <view style="font-size:20px;line-height:10px;height:10px">
+        
+      </view>
+    </view>
+  </view>
+<view class='v' catchtouchmove='onTouchMove'>
+  <view class='r h center_h' style='font-weight:bold;color:#FB3A46; font-size:16px; padding:10px'>
+    {{curFreq}}Hz  G:{{curGain}} Q:{{curQuality}}
+  </view>
   <view class='r' style="height: 200px;width:{{winWidth-30}}px;padding-left:15px;padding-right:15px;">
     <image src='/images/bg_eq.png' mode='center' class='a' style="z-index: 0; width:{{winWidth-30}}px;height:200px;"></image>
     <ec-canvas class='a' style="height: 200px; width:{{winWidth-30}}px; z-index: 1;" id="mychart-dom-line-all" canvas-id="mychart-line-all" ec="{{ecAll}}"></ec-canvas>
@@ -21,13 +43,15 @@
     <movable-area catchtap="onMoveAreaClick" class="a" style="height: 200px; width:{{winWidth-30}}px;margin-left:15px;margin-right:15px; ">
       <block wx:for="{{peakingEQList}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
         <movable-view class='a' style='z-index: 4;' catchtap='onCtrlViewClick' id='{{item.index}}' class='a h center' data-id='{{item.index}}' x="{{item.x - 4}}" y="{{item.y - 4}}" bindchange="viewMoveChange" direction="all">
-          <view class="ctrlViewOutSide a" style="height: 50px; width: 50px;position:absolute; z-index:3; display:{{ctrlViewIndex==item.index?'show':'none'}}"></view>
+           <view class="ctrlViewOutSide a" style="height: 50px; width: 50px;position:absolute; z-index:3; display:{{ctrlViewIndex==item.index?'show':'none'}}"></view>
           <view class='h center_v a' style="width:60px; height:5px; z-index:2; display:{{ctrlViewIndex==item.index?'show':'none'}}">
             <view class='ctrlView' style='width:5px;height:5px'></view>
             <view class='orangeLine' style='margin-top:2.5px; flex:1'></view>
             <view class='ctrlView' style='width:5px;height:5px'></view>
+          </view> 
+          <view class='a' style='padding:10px; z-index3'>
+            <view class="ctrlView"  style="height: 8px; width: 8px;"></view>
           </view>
-          <view class="ctrlView a" canvas-id="moveCanvas{{item.index}}" style="position:absolute; height: 8px; width: 8px; z-index:3"></view>
         </movable-view>
       </block>
     </movable-area>

@@ -28,3 +28,10 @@ ec-canvas {
   border-top:2px dashed #FB3A46;
 }
 
+.switch_bar{
+  width: 100%;
+  height:60px;
+  background-color: #FB3A46;
+  font-size: 14px;
+  color: white;
+}
