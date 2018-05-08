@@ -1,0 +1,35 @@
+<!--pages/save/save.wxml-->
+<view class='root_view v'>
+  <cover-view class="h center switch_bar" style='position: fixed; top: 0;right: 0;width: 100%;z-idnex:10'>
+    <cover-view style='flex:1;' class='v center_v' id="0" catchtap="swichNav">
+      <cover-view>我的音效</cover-view>
+      <cover-view style="font-size:20px;line-height:10px;height:10px"></cover-view>
+    </cover-view>
+    <cover-view style='flex:1' class='v center_v' id="1" catchtap="swichNav">
+      <cover-view>调音师</cover-view>
+      <cover-view style="font-size:20px;line-height:10px;height:10px">···</cover-view>
+    </cover-view>
+    <cover-view style='flex:1' class='v center_v' id="2" catchtap="swichNav">
+      <cover-view>热门音效</cover-view>
+      <cover-view style="font-size:20px;line-height:10px;height:10px"></cover-view>
+    </cover-view>
+  </cover-view>
+  <view class='v center text_view' style='width:100%;margin-top:50px;'>
+    <view style="width:{{winWidth-40}}px;margin-top:25px">名称</view>
+    <input bindinput="bindNameInput" style="width:{{winWidth-40}}px;height:30px;padding-left:5px" maxlength="15" class='input_view' type='text' confirm-type='next'></input>
+    <view style="width:{{winWidth-40}}px;margin-top:15px">介绍</view>
+    <input bindinput="bindDesciptInput" style="width:{{winWidth-40}}px;height:30px;padding-left:5px" maxlength="15" class='input_view' type='text' confirm-type='done'></input>
+    <view style="width:{{winWidth-40}}px;margin-top:15px">请为您的音效选一个图标</view>
+
+    <view class='grid_view' style="width:{{winWidth}}px;">
+      <block wx:for="{{imagesData}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
+        <view class='grid_item' style="margin-bottom:10px" bindtap="onItemClick" id="{{item}}">
+          <view class='item_view' style='width:{{item_width}}px;height:{{item_width}}px;}}'>
+            <image class='item_image' src='/images/{{item}}.png' style="width:{{image_width}}px;height:{{image_height}}px;"></image>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+</view>
