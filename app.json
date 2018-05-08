@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/btooth/btooth",
     "pages/main/main",
     "pages/add/add",
     "pages/setting/setting",

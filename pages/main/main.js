@@ -47,6 +47,8 @@ Page({
       image_width: windowWidth / 4 - 26,
       image_height: (windowWidth / 4 - 26) * 188 / 197
     });
+
+    
   },
 
   /**
