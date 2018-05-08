@@ -8,6 +8,10 @@ page{
   background-color: white;
 }
 
+.f{
+  display: flex;
+}
+
 .h{
   display: flex;
   flex-direction: row;

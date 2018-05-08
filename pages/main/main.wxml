@@ -4,20 +4,16 @@
     <view style='flex:1;' class='v center_v' id="0" catchtap="swichNav">
       <view>我的音效</view>
       <view style="font-size:20px;line-height:10px;height:10px">
-        {{currentTab==0?'···':''}}
+        ···
       </view>
     </view>
     <view style='flex:1' class='v center_v' id="1" catchtap="swichNav">
       <view>调音师</view>
-      <view style="font-size:20px;line-height:10px;height:10px">
-        {{currentTab==1?'···':''}}
-      </view>
+      <view style="font-size:20px;line-height:10px;height:10px"></view>
     </view>
     <view style='flex:1' class='v center_v' id="2" catchtap="swichNav">
       <view>热门音效</view>
-      <view style="font-size:20px;line-height:10px;height:10px">
-        {{currentTab==2?'···':''}}
-      </view>
+      <view style="font-size:20px;line-height:10px;height:10px"></view>
     </view>
   </view>
   <include src="page1" />

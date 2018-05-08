@@ -73,25 +73,11 @@ Page({
     that.setData({
       detailViewDisplay: 'none'
     });
-    util.redirectPage('../add/add?position=' + that.data.selectPosition)
+    util.redirectPage('../detail/detail?position=' + that.data.selectPosition)
   },
   //删除
   onDeleteClick: function (e) {
-    that.setData({
-      bottomDisplay: 'none'
-    });
-    var name = patterns.getData(e.currentTarget.id).name_zh_cn;
-    wx.showModal({
-      content: '确定要删除 \'' + name+'\' 音效吗？',
-      success: function (res) {
-        if (res.confirm) {
-          patterns.removeData(e.currentTarget.id)
-          that.setData({
-            patternsData: patterns.getAllData()
-          });
-        }
-      } 
-    })
+    
   },
   //页面改变
   bindChange: function (e) {

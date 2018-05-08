@@ -1,0 +1,46 @@
+<!--pages/detail.wxml-->
+<view class='root_view'>
+  <view class="h center switch_bar">
+    <view style='flex:1;' class='v center_v' id="0" catchtap="swichNav">
+      <view>我的音效</view>
+      <view style="font-size:20px;line-height:10px;height:10px">
+        ···
+      </view>
+    </view>
+    <view style='flex:1' class='v center_v' id="1" catchtap="swichNav">
+      <view>调音师</view>
+      <view style="font-size:20px;line-height:10px;height:10px"></view>
+    </view>
+    <view style='flex:1' class='v center_v' id="2" catchtap="swichNav">
+      <view>热门音效</view>
+      <view style="font-size:20px;line-height:10px;height:10px"></view>
+    </view>
+  </view>
+
+  <view class='v' style='width:100%; '>
+    <view class='h center_h'>
+      <image src='/images/icon_logo.png' class='logo_img'></image>
+    </view>
+    <view class='h center_h text_view' style='margin-top:20px;'>名称: {{name}}</view>
+    <view class='h center_h text_view'>介绍: {{description}}</view>
+    <view class='h center_h text_view'>调音师: {{tuner}}</view>
+    <view class='h center_h text_view'>获得点赞: {{supportnum}}</view>
+  </view>
+
+  <view catchtap='onDeleteClick' class='a h center'  style='bottom:20px;width:88px;height:56px;'>
+    <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_left.png'></image>
+    <text class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>删除</text>
+  </view>
+
+  <view catchtap='onModifyClick' class='a v center_h' style="display:{{saveViewDisplay}};bottom:20px;left:50%;margin-left:-60px;width:120px;height:56px;">
+    <view class='h center' style='width:120px;height:56px;'>
+      <image class='a' style='z-index:9;width:120px;height:56px' src='/images/button_center.png'></image>
+      <text class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>修改</text>
+    </view>
+  </view>
+
+  <view catchtap='onShareClick' class='a h center' style='bottom:20px;right:0px;width:88px;height:56px;'>
+    <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_right.png'></image>
+    <view class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>分享</view>
+  </view>
+</view>

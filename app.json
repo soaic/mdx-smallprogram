@@ -1,6 +1,8 @@
 {
   "pages": [
+    "pages/save/save",
     "pages/main/main",
+    "pages/detail/detail",
     "pages/add/add",
     "pages/setting/setting",
     "pages/index/index",
