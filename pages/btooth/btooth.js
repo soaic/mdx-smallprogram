@@ -36,7 +36,7 @@ Page({
         that.setData({
           msg: "初始化蓝牙适配器成功！" + JSON.stringify(res),
         })
-        //监听蓝牙适配器状态  
+        //监听蓝牙适配器状态
         wx.onBluetoothAdapterStateChange(function (res) {
           that.setData({
             sousuo: res.discovering ? "在搜索。" : "未搜索。",
