@@ -1,12 +1,33 @@
 //app.js
-const NAME_FIRST = 'EDRS'
+const NAME_FIRST = 'MDX'
+const UUID = '00006666-0000-1000-8000-00805F9B34FB'
+var that
 App({
   onLaunch: function () {
-    //this.startConnect()
+    that = this;
+  },
+  onShow: function(){
+    if (!this.connected && !this.isConnectting){
+      this.startConnect()
+    }
   },
   //开启适配，如果失败提示设备蓝牙不可用，同时开启蓝牙适配器状态监听
   startConnect: function () {
-    var that = this;
+    that.resetNum = 0;
+    wx.hideLoading()
+    if (that.getDeviceFoundTimer){
+      clearInterval(that.getDeviceFoundTimer);
+      that.getDeviceFoundTimer = null;
+    }
+    if (that.getConnectedTimer){
+      clearTimeout(that.getConnectedTimer);
+      that.getConnectedTimer = null;
+    }
+    if (that.discoveryDevicesTimer){
+      clearTimeout(that.discoveryDevicesTimer);
+      that.discoveryDevicesTimer = null;
+    }
+    this.isConnectting = true;
     wx.showLoading({
       title: '开启蓝牙适配'
     });
@@ -19,67 +40,61 @@ App({
       })
       return;
     }
+    that.openBluetoothAdapter()
+  },
+  //开启蓝牙适配器
+  openBluetoothAdapter: function(){
+    wx.showLoading({
+      title: '初始化蓝牙适配器'
+    });
     wx.openBluetoothAdapter({
       success: function (res) {
-        console.log("初始化蓝牙适配器");
-        console.log(res);
-        wx.onBluetoothAdapterStateChange(function (res1) {
-          console.log("res1=" + res1)
-          var available = res1.available;
-          console.log("available=" + available)
-          if (available) {
-            that.getBluetoothAdapterState();
+        wx.onBluetoothAdapterStateChange(function (res) {
+          if (!that.available && res.available) {
+            //重新连接
+            that.startConnect();
           }
+          that.available = res.available
+          that.discovering = res.discovering
+          console.log('available:' + res.available + ',discovering:'+res.discovering)
+          
         })
+        console.log("openBluetoothAdapter success")
+        that.getBluetoothAdapterState();
       },
       fail: function (err) {
+        wx.hideLoading()
         console.log(err);
-        wx.showToast({
-          title: '蓝牙初始化失败',
-          icon: 'success',
-          duration: 2000
-        })
-        setTimeout(function () {
-          wx.hideToast()
-        }, 2000)
-      }
-    });
-    
-  },
-  //开始扫描附近的蓝牙设备，开启获取本机已配对的蓝牙设备
-  getBluetoothAdapterState: function () {
-    console.log("----getBluetoothAdapterState---init")
-    var that = this;
-    wx.getBluetoothAdapterState({
-      success: function (res) {
-        console.log("----getBluetoothAdapterState---success")
-        console.log(res)
-        var available = res.available,
-        discovering = res.discovering;
-        if (!available) {
+        if(err.errCode == 10001){
+          showUnAvailableDialog()
+        }else{
           wx.showToast({
-            title: '设备无法开启蓝牙连接',
-            icon: 'success',
+            title: '蓝牙初始化失败',
             duration: 2000
           })
+        }
+      }
+    });
+  },
+
+  //开始扫描附近的蓝牙设备，开启获取本机已配对的蓝牙设备
+  getBluetoothAdapterState: function () {
+    wx.getBluetoothAdapterState({
+      success: function (res) {
+        that.available = res.available
+        that.discovering = res.discovering
+        if (!that.available) {
+          wx.showLoading({
+            title: '设备无法开启蓝牙连接'
+          })
           setTimeout(function () {
-            wx.hideToast()
+            wx.hideLoading()
           }, 2000)
         } else {
-          console.log("discovering=" + discovering)
-          if (!discovering) {
-            wx.getBluetoothDevices({
-              success: function (res) {
-                console.log("-----getBluetoothDevices---success")
-                console.log(res)
-                that.startBluetoothDevicesDiscovery();
-                that.getConnectedBluetoothDevices();
-              },
-              fail: function(res){
-                console.log("-----getBluetoothDevices---fail")
-                console.log(res)
-              }
-            })
+          if (!that.discovering) {
+            console.log("getBluetoothAdapterState success")
+            //开始蓝牙扫描
+            that.startBluetoothDevicesDiscovery()
           }
         }
       }
@@ -87,168 +102,214 @@ App({
   },
   //开始搜索蓝牙设备, 提示蓝牙搜索
   startBluetoothDevicesDiscovery: function () {
-    var that = this;
     wx.showLoading({
-      title: '蓝牙搜索'
+      title: '蓝牙搜索中...' + (that.resetNum == 0 ? "" : that.resetNum)
     });
     wx.startBluetoothDevicesDiscovery({
-      services: [],
-      allowDuplicatesKey: false,
+      services: [UUID],
+      allowDuplicatesKey: true,
       success: function (res) {
+        console.log("startBluetoothDevicesDiscovery success")
         if (!res.isDiscovering) {
-          that.getBluetoothAdapterState();
+          wx.getBluetoothDevices({
+            success: function (res) {
+              that.getConnectedBluetoothDevices()
+            }
+          })
         } else {
-          that.onBluetoothDeviceFound();
+          that.getDeviceFoundTimer = setInterval(function () {
+            that.onBluetoothDeviceFound();
+            that.resetNum = that.resetNum + 1
+          }, 5000);
+          
         }
       },
       fail: function (err) {
-        console.log(err);
+        console.log("startBluetoothDevicesDiscovery fail", err)
+        that.resetNum = that.resetNum+1
+        setTimeout(that.getBluetoothAdapterState, 2000)
       }
     });
   },
   //获取已配对的蓝牙设备
   getConnectedBluetoothDevices: function () {
-    var that = this;
     wx.getConnectedBluetoothDevices({
-      services: [that.serviceId],
+      services: [UUID],
       success: function (res) {
-        console.log(res)
-        console.log("获取处于连接状态的设备", res);
+        console.log("getConnectedBluetoothDevices success")
         var devices = res['devices'], flag = false, index = 0, conDevList = [];
-        console.log(devices);
         devices.forEach(function (value, index, array) {
-          console.log(value['name'])
-          if (value['name'].indexOf(NAME_FIRST) != -1) {
+          if (value['localName'].indexOf(NAME_FIRST) != -1) {
             // 如果存在包含NAME_FIRST字段的设备
-            flag = true;
-            index += 1;
-            conDevList.push(value['deviceId']);
+            flag = true
             that.deviceId = value['deviceId'];
             return;
           }
         });
-        console.log(index + "======" + flag)
         if (flag) {
-          this.connectDeviceIndex = 0;
-          that.loopConnect(conDevList);
+          that.startConnectDevices();
         } else {
           if (!this.getConnectedTimer) {
             that.getConnectedTimer = setTimeout(function () {
+              that.resetNum = that.resetNum + 1
               that.getConnectedBluetoothDevices();
             }, 5000);
           }
         }
       },
       fail: function (err) {
+        console.log("getConnectedBluetoothDevices fail")
         if (!this.getConnectedTimer) {
           that.getConnectedTimer = setTimeout(function () {
+            that.resetNum = that.resetNum + 1
             that.getConnectedBluetoothDevices();
           }, 5000);
         }
       }
     });
   },
-  //开启蓝牙搜索功能失败
+  //重新查询蓝牙设备列表
   onBluetoothDeviceFound: function () {
-    var that = this;
-    console.log('onBluetoothDeviceFound');
+    wx.showLoading({
+      title: '蓝牙搜索中...' + (that.resetNum == 0 ? "" : that.resetNum)
+    });
     wx.onBluetoothDeviceFound(function (res) {
-      console.log('new device list has founded')
-      console.log(res);
       if (res.devices[0]) {
         var name = res.devices[0]['name'];
-        if (name != '') {
-          if (name.indexOf(NAME_FIRST) != -1) {
-            var deviceId = res.devices[0]['deviceId'];
-            that.deviceId = deviceId;
-            console.log(that.deviceId);
-            that.startConnectDevices();
-          }
+        var localName = res.devices[0]['localName'];
+        if ((name != '' && name.indexOf(NAME_FIRST) != -1) || 
+            (localName != '' && localName.indexOf(NAME_FIRST) != -1)) {
+          var deviceId = res.devices[0]['deviceId'];
+          that.deviceId = deviceId;
+          //取消搜索
+          clearInterval(that.getDeviceFoundTimer);
+          that.getDeviceFoundTimer = null;
+          that.startConnectDevices();
         }
+        
       }
     })
   },
   //开始配对设备
-  startConnectDevices: function (ltype, array) {
-    var that = this;
+  startConnectDevices: function () {
+    wx.showLoading({
+      title: '开始配对...'
+    });
     clearTimeout(that.getConnectedTimer);
     that.getConnectedTimer = null;
     clearTimeout(that.discoveryDevicesTimer);
+    that.discoveryDevicesTimer = null;
     that.stopBluetoothDevicesDiscovery();
-    this.isConnectting = true;
     wx.createBLEConnection({
       deviceId: that.deviceId,
       success: function (res) {
         if (res.errCode == 0) {
           setTimeout(function () {
-            that.getService(that.deviceId);
-          }, 5000)
+            that.getService();
+          }, 2000)
         }
       },
       fail: function (err) {
         console.log('连接失败：', err);
-        if (ltype == 'loop') {
-          that.connectDeviceIndex += 1;
-          that.loopConnect(array);
+        if (that.devices) {
+          that.resetNum = that.resetNum+1;
+          setTimeout(that.startConnectDevices(),2000)
         } else {
           that.startBluetoothDevicesDiscovery();
-          that.getConnectedBluetoothDevices();
         }
       },
       complete: function () {
-        console.log('complete connect devices');
-        this.isConnectting = false;
+        
       }
     });
   },
   //连接成功后根据deiviceId获取设备的所有服务
-  getService: function (deviceId) {
-    var that = this;
+  getService: function () {
+    wx.showLoading({
+      title: '获取信息中...'
+    });
     // 监听蓝牙连接
     wx.onBLEConnectionStateChange(function (res) {
-      console.log(res);
+      that.connected = res.connected
+      if (!that.connected) {
+        that.startConnect();
+      }
+      console.log('device{'+ res.deviceId+'}state has changed, connected: '+res.connected)
     });
     // 获取蓝牙设备service值
     wx.getBLEDeviceServices({
-      deviceId: deviceId,
+      deviceId: that.deviceId,
       success: function (res) {
-        that.getCharacter(deviceId, res.services);
+        that.getCharacter();
       }
     })
   },
   //读取服务的特征值
-  getCharacter: function (deviceId, services) {
-    var that = this;
-    services.forEach(function (value, index, array) {
-      if (value == that.serviceId) {
-        that.serviceId = array[index];
-      }
-    });
+  getCharacter: function () {
     wx.getBLEDeviceCharacteristics({
-      deviceId: deviceId,
-      serviceId: that.serviceId,
+      deviceId: that.deviceId,
+      serviceId: UUID,
       success: function (res) {
-        that.writeBLECharacteristicValue(deviceId, that.serviceId, that.characterId_write);
-        that.openNotifyService(deviceId, that.serviceId, that.characterId_read);
+        that.characteristicId = res.characteristics
+        that.connected = true
+        that.isConnectting = false;
+        wx.showToast({
+          title: '配对成功',
+          icon: 'success',
+          duration: 5000
+        })
       },
       fail: function (err) {
-        console.log(err);
+        setTimeout(that.getCharacter,2000)
       },
       complete: function () {
-        console.log('complete');
+        wx.hideLoading()
       }
     })
   },
-  loopConnect: function (devicesId) {
-    var that = this;
-    var listLen = devicesId.length;
-    if (devicesId[this.connectDeviceIndex]) {
-      this.deviceId = devicesId[this.connectDeviceIndex];
-      this.startConnectDevices('loop', devicesId);
-    } else {
-      console.log('已配对的设备小程序蓝牙连接失败');
-      that.startBluetoothDevicesDiscovery();
-      that.getConnectedBluetoothDevices();
-    }
+  stopBluetoothDevicesDiscovery: function(){
+    wx.stopBluetoothDevicesDiscovery({
+      success: function(res) {
+      }
+    })
+  },
+  writeBLECharacteristicValue: function (arrayBuffer){
+    let buffer = new ArrayBuffer(1)
+    let dataView = new DataView(buffer)
+    dataView.setUint8(0, 0)
+    wx.writeBLECharacteristicValue({
+      // 这里的 deviceId 需要在上面的 getBluetoothDevices 或 onBluetoothDeviceFound 接口中获取
+      deviceId: that.deviceId,
+      // 这里的 serviceId 需要在上面的 getBLEDeviceServices 接口中获取
+      serviceId: UUID,
+      // 这里的 characteristicId 需要在上面的 getBLEDeviceCharacteristics 接口中获取
+      characteristicId: that.characteristicId,
+      // 这里的value是ArrayBuffer类型
+      value: arrayBuffer,
+      success: function (res) {
+        console.log('writeBLECharacteristicValue success', res.errMsg)
+      }
+    })
+  },
+  closeBLEConnection:function(){
+    wx.closeBLEConnection({
+      deviceId: that.deviceId,
+      success: function (res) {
+        console.log(res)
+      }
+    })
   }
 })
+
+function showUnAvailableDialog(){
+  wx.showModal({
+    content: "蓝牙未开启,请在手机设置开启蓝牙",
+    confirmText: "确定",
+    cancelText: '取消',
+    success: function (res) {
+      if (res.confirm) {
+
+      }
+    }
+  })
+}

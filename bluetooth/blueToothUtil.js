@@ -9,6 +9,9 @@ const noConnection = 10006
 const propertyNotSupport = 10007
 const systemError = 10008
 const systemNotSupport = 10009
+const deviceId = '1770EE81-BC36-378C-C47A-B049AED6F1D1'
+const advertisServiceUUIDs= '00006666-0000-1000-8000-00805F9B34FB'
+const rrsi = -52
 
 function init(){
   if (wx.openBluetoothAdapter) {
