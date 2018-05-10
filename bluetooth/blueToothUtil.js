@@ -202,6 +202,7 @@ function startConnectDevices() {
   wx.showLoading({
     title: '开始配对...'
   });
+  console.log("devceId=", deviceId)
   clearTimeout(getConnectedTimer);
   getConnectedTimer = null;
   clearTimeout(discoveryDevicesTimer);
@@ -259,7 +260,7 @@ function getCharacter() {
     deviceId: deviceId,
     serviceId: UUID,
     success: function (res) {
-      characteristicId = res.characteristics
+      characteristicId = res.characteristics[0].uuid
       connected = true
       isConnectting = false;
       notifyBLECharacteristicValueChange();
@@ -293,16 +294,17 @@ function notifyBLECharacteristicValueChange() {
     characteristicId: characteristicId,
     complete(res) {
       wx.onBLECharacteristicValueChange(function (res) {
-        console.log(arrayBufferToHexString(res.value));
+        console.log('notifyBLECharacteristicValueChange',res)
       })
     },
     fail(res) {
-      console.log(res);
+      console.log('notify fail',res);
     }
   })
 }
 
 function send(arrayBuffer) {
+  console.log(arrayBufferToHexString(arrayBuffer))
   wx.writeBLECharacteristicValue({
     // 这里的 deviceId 需要在上面的 getBluetoothDevices 或 onBluetoothDeviceFound 接口中获取
     deviceId: deviceId,
@@ -313,7 +315,7 @@ function send(arrayBuffer) {
     // 这里的value是ArrayBuffer类型
     value: arrayBuffer,
     success: function (res) {
-      console.log('writeBLECharacteristicValue success', res.errMsg)
+      console.log('writeBLECharacteristicValue success', res)
     }
   })
 }
@@ -357,8 +359,11 @@ function arrayBufferToHexString(buffer) {
   var hexStr = '';
   for (var i = 0; i < dataView.byteLength; i++) {
     var str = dataView.getUint8(i);
+    console.log("hex" + i, str)
     var hex = (str & 0xff).toString(16);
+    console.log("16hex" + i, hex)
     hex = (hex.length === 1) ? '0' + hex : hex;
+    
     hexStr += hex;
   }
   return hexStr.toUpperCase();

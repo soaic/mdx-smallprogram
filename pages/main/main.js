@@ -59,8 +59,8 @@ Page({
       detailViewDisplay: 'show'
     });
     //把pattern数据转成ArrayBuffer,然后通过蓝牙发送数据
-    // var btData = btrequest.createPeakingEQ(pattern)
-    // btutil.send(btData)
+    var btData = btrequest.createPeakingEQ(pattern)
+    btutil.send(btData)
 
     if (that.detailDisplayTimer){
       clearTimeout(that.detailDisplayTimer)
