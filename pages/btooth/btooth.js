@@ -70,8 +70,7 @@ Page({
   lanya3: function () {
     var that = this;
     wx.startBluetoothDevicesDiscovery({
-      services: ['00006666-0000-1000-8000-00805F9B34FB'],
-      allowDuplicatesKey: false,
+      allowDuplicatesKey: true,
       success: function (res) {
         that.setData({
           msg: "搜索设备" + JSON.stringify(res),

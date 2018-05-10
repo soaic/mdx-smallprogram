@@ -1,8 +1,8 @@
 {
   "pages": [
+    "pages/main/main",
     "pages/btooth/btooth",
     "pages/save/save",
-    "pages/main/main",
     "pages/detail/detail",
     "pages/add/add",
     "pages/setting/setting",

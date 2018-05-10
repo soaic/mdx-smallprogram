@@ -1,6 +1,8 @@
 // pages/main.js
 import patterns from '../../config/patterns.js' ;
 import util from '../../utils/util.js';
+import btutil from '../../bluetooth/blueToothUtil.js'
+import btrequest from '../../bluetooth/bluetoothRequest.js'
 
 const app = getApp();
 var that;
@@ -47,24 +49,23 @@ Page({
       image_width: windowWidth / 4 - 26,
       image_height: (windowWidth / 4 - 26) * 188 / 197
     });
-
-    
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
   },
   //音效点击
   onItemClick: function(e){
+    let pattern = patterns.getData(e.currentTarget.id)
     that.setData({
       selectPosition: e.currentTarget.id,
-      selectName: patterns.getData(e.currentTarget.id).name_zh_cn,
+      selectName: pattern.name_zh_cn,
       detailViewDisplay: 'show'
     });
-    setTimeout(function(){
+    //把pattern数据转成ArrayBuffer,然后通过蓝牙发送数据
+    // var btData = btrequest.createPeakingEQ(pattern)
+    // btutil.send(btData)
+
+    if (that.detailDisplayTimer){
+      clearTimeout(that.detailDisplayTimer)
+    }
+    that.detailDisplayTimer = setTimeout(function(){
       that.setData({
         detailViewDisplay: 'none'
       })
