@@ -356,17 +356,18 @@ function arrayBufferToHexString(buffer) {
     return
   }
   let dataView = new DataView(buffer)
-  var hexStr = '';
+  var hexStr = '[';
   for (var i = 0; i < dataView.byteLength; i++) {
     var str = dataView.getUint8(i);
-    console.log("hex" + i, str)
     var hex = (str & 0xff).toString(16);
-    console.log("16hex" + i, hex)
     hex = (hex.length === 1) ? '0' + hex : hex;
-    
-    hexStr += hex;
+    hexStr += " 0x"+ hex;
+    if (i < dataView.byteLength - 1) {
+      hexStr += ","
+    }
   }
-  return hexStr.toUpperCase();
+  hexStr += " ]"
+  return hexStr;//hexStr.toUpperCase();
 }
 
 function hexStringToArrayBuffer(str) {

@@ -1,11 +1,12 @@
 
+import patterns from '../config/patterns.js';
 var SN = 0
 
 function createPeakingEQ(pattern) {
   var peakingEQList;
   console.log("isByPass = " + pattern.byPass)
   if (pattern.byPass) {
-    //peakingEQList = EQValues.getDefaultPeakingEQList(false);
+    peakingEQList = patterns.getData(0);
   } else {
     peakingEQList = pattern.peakingEQList;
   }
@@ -36,7 +37,6 @@ function createPeakingEQ(pattern) {
     var freq = peakingEQ.frequency;
     var gain = peakingEQ.gain * 10;
     var quality = peakingEQ.quality * 10;
-    console.log(1 + "peakingEqfreq=" + freq)
     dataView.setUint8(pos++, ((freq & 0xFF00) >> 8));
     dataView.setUint8(pos++, (freq & 0xFF));
     dataView.setUint8(pos++, ((quality & 0xFF00) >> 8));
@@ -53,11 +53,9 @@ function fillChecksum(data) {
     sum += data.getUint8(i);
   }
   var checkSum = (0 - sum) & 0xFF;
-
   console.log("sum = " + sum)
   console.log("checkSum = "+checkSum)
-  
-  data.setUint8(data.length - 1, checkSum)
+  data.setUint8(data.byteLength - 1, checkSum)
 }
 
 function createSN() {
