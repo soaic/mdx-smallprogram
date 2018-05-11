@@ -11,7 +11,7 @@
   </block>
 </view>
 
-<view class='a h center' style='bottom:20px;width:88px;height:56px;'>
+<view bindtap='onHomeClick' class='a h center' style='bottom:20px;width:88px;height:56px;'>
   <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_left.png'></image>
   <text class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>首页</text>
 </view>

@@ -118,15 +118,15 @@ Page({
     })
   }, 
   onResetClick: function(e){
-    isRunReset = true
-    var patternData1 = patterns.getData(curPosition);
-    let data = getPatternXYData(patternData1.peakingEQList);
-    that.setData({
-      peakingEQList: data
-    });
-    setTimeout(function(){
-      isRunReset = false
-    },1000);
+    // isRunReset = true
+    // var patternData1 = patterns.getData(curPosition);
+    // let data = getPatternXYData(patternData1.peakingEQList);
+    // that.setData({
+    //   peakingEQList: data
+    // });
+    // setTimeout(function(){
+    //   isRunReset = false
+    // },1000);
   },
   onTouchMove: function(e){
     
@@ -283,9 +283,11 @@ function getBIQArrayDataByPointXY(x, y, q){
   var mFreq = getFreqByPointX(x, false);
   BiQuadFilter.biqfilter.create(BIQType, mFreq, SampleFreq, q, mGain);
   var dataArray = new Array();
-  for (var i = 0; i < MaxFreq; i = i + 300) {
+  let da
+  for (var i = 0; i < MaxFreq; i = i + 250) {
     var PointY = BiQuadFilter.biqfilter.log_result(i);
-    let da = new Array();
+    
+    da = new Array();
     da.push(i);
     da.push(PointY);
     dataArray.push(da);

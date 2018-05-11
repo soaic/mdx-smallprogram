@@ -79,8 +79,8 @@ Page({
     util.redirectPage('../detail/detail?position=' + that.data.selectPosition)
   },
   //删除
-  onDeleteClick: function (e) {
-    
+  onHomeClick: function (e) {
+    btutil.read()
   },
   //页面改变
   bindChange: function (e) {
