@@ -15,7 +15,6 @@ const BIQType = 3;
 
 const app = getApp();
 var that;
-var patternData;
 var viewWidth;
 var curPosition;
 var isRunReset = false;
@@ -63,8 +62,8 @@ Page({
     if (!curPosition){
       curPosition = 0
     }
-    patternData = patterns.getData(curPosition);
-    let data = getPatternXYData(patternData.peakingEQList);
+    that.patternData = patterns.getData(curPosition);
+    let data = getPatternXYData(that.patternData.peakingEQList);
     that.setData({
       peakingEQList: data,
       winWidth: res.windowWidth,
@@ -89,7 +88,7 @@ Page({
         let item = data[i];
         item.x = x;
         item.y = y;
-        item.frequency = getFreqByPointX(item.x);
+        item.frequency = getFreqByPointX(item.x, true);
         item.gain = getGainByPointY(item.y);
 
         that.setData({
@@ -118,15 +117,21 @@ Page({
     })
   }, 
   onResetClick: function(e){
-    // isRunReset = true
-    // var patternData1 = patterns.getData(curPosition);
-    // let data = getPatternXYData(patternData1.peakingEQList);
-    // that.setData({
-    //   peakingEQList: data
-    // });
-    // setTimeout(function(){
-    //   isRunReset = false
-    // },1000);
+    isRunReset = true
+    patterns.initData();
+    that.patternData = patterns.getData(curPosition);
+    let data = getPatternXYData(that.patternData.peakingEQList);
+    that.setData({
+      peakingEQList: data,
+      ctrlViewIndex: -1
+    });
+    setTimeout(function(){
+      isRunReset = false
+    },2000);
+  },
+  onSaveClick: function(e){
+    var peakStr = JSON.stringify(that.data.peakingEQList)
+    util.redirectPage('../save/save?data=' + peakStr + '&name=' + that.patternData.name_zh_tw + '&position=' + that.patternData.position + '&icon=' + that.patternData.icon)
   },
   onTouchMove: function(e){
     
@@ -139,7 +144,7 @@ Page({
       if (e.currentTarget.id == 0) {
         util.redirectPage('../main/main')
       } else if (e.currentTarget.id == 2) {
-
+        util.redirectPage('../hot/hot')
       }
     }
   }
@@ -339,11 +344,12 @@ function getPointYByGain(gain){
 }
 
 function getPatternXYData(data) {
+  var tempData= []
   for (var i = 0; i < data.length; i++) {
     var item = data[i];
     item.x = getPointXByFreq(item.frequency);
     item.y = getPointYByGain(item.gain);
-    data[i] = item;
+    tempData[i] = item;
   }
   return data;
 }

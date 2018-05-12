@@ -1,7 +1,8 @@
 // pages/save/save.js
 import util from '../../utils/util.js';
+import patterns from '../../config/patterns.js';
 
-var that
+var that;
 Page({
 
   /**
@@ -14,7 +15,10 @@ Page({
     image_width: 0,
     image_height: 0, 
     winWidth: 0,
-    winHeight: 0
+    winHeight: 0,
+    icon:'',
+    name:''
+
   },
 
   /**
@@ -22,6 +26,13 @@ Page({
    */
   onLoad: function (options) {
     that = this
+    if(options.data){
+      that.parttenEq = JSON.parse(options.data)
+      that.name = options.name
+      that.position = options.position
+      that.icon = options.icon
+    }
+
     var images = []
     for(var i = 1; i <= 16 ;i++){
       images.push("pattern_"+i)
@@ -38,19 +49,24 @@ Page({
       item_width: windowWidth / 4 - 5,
       item_height: windowWidth / 4,
       image_width: windowWidth / 4 - 26,
-      image_height: (windowWidth / 4 - 26) * 188 / 197
+      image_height: (windowWidth / 4 - 26) * 188 / 197,
+      icon: that.icon,
+      name: that.name
     });
 
   },
   onItemClick: function (e) {
-
+    var icon = e.currentTarget.id;
+    that.setData({
+      icon: icon
+    })
   },
   bindNameInput: function(e){
-    var name = e.detail.value
-
+    that.name = e.detail.value
   },
   bindDesciptInput: function(e){
-    var descript = e.detail.value
+    that.descript = e.detail.value
+    
   },
   swichNav: function (e) {
     if (e.currentTarget.id == 0) {
@@ -60,5 +76,22 @@ Page({
     } else if (e.currentTarget.id == 2) {
 
     }
+  },
+  onCancelClick: function(e){
+
+  },
+  onConfirmClick: function(e){
+    var partten = {}
+    partten['name_zh_tw'] = that.name;
+    partten['peakingEQList'] = that.parttenEq;
+    partten['descript'] = that.descript;
+    
+    partten['icon'] = that.data.icon
+    let position = that.position
+    if (!position) {
+      position = patterns.getLastPosition() + 1
+    }
+    partten['position'] = position;
+    console.log(partten);
   }
 })

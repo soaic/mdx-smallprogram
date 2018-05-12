@@ -2,12 +2,14 @@
   "pages": [
     "pages/main/main",
     "pages/btooth/btooth",
+    "pages/hot/hot",
     "pages/save/save",
     "pages/detail/detail",
     "pages/add/add",
     "pages/setting/setting",
     "pages/index/index",
     "pages/logs/logs"
+    
   ],
   "window": {
     "backgroundTextStyle": "light",

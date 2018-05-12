@@ -874,12 +874,17 @@ function updataData(position,json){
   })
 }
 
-
+function getLastPosition(){
+  let data = getAllData();
+  return data[data.length - 1].position
+}
 
 module.exports = {
+  initData: initData,
   getData: getData,
   getAllData: getAllData,
   removeData: removeData,
   updataData: updataData,
   addData: addData,
+  getLastPosition: getLastPosition
 }

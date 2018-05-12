@@ -59,7 +59,7 @@ Page({
     } else if (e.currentTarget.id == 1) {
       util.redirectPage('../add/add')
     } else if (e.currentTarget.id == 2) {
-
+      util.redirectPage('../hot/hot')
     } 
   }
 
