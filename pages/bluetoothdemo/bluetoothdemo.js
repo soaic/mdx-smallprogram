@@ -1,6 +1,8 @@
 // pages/bluetoothdemo/bluetoothdemo.js
 import btrequest from '../../bluetooth/bluetoothRequest.js'
 import btutil from '../../bluetooth/blueToothUtil.js'
+
+
 Page({
 
   /**
@@ -8,19 +10,35 @@ Page({
    */
   data: {
     sendText: '',
-    sendTextHex: ''
+    sendTextHex: '',
+    receiveText:'',
+    isConnected: false
   },
   onLoad: function(e){
     var that = this
     that.setData({
       sendText: buf2hex(btrequest.handShakeReq())
     })
-    // if (blueTooth.isResetConntct()) {
-    //   blueTooth.startConnect()
-    // }
+    if (btutil.isResetConnect()) {
+      btutil.startConnect()
+    }
+    btutil.setOnConnectListener(function(str){
+      console.log("str="+str)
+      that.setData({
+        isConnected: str
+      })
+    })
+
+    btutil.setOnReciverListener(function(res){
+      that.setData({
+        receiveText: buf2hex(res.value)
+      })
+    })
   },
   onResetConnectClikc: function(e){
-
+    if (btutil.isResetConnect()) {
+      btutil.startConnect()
+    }
   },
   onSendClick: function (e){
     var that = this
@@ -30,9 +48,10 @@ Page({
     }))
     var buffer = typedArray.buffer
     that.setData({
-        sendTextHex: arrayBufferToHexString(buffer)
+        sendTextHex: arrayBufferToHexString(buffer),
+        receiveText: ''
     })
-    
+    btutil.send(buffer)
 
   },
   onTextInputChange: function (e){

@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/main/main",
     "pages/bluetoothdemo/bluetoothdemo",
+    "pages/main/main",
     "pages/btooth/btooth",
     "pages/hot/hot",
     "pages/save/save",

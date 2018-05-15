@@ -14,9 +14,10 @@ const NAME_FIRST = 'MDX'
 const UUID = '00006666-0000-1000-8000-00805F9B34FB'
 var resetNum = 0
 var getDeviceFoundTimer, getConnectedTimer, discoveryDevicesTimer
-var isConnectting = false, connected = false, isConnectting = false
+var isConnectting = false, connected = false
 var available, discovering
 var deviceId, characteristicId
+var onReciverListener,onConnectListener
 
 
 //开启适配，如果失败提示设备蓝牙不可用，同时开启蓝牙适配器状态监听
@@ -40,7 +41,6 @@ function startConnect() {
   if (wx.openBluetoothAdapter) {
     wx.openBluetoothAdapter()
     openBluetoothAdapter()
-    isConnectting = true;
   } else {
     versionLowDialog()
   }
@@ -62,9 +62,14 @@ function openBluetoothAdapter() {
         available = res.available
         discovering = res.discovering
         console.log('available:' + res.available + ',discovering:' + res.discovering)
-
+        if (!res.available) {
+          if (onConnectListener instanceof Function) {
+            onConnectListener(res.available)
+          }
+          isConnectting = false
+          connected = false
+        }
       })
-      console.log("openBluetoothAdapter success")
       getBluetoothAdapterState();
     },
     fail: function (err) {
@@ -221,6 +226,7 @@ function onBluetoothDeviceFound() {
 
 //开始配对设备
 function startConnectDevices() {
+  isConnectting = true
   wx.showLoading({
     title: '开始配对...'
   });
@@ -299,6 +305,10 @@ function getCharacter() {
         icon: 'success',
         duration: 5000
       })
+
+      if (onConnectListener instanceof Function){
+        onConnectListener(true)
+      }
     },
     fail: function (err) {
       setTimeout(getCharacter, 2000)
@@ -324,6 +334,8 @@ function notifyBLECharacteristicValueChange() {
     characteristicId: characteristicId,
     complete(res) {
       wx.onBLECharacteristicValueChange(function (res) {
+        if (onReciverListener instanceof Function)
+          onReciverListener(res)
         console.log('notifyBLECharacteristicValueChange',res)
       })
     },
@@ -360,6 +372,7 @@ function send(arrayBuffer) {
     value: arrayBuffer,
     success: function (res) {
       console.log('writeBLECharacteristicValue success', res)
+      read()
     }
   })
 }
@@ -437,13 +450,25 @@ function versionLowDialog(){
   })
 }
 
-function isResetConntct(){
+function isResetConnect(){
+  console.log("isConnectting=" + isConnectting)
+  console.log("connected=" + connected)
   return !isConnectting && !connected
+}
+
+function setOnConnectListener(listner){
+  onConnectListener = listner;
+}
+
+function setOnReciverListener(listener){
+  onReciverListener = listener
 }
 
 module.exports = {
   startConnect: startConnect,
-  isResetConntct: isResetConntct,
+  isResetConnect: isResetConnect,
   send: send,
-  read: read
+  read: read,
+  setOnConnectListener: setOnConnectListener,
+  setOnReciverListener: setOnReciverListener
 }
