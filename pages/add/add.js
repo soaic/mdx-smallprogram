@@ -12,6 +12,8 @@ const MaxGain = 10;
 const SampleFreq = 44100;
 const ViewHeight = 200;
 const BIQType = 3;
+const WarningMaxDB = 12;
+const ErrorMaxDB = 40;
 
 const app = getApp();
 var that;
@@ -29,6 +31,10 @@ Page({
     curFreq:'0.0',
     curQuality:'1.0',
     curGain:'+0.0',
+    tipFreq100Margin:0,
+    tipFreq1KMargin: 0,
+    tipFreq10KMargin: 0,
+    tipFreq20KMargin: 0,
     ec: {
       onInit: function (canvas, width, height) {
         const chart = echarts.init(canvas, null, {
@@ -67,7 +73,11 @@ Page({
     that.setData({
       peakingEQList: data,
       winWidth: res.windowWidth,
-      winHeight: res.windowHeight
+      winHeight: res.windowHeight,
+      tipFreq100Margin: getPointXByFreq(100),
+      tipFreq1KMargin: getPointXByFreq(1000),
+      tipFreq10KMargin: getPointXByFreq(10000),
+      tipFreq20KMargin: getPointXByFreq(20000),
     });
   },
   viewMoveChange: function(e){

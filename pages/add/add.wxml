@@ -29,20 +29,20 @@
     <!-- <ec-canvas class='a' style="height: 200px; width:{{winWidth-30}}px; z-index: 2;" id="mychart-dom-line" canvas-id="mychart-line" ec="{{ec}}"></ec-canvas> -->
   </view>
 
-  <view class='r h' style='width:100px;height:20px;margin-left:15px;margin-top:2px;'>
-    <view style='color:#FB3A46; font-size:12px;margin-left:10px;'>100</view>
-    <view style='color:#FB3A46; font-size:12px;margin-left:30px;'>1K</view>
-    <view style='color:#FB3A46; font-size:12px;margin-left:50px;'>10K</view>
-    <view style='color:#FB3A46; font-size:12px;margin-left:100px;'>22K</view>
+  <view class='r h' style='width:{{winWidth-30}};height:20px;margin-left:15px;margin-top:2px;'>
+    <view class='a h center_h' style='color:#FB3A46;font-size:12px;width:30px;margin-left:{{tipFreq100Margin-15}}px;'>100</view>
+    <view class='a h center_h' style='color:#FB3A46;font-size:12px;width:30px;margin-left:{{tipFreq1KMargin-15}}px;'>1K</view>
+    <view class='a h center_h' style='color:#FB3A46;font-size:12px;width:30px;margin-left:{{tipFreq10KMargin-15}}px;'>10K</view>
+    
   </view>
 
   <view class='r'>
     <view class='a h center' style='height: 200px; width:{{winWidth-30}}px;margin-left:15px;margin-right:15px; '>
       <view class='dashedLine'></view>
     </view>
-    <movable-area catchtap="onMoveAreaClick" class="a" style="height: 200px; width:{{winWidth-30}}px;margin-left:15px;margin-right:15px; ">
+    <movable-area catchtap="onMoveAreaClick" class="a" style="height: 200px; width:{{winWidth-30}}px;padding-left:15px;padding-right:15px; ">
       <block wx:for="{{peakingEQList}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
-        <movable-view class='a' style='z-index: 4;' catchtap='onCtrlViewClick' id='{{item.index}}' class='a h center' data-id='{{item.index}}' x="{{item.x - 4}}" y="{{item.y - 4}}" bindchange="viewMoveChange" direction="all">
+        <movable-view out-of-bounds="true" class='a' style='z-index: 4;' catchtap='onCtrlViewClick' id='{{item.index}}' class='a h center' data-id='{{item.index}}' x="{{item.x - 4}}" y="{{item.y - 4}}" bindchange="viewMoveChange" direction="all">
            
           <view class='a' style='padding:10px; z-index:1'>
             <view class="ctrlView"  style="height: 8px; width: 8px;"></view>
