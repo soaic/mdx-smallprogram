@@ -7,9 +7,9 @@ App({
     //this.globalData.sysinfo = wx.getSystemInfoSync()
   },
   onShow: function () {
-    if (blueTooth.isResetConntct()) {
-      blueTooth.startConnect()
-    }
+    // if (blueTooth.isResetConntct()) {
+    //   blueTooth.startConnect()
+    // }
   },
   getModel: function () { //获取手机型号
     return this.globalData.sysinfo["model"]

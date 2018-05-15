@@ -2,6 +2,58 @@
 import patterns from '../config/patterns.js';
 var SN = 0
 
+function handShakeReq() {
+  var buffer = new ArrayBuffer(22);
+  var dataView = new DataView(buffer)
+  // start byte
+  dataView.setUint8(0, 0x55);
+  dataView.setUint8(1, 0x10);
+
+  dataView.setUint8(2, 0x01);
+  dataView.setUint8(3, 0x01);
+
+  SN = 0;
+  dataView.setUint8(4, SN & 0xff);
+
+  for (var i = 5; i < 21; i++) {
+    dataView.setUint8(i, (Math.random() * 256) & 0xff);
+  }
+  fillChecksum(dataView);
+  return buffer;
+}
+
+function getID() {
+  var buffer = new ArrayBuffer(6);
+  var dataView = new DataView(buffer)
+  // start byte
+  dataView.setUint8(0, 0x55);
+  dataView.setUint8(1, 0); //len
+
+  dataView.setUint8(2, 0x01);
+  dataView.setUint8(3, 0x02);
+
+  SN = 1;
+  dataView.setUint8(4, SN & 0xff);
+  fillChecksum(dataView);
+  return bytes;
+}
+
+function getEqReq() {
+  var buffer = new ArrayBuffer(6);
+  var dataView = new DataView(buffer)
+  // start byte
+  dataView.setUint8(0, 0x55);
+  dataView.setUint8(1, 0); //len
+
+  dataView.setUint8(2, 0x04);
+  dataView.setUint8(3, 0x02);
+
+  SN = 2;
+  dataView.setUint8(4, SN & 0xff);
+  fillChecksum(dataView);
+  return buffer;
+}
+
 function createPeakingEQ(pattern) {
   var peakingEQList;
   console.log("isByPass = " + pattern.byPass)
@@ -67,5 +119,8 @@ function createSN() {
 }
 
 module.exports = {
-  createPeakingEQ: createPeakingEQ
+  createPeakingEQ: createPeakingEQ,
+  handShakeReq: handShakeReq,
+  getID: getID,
+  getEqReq: getEqReq
 }

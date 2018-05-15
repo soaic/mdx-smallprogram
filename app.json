@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/bluetoothdemo/bluetoothdemo",
     "pages/main/main",
     "pages/btooth/btooth",
     "pages/hot/hot",
@@ -9,7 +10,6 @@
     "pages/setting/setting",
     "pages/index/index",
     "pages/logs/logs"
-    
   ],
   "window": {
     "backgroundTextStyle": "light",
