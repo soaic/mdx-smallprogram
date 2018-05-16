@@ -2,14 +2,29 @@
 
 import blueTooth from '/bluetooth/blueToothUtil.js'
 
+const AV = require('libs/av-weapp-min.js');
+AV.init({
+  appId: 'nSNhFcJCeysT9vRXgfNvtbQF-gzGzoHsz',
+  appKey: 'aegQNi8pntiOE4R2z0e5B84D',
+});
+console.log(AV);
+
 App({
   onLaunch: function () {
+    
+
+    AV.User.loginWithWeapp().then(user => {
+      this.globalData.user = user.toJSON();
+      
+    }).catch(console.error);
     //this.globalData.sysinfo = wx.getSystemInfoSync()
   },
   onShow: function () {
     // if (blueTooth.isResetConntct()) {
     //   blueTooth.startConnect()
     // }
+  },
+  globalData: {
   },
   getModel: function () { //获取手机型号
     return this.globalData.sysinfo["model"]

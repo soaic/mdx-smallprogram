@@ -1,7 +1,8 @@
 // pages/bluetoothdemo/bluetoothdemo.js
 import btrequest from '../../bluetooth/bluetoothRequest.js'
 import btutil from '../../bluetooth/blueToothUtil.js'
-
+const AV = require('../../libs/av-weapp-min.js');
+var app = getApp();
 
 Page({
 
@@ -12,7 +13,8 @@ Page({
     sendText: '',
     sendTextHex: '',
     receiveText:'',
-    isConnected: false
+    isConnected: false,
+    canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
   onLoad: function(e){
     var that = this
@@ -34,11 +36,14 @@ Page({
         receiveText: buf2hex(res.value)
       })
     })
+    
   },
   onResetConnectClikc: function(e){
-    if (btutil.isResetConnect()) {
-      btutil.startConnect()
-    }
+    // if (btutil.isResetConnect()) {
+    //   btutil.startConnect()
+    // }
+    var user = app.globalData.user
+    console.log(user.objectId)
   },
   onSendClick: function (e){
     var that = this
@@ -60,6 +65,12 @@ Page({
       sendText: e.detail.value
     })
     console.log(that.data.sendText)
+  },
+  bindGetUserInfo: function (e) {
+    const user = AV.User.current();
+    user.set(e.detail.userInfo).save().then(user => {
+      app.globalData.user = user.toJSON();
+    }).catch(console.error);
   }
 })
 

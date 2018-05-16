@@ -7,6 +7,8 @@
 <view>接收到的数据:</view>
 <textarea value='{{receiveText}}' class='input_view'></textarea>
 <button bindtap='onSendClick' type='primary' style='margin-top:10px'>发送</button>
+<button wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
+<view wx:else>请升级微信版本</view>
     
 
 
