@@ -18,7 +18,7 @@
     <view style="width:{{winWidth-40}}px;margin-top:25px">名称</view>
     <input bindinput="bindNameInput" style="width:{{winWidth-40}}px;height:30px;padding-left:5px" maxlength="15" class='input_view' type='text' confirm-type='next' value='{{name}}'></input>
     <view style="width:{{winWidth-40}}px;margin-top:15px">介绍</view>
-    <input bindinput="bindDesciptInput" style="width:{{winWidth-40}}px;height:30px;padding-left:5px" maxlength="15" class='input_view' type='text' confirm-type='done'></input>
+    <input bindinput="bindDesciptInput" style="width:{{winWidth-40}}px;height:30px;padding-left:5px" maxlength="15" class='input_view' type='text' confirm-type='done' value='{{descript}}'></input>
     <view class='h center_v' style="width:{{winWidth-40}}px;margin-top:15px">
     <text>请为您的音效选一个图标</text>
     <image style='width:15px;height:15px;margin-left:5px' wx:if="{{icon!=''}}" src='/images/{{icon}}.png'></image>
@@ -35,7 +35,7 @@
     </view>
   </view>
 
-  <view bindtap='onCancelClick' class='a h center' catchtap='onResetClick' style='bottom:20px;width:88px;height:56px;'>
+  <view bindtap='onCancelClick' class='a h center'  style='bottom:20px;width:88px;height:56px;'>
     <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_left.png'></image>
     <text class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>取消</text>
   </view>

@@ -39,11 +39,9 @@ Page({
     
   },
   onResetConnectClikc: function(e){
-    // if (btutil.isResetConnect()) {
-    //   btutil.startConnect()
-    // }
-    var user = app.globalData.user
-    console.log(user.objectId)
+    if (btutil.isResetConnect()) {
+      btutil.startConnect()
+    }
   },
   onSendClick: function (e){
     var that = this

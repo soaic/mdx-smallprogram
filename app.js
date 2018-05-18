@@ -12,12 +12,13 @@ console.log(AV);
 App({
   onLaunch: function () {
     
-
     AV.User.loginWithWeapp().then(user => {
       this.globalData.user = user.toJSON();
-      
+
+      wx.setStorageSync('uid', this.globalData.user.objectId)
+
     }).catch(console.error);
-    //this.globalData.sysinfo = wx.getSystemInfoSync()
+    
   },
   onShow: function () {
     // if (blueTooth.isResetConntct()) {

@@ -1,8 +1,10 @@
 // pages/save/save.js
 import util from '../../utils/util.js';
 import patterns from '../../config/patterns.js';
+import audioTable from '../../db/audioTable.js'
 
 var that;
+var app = getApp();
 Page({
 
   /**
@@ -17,8 +19,8 @@ Page({
     winWidth: 0,
     winHeight: 0,
     icon:'',
-    name:''
-
+    name:'',
+    descript: ''
   },
 
   /**
@@ -27,10 +29,16 @@ Page({
   onLoad: function (options) {
     that = this
     if(options.data){
-      that.parttenEq = JSON.parse(options.data)
-      that.name = options.name
-      that.position = options.position
-      that.icon = options.icon
+      that.partten = JSON.parse(options.data)
+      that.parttenEq = that.partten.peakingEQList
+      for (var i = 0; i < that.parttenEq.length; i++) {
+        delete that.parttenEq[i]['x']
+        delete that.parttenEq[i]['y']
+      }
+      that.name = that.partten.name_zh_cn
+      that.position = that.partten.position
+      that.descript = that.partten.descript
+      that.icon = that.partten.icon
     }
 
     var images = []
@@ -51,7 +59,8 @@ Page({
       image_width: windowWidth / 4 - 26,
       image_height: (windowWidth / 4 - 26) * 188 / 197,
       icon: that.icon,
-      name: that.name
+      name: that.name,
+      descript: that.descript
     });
 
   },
@@ -78,20 +87,36 @@ Page({
     }
   },
   onCancelClick: function(e){
-
+    util.redirectPage('../add/add')
   },
   onConfirmClick: function(e){
-    var partten = {}
-    partten['name_zh_tw'] = that.name;
-    partten['peakingEQList'] = that.parttenEq;
-    partten['descript'] = that.descript;
-    
-    partten['icon'] = that.data.icon
-    let position = that.position
-    if (!position) {
-      position = patterns.getLastPosition() + 1
+    that.partten.name_zh_cn = that.name;
+    that.partten.descript = that.descript;
+    that.partten.icon = that.data.icon
+    console.log(that.partten)
+    if(that.partten.id){
+      //更新
+      audioTable.update({
+        content: that.partten,
+        success: function (res) {
+          util.redirectPage('../main/main')
+        }, fail: function (err) {
+          console.error(err)
+        }
+      })
+    }else{
+      //保存
+      that.partten['uid'] = app.globalData.user.objectId
+      audioTable.save({
+        content: that.partten,
+        success: function(res){
+          util.redirectPage('../main/main')
+        },fail: function (err){
+          console.error(err)
+        }
+      })
     }
-    partten['position'] = position;
-    console.log(partten);
+
+    
   }
 })

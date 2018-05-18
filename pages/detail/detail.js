@@ -1,6 +1,7 @@
 // pages/detail.js
 import patterns from '../../config/patterns.js';
 import util from '../../utils/util.js';
+import audioTable from '../../db/audioTable.js';
 
 var that;
 Page({
@@ -12,8 +13,7 @@ Page({
     name: '',
     description: '',
     tuner: '',
-    supportnum: '',
-    selectPosition: ''
+    supportnum: ''
   },
 
   /**
@@ -21,37 +21,72 @@ Page({
    */
   onLoad: function (options) {
     that = this
-
-    if (options.position){
-      var patter = patterns.getData(options.position);
+    if (options.data){
+      that.patter = JSON.parse(options.data);
       that.setData({
-        selectPosition: options.position,
-        name: patter.name_zh_cn,
+        name: that.patter.name_zh_cn,
         tuner: '官方',
-        supportnum: '0',
-        description: '原始耳机音效'
+        supportnum: that.patter.nicknum,
+        description: that.patter.descript
       })
     }
 
   },
   onDeleteClick: function(e) {
-    
     wx.showModal({
       content: '确定要删除 \'' + that.data.name + '\' 音效吗？',
       success: function (res) {
         if (res.confirm) {
           patterns.removeData(that.data.selectPosition)
-          util.redirectPage('../main/main')
+
+          audioTable.del({
+            id: that.patter.id,
+            success: function(e){
+              wx.showToast({
+                title: '删除成功',
+              })
+              util.redirectPage('../main/main')
+            },fail: function(e){
+              wx.showToast({
+                title: '删除失败',
+              })
+            }
+          })
+          
+
+          
         }
       }
     })
 
   },
   onModifyClick: function(options) {
-    util.redirectPage('../add/add?position=' + that.data.selectPosition)
+    util.redirectPage('../add/add?data=' + JSON.stringify(that.patter))
   },
   onShareClick: function(options) {
-
+    var that = this;
+    //分享
+    if (that.patter.shareState != '0'){
+      wx.showToast({
+        title: '重复分享',
+      })
+      return;
+    }
+    console.log(that.patter.id)
+    audioTable.share({
+      id: that.patter.id,
+      success: function(res){
+        that.patter.shareState = res.attributes.shareState
+        wx.showToast({
+          title: '分享成功',
+        })
+      },
+      fail: function(err){
+        wx.showToast({
+          title: '分享失败,青重试',
+        })
+      }
+    })
   },
   swichNav: function (e) {
     if (e.currentTarget.id == 0) {

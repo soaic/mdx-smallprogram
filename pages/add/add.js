@@ -64,12 +64,19 @@ Page({
     let res = wx.getSystemInfoSync();
     //获取屏幕宽度
     viewWidth = res.windowWidth - 30;
-    curPosition = option.position
-    if (!curPosition){
-      curPosition = 0
+    if (option.data){
+      that.patternData = JSON.parse(option.data);
+      that.originStrData = option.data;
+    }else{
+      that.patternData = patterns.getData(0);
+      that.patternData.name_zh_cn = '';
+      that.originStrData = JSON.stringify(that.patternData)
     }
-    that.patternData = patterns.getData(curPosition);
-    let data = getPatternXYData(that.patternData.peakingEQList);
+    console.log(that.originStrData)
+    console.log(that.patternData)
+    
+    
+    let data = getPatternXYData(JSON.parse(that.patternData.peakingEQList));
     that.setData({
       peakingEQList: data,
       winWidth: res.windowWidth,
@@ -128,9 +135,9 @@ Page({
   }, 
   onResetClick: function(e){
     isRunReset = true
-    patterns.initData();
-    that.patternData = patterns.getData(curPosition);
-    let data = getPatternXYData(that.patternData.peakingEQList);
+    //patterns.initData();
+    that.patternData = JSON.parse(that.originStrData);
+    let data = getPatternXYData(JSON.parse(that.patternData.peakingEQList));
     that.setData({
       peakingEQList: data,
       ctrlViewIndex: -1
@@ -140,8 +147,9 @@ Page({
     },2000);
   },
   onSaveClick: function(e){
-    var peakStr = JSON.stringify(that.data.peakingEQList)
-    util.redirectPage('../save/save?data=' + peakStr + '&name=' + that.patternData.name_zh_tw + '&position=' + that.patternData.position + '&icon=' + that.patternData.icon)
+    that.patternData.peakingEQList = that.data.peakingEQList;
+    var patternData = JSON.stringify(that.patternData)
+    util.redirectPage('../save/save?data=' + patternData)
   },
   onTouchMove: function(e){
     

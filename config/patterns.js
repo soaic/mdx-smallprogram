@@ -826,6 +826,7 @@ function initData() {
 }
 
 function getData(position){
+  initData()
   for (var i = 0; i < localData.length; i++) {
     if (localData[i].position == position) {
       return localData[i];
@@ -834,9 +835,7 @@ function getData(position){
 }
 
 function getAllData(){
-  if (localData.length == 0){
-    initData();
-  }
+  initData();
   return localData;
 }
 

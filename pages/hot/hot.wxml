@@ -29,17 +29,17 @@
     <swiper-item currentIndex="0" >
       <scroll-view  style='height:{{windowHeight - 150}}px' scroll-y='true'>
       <block wx:for="{{officialData}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
-        <view class='h center_v' id="{{item}}" bindtap='onItemClick'>
-          <view style="height:50px;width:3px;background:{{item==curSelectItem?'#FB3A46':'#FFFFFF'}}"></view>
+        <view class='h center_v' id="{{item.objectId}}" bindtap='onItemClick'>
+          <view style="height:50px;width:3px;background:{{item.objectId==curSelectItem?'#FB3A46':'#FFFFFF'}}"></view>
           <image style='background-color:grey;width:35px;height:35px;margin-left:20px' src='/images/icon_logo.png'></image>
           <view style='flex:1; margin-left:5px;' class='v'>
             <view class='h center_v'>
-              <view>王者荣耀强悍音效{{item}}</view>
-              <image style='width:15px;height:15px;margin-left:5px;' src='/images/pattern_1.png'></image>
+              <view>{{item.name_zh_cn}}</view>
+              <image style='width:15px;height:15px;margin-left:5px;' src='/images/{{item.icon}}.png'></image>
               <image style='width:15px;height:15px;margin-left:5px;' src='/images/icon_praise.png'></image>
-              <view style='margin-left:5px;'>96</view>  
+              <view style='margin-left:5px;'>{{item.nicknum}}</view>  
             </view>
-            <view >由爱你一生创建|低音效果非常强劲</view>
+            <view >由爱你一生创建|{{item.descript}}</view>
             <view style='background-color:#666666;height:1px;width:100%'></view>
           </view>
         </view>
@@ -49,17 +49,17 @@
     <swiper-item currentIndex="1" >
       <scroll-view style='height:{{windowHeight - 150}}px' scroll-y='true'> 
       <block wx:for="{{usersData}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
-        <view class='h center_v' id="{{item}}" bindtap='onItemClick'>
-          <view style="height:50px;width:3px;background:{{item==curSelectItem?'#FB3A46':'#FFFFFF'}}"></view>
+        <view class='h center_v' id="{{item.objectId}}" bindtap='onItemClick'>
+          <view style="height:50px;width:3px;background:{{item.objectId==curSelectItem?'#FB3A46':'#FFFFFF'}}"></view>
           <image style='background-color:grey;width:35px;height:35px;margin-left:20px' src='/images/icon_logo.png'></image>
           <view style='flex:1; margin-left:5px;' class='v'>
             <view class='h center_v'>
-              <view>王者荣耀强悍音效{{item}}</view>
-              <image style='width:15px;height:15px;margin-left:5px;' src='/images/pattern_1.png'></image>
+              <view>{{item.name_zh_cn}}</view>
+              <image style='width:15px;height:15px;margin-left:5px;' src='/images/{{item.icon}}.png'></image>
               <image style='width:15px;height:15px;margin-left:5px;' src='/images/icon_praise.png'></image>
-              <view style='margin-left:5px;'>96</view>  
+              <view style='margin-left:5px;'>{{item.nicknum}}</view>  
             </view>
-            <view >由爱你一生创建|低音效果非常强劲</view>
+            <view >由爱你一生创建|{{item.descript}}</view>
             <view style='background-color:#666666;height:1px;width:100%'></view>
           </view>
         </view>
@@ -68,12 +68,12 @@
     </swiper-item>
   </swiper>
 
-  <view catchtap='onDownloadClick' class='a h center'  style='bottom:20px;width:88px;height:56px;'>
+  <view catchtap='onDownloadClick' class='a h center'  style='bottom:20px;width:88px;height:56px;display:{{curSelectItem?"show":"none"}}'>
     <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_left.png'></image>
     <text class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>下载</text>
   </view>
 
-  <view catchtap='onLikeClick' class='a h center' style='bottom:20px;right:0px;width:88px;height:56px;'>
+  <view catchtap='onLikeClick' class='a h center' style='bottom:20px;right:0px;width:88px;height:56px;display:{{curSelectItem?"show":"none"}}'>
     <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_right.png'></image>
     <view class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>点赞</view>
   </view>

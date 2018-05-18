@@ -2,7 +2,7 @@
 <view class='contion_tip'>设备已连接，你可以开始设置你的设备了!</view>
 <view class='grid_view'>
   <block wx:for="{{patternsData}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
-    <view class='grid_item' style="margin-bottom:10px" bindtap="onItemClick" bindlongpress="onItemLongClick" id="{{item.position}}">
+    <view class='grid_item' style="margin-bottom:10px" bindtap="onItemClick" bindlongpress="onItemLongClick" id="{{idx}}">
       <view class='item_view' style='width:{{item_width}}px;height:{{item_width}}px;}}'>
         <image class='item_image' src='/images/{{item.icon}}.png' style="width:{{image_width}}px;height:{{image_height}}px;"></image>
       </view>

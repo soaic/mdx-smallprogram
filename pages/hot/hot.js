@@ -1,5 +1,7 @@
 // pages/hot.js
 import util from '../../utils/util.js'
+import audioTable from '../../db/audioTable.js';
+
 var that;
 Page({
 
@@ -8,9 +10,9 @@ Page({
    */
   data: {
     curSelect: 0,
-    curSelectItem: 1,
-    officialData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-    usersData:[15,16,17,18,19,20,21,22,23,24,25],
+    curSelectItem: null,
+    officialData: [],
+    usersData:[],
     windowHeight: 0
   },
 
@@ -23,6 +25,26 @@ Page({
     var systemInfo = wx.getSystemInfoSync();
     that.setData({
       windowHeight: systemInfo.windowHeight
+    })
+
+    audioTable.queryOfficalShare({
+      success: function(res){
+        that.setData({
+          officialData: res
+        })
+      }, fial: function(res){
+        console.log(res)
+      }
+    })
+
+    audioTable.queryUserShare({
+      success: function (res) {
+        that.setData({
+          usersData: res
+        })
+      }, fial: function (res) {
+        console.log(res)
+      }
     })
     
   },
@@ -54,5 +76,20 @@ Page({
     that.setData({
       curSelectItem: selectId
     });
+  },
+  
+  onLikeClick: function(e){
+    if (!that.data.curSelectItem){
+      return;
+    }
+    audioTable.nickEq({
+      id: that.data.curSelectItem,
+      success: function (res) {
+        console.log(res)
+        
+      }, fial: function (res) {
+        console.log(res)
+      }
+    })
   }
 })

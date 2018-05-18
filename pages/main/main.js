@@ -1,8 +1,9 @@
 // pages/main.js
 import patterns from '../../config/patterns.js' ;
 import util from '../../utils/util.js';
-import btutil from '../../bluetooth/blueToothUtil.js'
-import btrequest from '../../bluetooth/bluetoothRequest.js'
+import btutil from '../../bluetooth/blueToothUtil.js';
+import btrequest from '../../bluetooth/bluetoothRequest.js';
+import audioTable from '../../db/audioTable.js';
 
 const app = getApp();
 var that;
@@ -18,7 +19,7 @@ Page({
     item_height: 0,
     image_width: 0,
     image_height : 0,
-    patternsData: patterns.getAllData(),
+    patternsData: [],
     selectPosition: 0,
     selectName: '',
     selectLongPosition: 0,
@@ -49,19 +50,35 @@ Page({
       image_width: windowWidth / 4 - 26,
       image_height: (windowWidth / 4 - 26) * 188 / 197
     });
+    const uid = wx.getStorageSync('uid')
+    audioTable.requestMainEq({
+      uid: uid,
+      success: function (res) {
+        that.setData({
+          patternsData: res
+        })
+
+
+
+      }, fail: function (err) {
+
+      }
+    })
+    
   },
   //音效点击
   onItemClick: function(e){
-    let pattern = patterns.getData(e.currentTarget.id)
+    let index = e.currentTarget.id
+    let pattern = that.data.patternsData[index].attributes
+    pattern.id = that.data.patternsData[index].id
     that.setData({
-      selectPosition: e.currentTarget.id,
+      selectPosition: index,
       selectName: pattern.name_zh_cn,
       detailViewDisplay: 'show'
     });
     //把pattern数据转成ArrayBuffer,然后通过蓝牙发送数据
-    var btData = btrequest.createPeakingEQ(pattern)
-    btutil.send(btData)
-
+    // var btData = btrequest.createPeakingEQ(pattern)
+    // btutil.send(btData)
     if (that.detailDisplayTimer){
       clearTimeout(that.detailDisplayTimer)
     }
@@ -70,13 +87,24 @@ Page({
         detailViewDisplay: 'none'
       })
     },3000);
+    // pattern['uid'] = app.globalData.user.objectId
+    // audioTable.save({
+    //   content: pattern,
+    //   success: function (res) {
+    //     console.log(res)
+        
+    //   }, fail: function (err) {
+    //     console.error(err)
+    //   }
+    // })
+
   },
   //详情
   onDetailClick: function(e){
     that.setData({
       detailViewDisplay: 'none'
     });
-    util.redirectPage('../detail/detail?position=' + that.data.selectPosition)
+    util.redirectPage('../detail/detail?data=' + JSON.stringify(that.data.patternsData[that.data.selectPosition].attributes))
   },
   //删除
   onHomeClick: function (e) {
