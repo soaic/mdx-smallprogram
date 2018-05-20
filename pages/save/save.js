@@ -39,6 +39,11 @@ Page({
       that.position = that.partten.position
       that.descript = that.partten.descript
       that.icon = that.partten.icon
+    }else{
+      that.name = ''
+      that.descript = ''
+      that.position = 0
+      that.icon = 'pattern_1'
     }
 
     var images = []
@@ -93,7 +98,8 @@ Page({
     that.partten.name_zh_cn = that.name;
     that.partten.descript = that.descript;
     that.partten.icon = that.data.icon
-    console.log(that.partten)
+    that.partten['uname'] = app.globalData.user.nickName
+    that.partten['uphoto'] = app.globalData.user.avatarUrl
     if(that.partten.id){
       //更新
       audioTable.update({
@@ -107,6 +113,8 @@ Page({
     }else{
       //保存
       that.partten['uid'] = app.globalData.user.objectId
+      that.partten['uname'] = app.globalData.user.nickName
+      that.partten['uphoto'] = app.globalData.user.avatarUrl
       audioTable.save({
         content: that.partten,
         success: function(res){

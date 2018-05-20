@@ -6,7 +6,7 @@ const USER_SHARE = "2"
 //查询主页EQ
 module.exports.requestMainEq = function requestMainEq(data) {
   if (!data) return
-  AV.Query.doCloudQuery('select * from ' + tableName + ' where uid = "' + data.uid + '" or shareState = "1"')
+  AV.Query.doCloudQuery('select * from ' + tableName + ' where uid = "' + data.uid + '" or shareState = 1')
     .then(function (res) {
       var results = res.results;
       if (data.success) {
@@ -22,10 +22,11 @@ module.exports.requestMainEq = function requestMainEq(data) {
 }
 
 //搜索
-function searchEq(data){
+module.exports.searchEq = function searchEq(data){
   if (!data) return
-  AV.Query.doCloudQuery('select * from ' + tableName + ' where name like %' + data.searchText + '% and shareState = "' +data.shareState+"")
+  AV.Query.doCloudQuery('select * from ' + tableName + ' where name_zh_cn like "%' + data.searchText + '%" and shareState = ' +data.shareState)
     .then(function (res) {
+      console.log(res)
       var results = res.results;
       if (data.success) {
         data.success(results)
@@ -42,7 +43,7 @@ function searchEq(data){
 //查询用户分享
 module.exports.queryUserShare = function queryUserShare(data){
   if(!data) return 
-  AV.Query.doCloudQuery('select * from ' + tableName + ' where shareState = \"2\"')
+  AV.Query.doCloudQuery('select * from ' + tableName + ' where shareState = 2')
     .then(function (res) {
       var results = res.results;
       if (data.success) {
@@ -60,7 +61,7 @@ module.exports.queryUserShare = function queryUserShare(data){
 //查询官方分享
 module.exports.queryOfficalShare = function queryOfficalShare(data){
   if (!data) return 
-  AV.Query.doCloudQuery('select * from ' + tableName + ' where shareState = \"1\"')
+  AV.Query.doCloudQuery('select * from ' + tableName + ' where shareState = 1')
     .then(function (res) {
       var results = res.results;
       if (data.success) {
@@ -79,19 +80,17 @@ module.exports.queryOfficalShare = function queryOfficalShare(data){
 module.exports.nickEq = function nickEq(data){
   if(!data) return
   var audio = AV.Object.createWithoutData(tableName, data.id);
-  audio.fetch({
-    keys: 'nicknum'
-  }).then(function (audio) {
-    audio.increment('nicknum', 1);
-    audio.fetchWhenSave(true);
-    return audio.save();
-    // 获取到本地
-  }.then(function(audio){
+  audio.fetch().then(function (todo) {
+    todo.increment('nicknum', 1);
+    todo.fetchWhenSave(true);
+    return todo.save();
+  }).then(function (res) {
+    // 使用了 fetchWhenSave 选项，save 成功之后即可得到最新的 views 值
     console.log(res)
     if (data.success) {
       data.success(res)
     }
-  }), function (error) {
+  }, function (error) {
     // 异常处理
     console.error(error);
     if (data.fail) {
@@ -108,13 +107,15 @@ module.exports.save = function save(data){
   var a = new Audio();
   a.set('name_zh_cn', data.content.name_zh_cn);
   a.set('icon', data.content.icon);
-  a.set('nicknum', '0');
+  a.set('nicknum', 0);
   a.set('position', data.content.position.toString());
-  a.set('isOffical', '0');
+  a.set('isOffical', 0);
   a.set('descript', data.content.descript);
-  a.set('shareState', '0');//2为用户分享，1位官方分享, 0未分享
+  a.set('shareState', 0);//2为用户分享，1位官方分享, 0未分享
   a.set('peakingEQList', JSON.stringify(data.content.peakingEQList));
   a.set('uid', data.content.uid)
+  a.set('uname', data.content.uname)
+  a.set('uphoto', data.content.uphoto)
   a.save().then(function (a) {
     // 成功
     console.log('New object created with objectId: ' + a.id);
@@ -157,6 +158,8 @@ module.exports.update = function update(data){
   ad.set('icon', data.content.icon);
   ad.set('descript', data.content.descript);
   ad.set('peakingEQList', JSON.stringify(data.content.peakingEQList));
+  ad.set('uname', data.content.uname)
+  ad.set('uphoto', data.content.uphoto)
   // 保存到云端
   ad.save().then(function (a) {
     // 成功
@@ -176,7 +179,7 @@ module.exports.share = function share(data){
   if (!data) { return }
   var ad = AV.Object.createWithoutData(tableName, data.id);
   // 修改属性
-  ad.set('shareState', '2');
+  ad.set('shareState', 2);
   // 保存到云端
   ad.save().then(function (res) {
     // 成功
@@ -192,5 +195,4 @@ module.exports.share = function share(data){
 }
 
 module.exprots = {
-  searchEq: searchEq
 }

@@ -25,7 +25,7 @@ Page({
       that.patter = JSON.parse(options.data);
       that.setData({
         name: that.patter.name_zh_cn,
-        tuner: '官方',
+        tuner: that.patter.uname,
         supportnum: that.patter.nicknum,
         description: that.patter.descript
       })

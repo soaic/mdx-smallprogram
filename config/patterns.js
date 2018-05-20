@@ -1,3 +1,75 @@
+var defaultPattern = {
+  "name": "Original",
+  "name_zh_cn": "",
+  "name_en": "Original",
+  "name_de": "Tonspur",
+  "name_fr": "Soundtrack",
+  "name_jp": "サウンドトラック",
+  "name_zh_tw": "",
+  "name_ru": "Саундтрек",
+  "name_kr": "어쿠스틱",
+  "icon": "pattern_1",
+  "position": 0,
+  "maxdb": 0,
+  "mindb": 0,
+  "byPass": false,
+  "peakingEQList": [
+    {
+      "index": 0,
+      "frequency": 39.905247,
+      "gain": 0,
+      "quality": 1
+    },
+    {
+      "index": 1,
+      "frequency": 79.62144,
+      "gain": 0,
+      "quality": 1
+    },
+    {
+      "index": 2,
+      "frequency": 158.86566,
+      "gain": 0,
+      "quality": 1
+    },
+    {
+      "index": 3,
+      "frequency": 316.97864,
+      "gain": 0,
+      "quality": 1
+    },
+    {
+      "index": 4,
+      "frequency": 632.4555,
+      "gain": 0,
+      "quality": 1
+    },
+    {
+      "index": 5,
+      "frequency": 1261.9149,
+      "gain": 0,
+      "quality": 1
+    },
+    {
+      "index": 6,
+      "frequency": 2517.8506,
+      "gain": 0,
+      "quality": 1
+    },
+    {
+      "index": 7,
+      "frequency": 5023.7734,
+      "gain": 0,
+      "quality": 1
+    },
+    {
+      "index": 8,
+      "frequency": 10023.743,
+      "gain": 0,
+      "quality": 1
+    }
+  ]
+};
 var patterns = {
   "patterns": [
     {
@@ -879,6 +951,7 @@ function getLastPosition(){
 }
 
 module.exports = {
+  defaultPattern: defaultPattern,
   initData: initData,
   getData: getData,
   getAllData: getAllData,

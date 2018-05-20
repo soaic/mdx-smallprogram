@@ -1,37 +1,37 @@
 <!--pages/hot.wxml-->
 <view class='root_view'>
-  <cover-view class="h center switch_bar" style='position: fixed; top: 0;right: 0;width: 100%; z-idnex:10'>
-    <cover-view style='flex:1;' class='v center_v' id="0" catchtap="swichNav">
-      <cover-view>我的音效</cover-view>
-      <cover-view style="font-size:20px;line-height:10px;height:10px"></cover-view>
-    </cover-view>
-    <cover-view style='flex:1' class='v center_v' id="1" catchtap="swichNav">
-      <cover-view>调音师</cover-view>
-      <cover-view style="font-size:20px;line-height:10px;height:10px"></cover-view>
-    </cover-view>
-    <cover-view style='flex:1' class='v center_v' id="2" catchtap="swichNav">
-      <cover-view>热门音效</cover-view>
-      <cover-view style="font-size:20px;line-height:10px;height:10px">···</cover-view>
-    </cover-view>
-  </cover-view>
+  <view class="h center switch_bar" style='position: fixed; top: 0;right: 0;width: 100%; z-idnex:10'>
+    <view style='flex:1;' class='v center_v' id="0" catchtap="swichNav">
+      <view>我的音效</view>
+      <view style="font-size:20px;line-height:10px;height:10px"></view>
+    </view>
+    <view style='flex:1' class='v center_v' id="1" catchtap="swichNav">
+      <view>调音师</view>
+      <view style="font-size:20px;line-height:10px;height:10px"></view>
+    </view>
+    <view style='flex:1' class='v center_v' id="2" catchtap="swichNav">
+      <view>热门音效</view>
+      <view style="font-size:20px;line-height:10px;height:10px">···</view>
+    </view>
+  </view>
 
 
-  <cover-view class='h center_v' style='width:100%; height:40px; top:60px;position: fixed; z-idnex:10'>
-    <cover-view bindtap='onOfficialClick' class='h center' style='flex:1'>官方分享</cover-view>
-    <cover-view bindtap='onUserClick' class='h center' style='flex:1'>网友分享</cover-view>
-  </cover-view>
+  <view class='h center_v' style='width:100%; height:40px; top:60px;position: fixed; z-idnex:10'>
+    <view bindtap='onOfficialClick' class='h center' style='flex:1'>官方分享</view>
+    <view bindtap='onUserClick' class='h center' style='flex:1'>网友分享</view>
+  </view>
 
   <view style='width: 100%;height:30px;top:100px;z-idnex:10;position: fixed;' class='h center'>
-    <input confirm-type="search" class='h center search_input' placeholder="搜索" placeholder-style="color:#2e2e2e;"></input>
+    <input confirm-type="search" bindconfirm='searchInput' class='h center search_input' placeholder="搜索" placeholder-style="color:#2e2e2e;"></input>
   </view>
 
   <swiper current="{{curSelect}}"  bindchange="swiperChange" style='margin-top:140px;margin-bottom-10px;height:{{windowHeight - 150}}px' duration='300'>
     <swiper-item currentIndex="0" >
       <scroll-view  style='height:{{windowHeight - 150}}px' scroll-y='true'>
       <block wx:for="{{officialData}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
-        <view class='h center_v' id="{{item.objectId}}" bindtap='onItemClick'>
+        <view class='h center_v' id="{{item.objectId}}" data-index="{{idx}}" bindtap='onItemClick'>
           <view style="height:50px;width:3px;background:{{item.objectId==curSelectItem?'#FB3A46':'#FFFFFF'}}"></view>
-          <image style='background-color:grey;width:35px;height:35px;margin-left:20px' src='/images/icon_logo.png'></image>
+          <image style='background-color:grey;width:35px;height:35px;margin-left:20px' src='{{item.uphoto?item.uphoto:"/images/icon_logo.png"}}'></image>
           <view style='flex:1; margin-left:5px;' class='v'>
             <view class='h center_v'>
               <view>{{item.name_zh_cn}}</view>
@@ -39,7 +39,7 @@
               <image style='width:15px;height:15px;margin-left:5px;' src='/images/icon_praise.png'></image>
               <view style='margin-left:5px;'>{{item.nicknum}}</view>  
             </view>
-            <view >由爱你一生创建|{{item.descript}}</view>
+            <view >由{{item.uname}}创建 | {{item.descript}}</view>
             <view style='background-color:#666666;height:1px;width:100%'></view>
           </view>
         </view>
@@ -49,9 +49,9 @@
     <swiper-item currentIndex="1" >
       <scroll-view style='height:{{windowHeight - 150}}px' scroll-y='true'> 
       <block wx:for="{{usersData}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
-        <view class='h center_v' id="{{item.objectId}}" bindtap='onItemClick'>
+        <view class='h center_v' id="{{item.objectId}}" data-index="{{idx}}" bindtap='onItemClick'>
           <view style="height:50px;width:3px;background:{{item.objectId==curSelectItem?'#FB3A46':'#FFFFFF'}}"></view>
-          <image style='background-color:grey;width:35px;height:35px;margin-left:20px' src='/images/icon_logo.png'></image>
+          <image style='background-color:grey;width:35px;height:35px;margin-left:20px' src='{{item.uphoto?item.uphoto:"/images/icon_logo.png"}}'></image>
           <view style='flex:1; margin-left:5px;' class='v'>
             <view class='h center_v'>
               <view>{{item.name_zh_cn}}</view>
@@ -59,7 +59,7 @@
               <image style='width:15px;height:15px;margin-left:5px;' src='/images/icon_praise.png'></image>
               <view style='margin-left:5px;'>{{item.nicknum}}</view>  
             </view>
-            <view >由爱你一生创建|{{item.descript}}</view>
+            <view >由{{item.uname}}创建 | {{item.descript}}</view>
             <view style='background-color:#666666;height:1px;width:100%'></view>
           </view>
         </view>

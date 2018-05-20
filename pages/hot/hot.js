@@ -10,6 +10,8 @@ Page({
    */
   data: {
     curSelect: 0,
+    curSelctItemIndex: -1,
+    curSelctTop: 0,
     curSelectItem: null,
     officialData: [],
     usersData:[],
@@ -72,10 +74,20 @@ Page({
     } 
   },
   onItemClick: function(e){
-    var selectId = e.currentTarget.id
     that.setData({
-      curSelectItem: selectId
+      curSelectItem: e.currentTarget.id,
+      curSelctItemIndex: e.currentTarget.dataset.index,
+      curSelctTop: that.data.curSelect
     });
+
+    if (that.operationDisplayTimer) {
+      clearTimeout(that.detailDisplayTimer)
+    }
+    that.operationDisplayTimer = setTimeout(function () {
+      that.setData({
+        curSelectItem: null
+      })
+    }, 3000);
   },
   
   onLikeClick: function(e){
@@ -85,11 +97,49 @@ Page({
     audioTable.nickEq({
       id: that.data.curSelectItem,
       success: function (res) {
-        console.log(res)
+        wx.showToast({
+          title: '点赞成功',
+        })
         
+        if (that.data.curSelctTop == 0){
+          that.data.officialData[that.data.curSelctItemIndex] = res
+          console.log(that.data.officialData)
+          that.setData({
+            officialData: that.data.officialData
+          })
+        } else if (that.data.curSelctTop == 1){
+          that.data.usersData[that.data.curSelctItemIndex] = res
+          that.setData({
+            usersData: that.data.usersData
+          })
+        }
       }, fial: function (res) {
-        console.log(res)
+        wx.showToast({
+          title: '点赞失败',
+        })
       }
     })
+  },
+  searchInput: function(e){
+    var searchText = e.detail.value
+    audioTable.searchEq({
+      searchText: searchText,
+      shareState: that.data.curSelect == 0?1:2,
+      success: function(res){
+        if(that.data.curSelect == 0){
+          that.setData({
+            officialData: res
+          })
+        }else if(that.data.curSelect == 1){
+          that.setData({
+            usersData: res
+          })
+        }
+      }, fail: function(err){
+
+      }
+    })
+
+
   }
 })

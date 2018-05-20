@@ -64,19 +64,18 @@ Page({
     let res = wx.getSystemInfoSync();
     //获取屏幕宽度
     viewWidth = res.windowWidth - 30;
+    var peq;
     if (option.data){
       that.patternData = JSON.parse(option.data);
       that.originStrData = option.data;
+      peq = JSON.parse(that.patternData.peakingEQList)  //数据库存放的是json字符串，需要转换json对象
     }else{
-      that.patternData = patterns.getData(0);
-      that.patternData.name_zh_cn = '';
+      that.patternData = patterns.defaultPattern;
       that.originStrData = JSON.stringify(that.patternData)
+      peq = that.patternData.peakingEQList
     }
-    console.log(that.originStrData)
-    console.log(that.patternData)
     
-    
-    let data = getPatternXYData(JSON.parse(that.patternData.peakingEQList));
+    let data = getPatternXYData(peq);
     that.setData({
       peakingEQList: data,
       winWidth: res.windowWidth,
