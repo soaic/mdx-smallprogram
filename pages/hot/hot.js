@@ -3,6 +3,7 @@ import util from '../../utils/util.js'
 import audioTable from '../../db/audioTable.js';
 
 var that;
+var app = getApp()
 Page({
 
   /**
@@ -139,7 +140,42 @@ Page({
 
       }
     })
+  },
+  onDownloadClick: function(e){
+    if (!that.data.curSelectItem) {
+      return;
+    }
+    var downloadData = wx.getStorageSync("downloadData");
+    if (downloadData){
+      for(var i = 0; i < downloadData.length; i++){
+        if (that.data.curSelectItem == downloadData[i].objectId){
+          wx.showToast({
+            title: '重复下载',
+          })
+          return;
+        }
+      }
+    }else{
+      downloadData = []
+    }
 
-
+    if (that.data.curSelctTop == 0) {
+      var curItem = that.data.officialData[that.data.curSelctItemIndex]
+      downloadData.push(curItem)
+      wx.setStorage({ key: 'downloadData', data: downloadData})
+      wx.showToast({
+        title: '下载成功',
+      })
+    } else if (that.data.curSelctTop == 1) {
+      var curItem = that.data.usersData[that.data.curSelctItemIndex]
+      downloadData.push(curItem)
+      wx.setStorage({ key: 'downloadData', data: downloadData })
+      wx.showToast({
+        title: '下载成功',
+      })
+    }
+    that.setData({
+      curSelectItem: null
+    })
   }
 })

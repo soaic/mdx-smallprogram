@@ -26,6 +26,7 @@ App({
     // }
   },
   globalData: {
+    
   },
   getModel: function () { //获取手机型号
     return this.globalData.sysinfo["model"]

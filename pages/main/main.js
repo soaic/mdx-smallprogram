@@ -54,12 +54,12 @@ Page({
     audioTable.requestMainEq({
       uid: uid,
       success: function (res) {
+        var downloadData = wx.getStorageSync("downloadData");
+        console.log(downloadData)
+        var array = res.concat(downloadData)
         that.setData({
-          patternsData: res
+          patternsData: array
         })
-
-
-
       }, fail: function (err) {
 
       }
@@ -70,7 +70,10 @@ Page({
   onItemClick: function(e){
     let index = e.currentTarget.id
     let pattern = that.data.patternsData[index].attributes
-    pattern.id = that.data.patternsData[index].id
+
+    console.log(that.data.patternsData[index])
+
+    pattern['id'] = that.data.patternsData[index].objectId
     that.setData({
       selectPosition: index,
       selectName: pattern.name_zh_cn,
@@ -87,16 +90,6 @@ Page({
         detailViewDisplay: 'none'
       })
     },3000);
-    // pattern['uid'] = app.globalData.user.objectId
-    // audioTable.save({
-    //   content: pattern,
-    //   success: function (res) {
-    //     console.log(res)
-        
-    //   }, fail: function (err) {
-    //     console.error(err)
-    //   }
-    // })
 
   },
   //详情
