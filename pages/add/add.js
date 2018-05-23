@@ -151,7 +151,7 @@ Page({
     util.redirectPage('../save/save?data=' + patternData)
   },
   onTouchMove: function(e){
-    
+    console.log(e)
   },
   //导航栏滑动
   swichNav: function (e) {
