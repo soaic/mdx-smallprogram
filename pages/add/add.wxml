@@ -40,33 +40,33 @@
     <view class='a h center' style='height: 200px; width:{{winWidth-30}}px;margin-left:15px;margin-right:15px; '>
       <view class='dashedLine'></view>
     </view>
-    <movable-area catchtap="onMoveAreaClick" class="a" style="height: 200px; width:{{winWidth-30}}px;padding-left:15px;padding-right:15px; ">
+    <movable-area catchtap="onMoveAreaClick" class="a" style="height: 200px; width:{{winWidth-25}}px;margin-left:15px;margin-right:15px; ">
       <block wx:for="{{peakingEQList}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
-        <movable-view out-of-bounds="true" class='a' style='z-index: 4;' catchtap='onCtrlViewClick' id='{{item.index}}' class='a h center' data-id='{{item.index}}' x="{{item.x - 4}}" y="{{item.y - 4}}" bindchange="viewMoveChange" direction="all">
+        <movable-view class='a' style='z-index: 4;' catchtap='onCtrlViewClick' id='{{item.index}}' class='a h center' data-id='{{item.index}}' x="{{item.x - 4}}" y="{{item.y - 4}}" bindchange="viewMoveChange" direction="all">
            
           <view class='a' style='padding:10px; z-index:1'>
             <view class="ctrlView"  style="height: 8px; width: 8px;"></view>
           </view>
 
-          <view class='h center_v a' style="width:{{circleWidth+10}}px; height:5px; z-index:2; display:{{ctrlViewIndex==item.index?'show':'none'}}">
+          <view class='h center_v a' style="width:{{circleWidth+10}}px; height:4px; z-index:2; display:{{ctrlViewIndex==item.index?'show':'none'}}">
             <view class='ctrlView' style='width:5px;height:5px'></view>
-            <view class='orangeLine' style='margin-top:2.5px; flex:1'></view>
+            <view class='orangeLine' style=' flex:1'></view>
             <view class='ctrlView' style='width:5px;height:5px'></view>
           </view> 
 
           <view class="ctrlViewOutSide a" style="height: {{circleWidth}}px; width: {{circleWidth}}px; z-index:3; display:{{ctrlViewIndex==item.index?'show':'none'}}"></view>
           
-          <view class='a h center_v' style="height: {{circleWidth}}px; width: {{circleWidth+50}}px; z-index:4;display:{{ctrlViewIndex==item.index?'show':'none'}}">
-            <view class='h center_v' catchtouchstart='onTouchStart' catchtouchend='onTouchEnd' catchtouchmove='onTouchMove' style='width:25px; height: {{circleWidth}}px;'>
-              <view class='ctrlView' style='width:5px; height:5px'></view>
-              <view class='orangeLine' style='width:20px;'></view>
+          <view class='a h center_v' style="height: {{circleWidth}}px; width: {{circleWidth+84}}px; z-index:4;display:{{ctrlViewIndex==item.index?'show':'none'}}">
+            <view class='h center_v' data-type='left' catchtouchstart='onTouchStart' catchtouchend='onTouchEnd' catchtouchmove='onTouchMove' style='width:42px; height: {{circleWidth+20}}px;'>
+              <view class='ctrlView' style='width:8px; height:8px'></view>
+              <view class='orangeLine' style='width:30px;'></view>
             </view>
             <view style='width:{{circleWidth}}px;'></view>
-            <view class='h center_v' catchtouchstart='onTouchStart' catchtouchend='onTouchEnd'  catchtouchmove='onTouchMove' style='width:25px; height: {{circleWidth}}px;'>
-              <view class='orangeLine' style='width:20px;'></view>
-              <view class='ctrlView' style='width:5px; height:5px'></view>
+            <view class='h center_v' data-type="right" catchtouchstart='onTouchStart' catchtouchend='onTouchEnd'  catchtouchmove='onTouchMove' style='width:42px; height: {{circleWidth}}px;'>
+              <view class='orangeLine' style='width:30px;'></view>
+              <view class='ctrlView' style='width:8px; height:8px'></view>
             </view>
-          </view>
+          </view> 
 
           
         </movable-view>

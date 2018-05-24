@@ -29,13 +29,13 @@ Page({
     winWidth:0,
     winHeight:0,
     curFreq:'0.0',
-    curQuality:'1.0',
+    curQuality: '0.0',
     curGain:'+0.0',
     tipFreq100Margin:0,
     tipFreq1KMargin: 0,
     tipFreq10KMargin: 0,
     tipFreq20KMargin: 0,
-    circleWidth:100,
+    circleWidth:70,
     ec: {
       onInit: function (canvas, width, height) {
         const chart = echarts.init(canvas, null, {
@@ -97,7 +97,6 @@ Page({
         ctrlViewIndex: index
       })
     }
-    drawLine(x, y, 1.0);
     
     let data = that.data.peakingEQList;
     for (let i = 0; i < data.length; i++){
@@ -108,16 +107,18 @@ Page({
         item.frequency = getFreqByPointX(item.x, true);
         item.gain = getGainByPointY(item.y);
 
-        that.setData({
-          curFreq: util.getFreqFormat(item.frequency),
-          curGain: util.getGainFormat(item.gain),
-          curQuality:'1.0'
-        })
+        // that.setData({
+        //   curFreq: util.getFreqFormat(item.frequency),
+        //   curGain: util.getGainFormat(item.gain),
+        //   curQuality: item.quality.toFixed(1)
+        // })
 
         data[i] = item;
         break;
       }
     }
+    setOptionAll(that.chartAll, getAllOption());
+    //drawLine(x, y, that.data.curQuality);
   },
   onCtrlViewClick: function(e){
     let indexId = e.currentTarget.id;
@@ -126,6 +127,18 @@ Page({
     that.setData({
       ctrlViewIndex: indexId
     })
+
+    let data = that.data.peakingEQList;
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].index == indexId) {
+        let item = data[i];
+        that.setData({
+          circleWidth: item.quality * 20 + 50,
+          curQuality: item.quality.toFixed(1)
+        })
+        break;
+      }
+    }
   },
   onMoveAreaClick: function (e) {
     //setOption(that.chart, []);
@@ -152,10 +165,34 @@ Page({
     util.redirectPage('../save/save?data=' + patternData)
   },
   onTouchMove: function(e){
+    //控制左右滑动圆
+    var mType = e.currentTarget.dataset.type
+    var changeX = 0
+    if(mType == 'left'){
+      changeX = that.clientX - e.touches[0].clientX
+    }else if(mType == 'right'){
+      changeX = e.touches[0].clientX - that.clientX
+    }
+    var cw = that.data.circleWidth + changeX
+    var cq = (cw - 50)/20
+    if (cq < MinQuality || cq > MaxQuality){
+      return;
+    }
     that.setData({
-      circleWidth: that.data.circleWidth + (that.clientX - e.touches[0].clientX)
+      circleWidth: cw,
+      curQuality: cq.toFixed(1)
     })
     that.clientX = e.touches[0].clientX
+
+    let data = that.data.peakingEQList;
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].index == that.data.ctrlViewIndex) {
+        let item = data[i];
+        item.quality = cq
+        break;
+      }
+    }
+    setOptionAll(that.chartAll, getAllOption());
   },
   onTouchStart: function(e){
     that.clientX = e.touches[0].clientX
@@ -316,7 +353,7 @@ function getBIQArrayDataByPointXY(x, y, q){
   BiQuadFilter.biqfilter.create(BIQType, mFreq, SampleFreq, q, mGain);
   var dataArray = new Array();
   let da
-  for (var i = 0; i < MaxFreq; i = i + 250) {
+  for (var i = 0; i < MaxFreq; i = i + 100) {
     var PointY = BiQuadFilter.biqfilter.log_result(i);
     
     da = new Array();

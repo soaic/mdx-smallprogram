@@ -56,7 +56,11 @@ Page({
       success: function (res) {
         var downloadData = wx.getStorageSync("downloadData");
         console.log(downloadData)
-        var array = res.concat(downloadData)
+        var array = []
+        for(var i = 0;i<res.length;i++){
+          array.push(res[i].toJSON())
+        }
+        array = array.concat(downloadData)
         that.setData({
           patternsData: array
         })
@@ -69,11 +73,8 @@ Page({
   //音效点击
   onItemClick: function(e){
     let index = e.currentTarget.id
-    let pattern = that.data.patternsData[index].attributes
-
-    console.log(that.data.patternsData[index])
-
-    pattern['id'] = that.data.patternsData[index].objectId
+    let pattern = that.data.patternsData[index]
+    pattern['id'] = pattern.objectId
     that.setData({
       selectPosition: index,
       selectName: pattern.name_zh_cn,
@@ -97,7 +98,7 @@ Page({
     that.setData({
       detailViewDisplay: 'none'
     });
-    util.redirectPage('../detail/detail?data=' + JSON.stringify(that.data.patternsData[that.data.selectPosition].attributes))
+    util.redirectPage('../detail/detail?data=' + JSON.stringify(that.data.patternsData[that.data.selectPosition]))
   },
   //删除
   onHomeClick: function (e) {
