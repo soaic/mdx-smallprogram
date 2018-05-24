@@ -19,7 +19,7 @@
       </view>
     </view>
   </view>
-<view class='v' catchtouchmove='onTouchMove'>
+<view class='v' >
   <view class='r h center_h' style='font-weight:bold;color:#FB3A46; font-size:16px; padding:10px'>
     {{curFreq}}Hz  G:{{curGain}} Q:{{curQuality}}
   </view>
@@ -48,21 +48,21 @@
             <view class="ctrlView"  style="height: 8px; width: 8px;"></view>
           </view>
 
-          <view class='h center_v a' style="width:60px; height:5px; z-index:2; display:{{ctrlViewIndex==item.index?'show':'none'}}">
+          <view class='h center_v a' style="width:{{circleWidth+10}}px; height:5px; z-index:2; display:{{ctrlViewIndex==item.index?'show':'none'}}">
             <view class='ctrlView' style='width:5px;height:5px'></view>
             <view class='orangeLine' style='margin-top:2.5px; flex:1'></view>
             <view class='ctrlView' style='width:5px;height:5px'></view>
           </view> 
 
-          <view class="ctrlViewOutSide a" style="height: 50px; width: 50px; z-index:3; display:{{ctrlViewIndex==item.index?'show':'none'}}"></view>
+          <view class="ctrlViewOutSide a" style="height: {{circleWidth}}px; width: {{circleWidth}}px; z-index:3; display:{{ctrlViewIndex==item.index?'show':'none'}}"></view>
           
-          <view class='a h center_v' style="height: 50px; width: 100px; z-index:4;display:{{ctrlViewIndex==item.index?'show':'none'}}">
-            <view class='h center_v' catchtouchmove='onTouchMove' style='width:25px; height: 50px;'>
+          <view class='a h center_v' style="height: {{circleWidth}}px; width: {{circleWidth+50}}px; z-index:4;display:{{ctrlViewIndex==item.index?'show':'none'}}">
+            <view class='h center_v' catchtouchstart='onTouchStart' catchtouchend='onTouchEnd' catchtouchmove='onTouchMove' style='width:25px; height: {{circleWidth}}px;'>
               <view class='ctrlView' style='width:5px; height:5px'></view>
               <view class='orangeLine' style='width:20px;'></view>
             </view>
-            <view style='width:50px;'></view>
-            <view class='h center_v' catchtouchmove='onTouchMove' style='width:25px; height: 50px;'>
+            <view style='width:{{circleWidth}}px;'></view>
+            <view class='h center_v' catchtouchstart='onTouchStart' catchtouchend='onTouchEnd'  catchtouchmove='onTouchMove' style='width:25px; height: {{circleWidth}}px;'>
               <view class='orangeLine' style='width:20px;'></view>
               <view class='ctrlView' style='width:5px; height:5px'></view>
             </view>

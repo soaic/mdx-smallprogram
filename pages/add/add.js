@@ -35,6 +35,7 @@ Page({
     tipFreq1KMargin: 0,
     tipFreq10KMargin: 0,
     tipFreq20KMargin: 0,
+    circleWidth:100,
     ec: {
       onInit: function (canvas, width, height) {
         const chart = echarts.init(canvas, null, {
@@ -151,7 +152,16 @@ Page({
     util.redirectPage('../save/save?data=' + patternData)
   },
   onTouchMove: function(e){
-    
+    that.setData({
+      circleWidth: that.data.circleWidth + (that.clientX - e.touches[0].clientX)
+    })
+    that.clientX = e.touches[0].clientX
+  },
+  onTouchStart: function(e){
+    that.clientX = e.touches[0].clientX
+  },
+  onTouchEnd: function(e){
+    that.clientX = 0
   },
   //导航栏滑动
   swichNav: function (e) {
