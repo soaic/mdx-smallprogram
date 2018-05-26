@@ -10,10 +10,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    name: '',
-    description: '',
-    tuner: '',
-    supportnum: ''
+    patter:{}
+
   },
 
   /**
@@ -24,10 +22,7 @@ Page({
     if (options.data){
       that.patter = JSON.parse(options.data);
       that.setData({
-        name: that.patter.name_zh_cn,
-        tuner: that.patter.uname,
-        supportnum: that.patter.nicknum,
-        description: that.patter.descript
+        patter: that.patter
       })
     }
 

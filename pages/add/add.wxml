@@ -30,9 +30,9 @@
   </view>
 
   <view class='r h' style='width:{{winWidth-30}};height:20px;margin-left:15px;margin-top:2px;'>
-    <view class='a h center_h' style='color:#FB3A46;font-size:12px;width:30px;margin-left:{{tipFreq100Margin-15}}px;'>100</view>
-    <view class='a h center_h' style='color:#FB3A46;font-size:12px;width:30px;margin-left:{{tipFreq1KMargin-15}}px;'>1K</view>
-    <view class='a h center_h' style='color:#FB3A46;font-size:12px;width:30px;margin-left:{{tipFreq10KMargin-15}}px;'>10K</view>
+    <view class='a h center_h' style='font-weight:bold;color:#FB3A46;font-size:12px;width:30px;margin-left:{{tipFreq100Margin-15}}px;'>100</view>
+    <view class='a h center_h' style='font-weight:bold;color:#FB3A46;font-size:12px;width:30px;margin-left:{{tipFreq1KMargin-15}}px;'>1K</view>
+    <view class='a h center_h' style='font-weight:bold;color:#FB3A46;font-size:12px;width:30px;margin-left:{{tipFreq10KMargin-15}}px;'>10K</view>
     
   </view>
 

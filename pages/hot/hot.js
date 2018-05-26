@@ -30,13 +30,18 @@ Page({
       windowHeight: systemInfo.windowHeight
     })
 
+    wx.showLoading({
+      title: '加载中...',
+    })
     audioTable.queryOfficalShare({
       success: function(res){
+        wx.hideLoading()
         that.setData({
           officialData: res
         })
       }, fial: function(res){
         console.log(res)
+        wx.hideLoading()
       }
     })
 

@@ -47,13 +47,17 @@ Page({
       winHeight: windowHeight,
       item_width: windowWidth / 4 - 5,
       item_height: windowWidth / 4,
-      image_width: windowWidth / 4 - 26,
-      image_height: (windowWidth / 4 - 26) * 188 / 197
+      image_width: windowWidth / 4 - 36,
+      image_height: (windowWidth / 4 - 36) * 197 / 188
     });
+    wx.showLoading({
+      title: '加载中...',
+    })
     const uid = wx.getStorageSync('uid')
     audioTable.requestMainEq({
       uid: uid,
       success: function (res) {
+        wx.hideLoading()
         var downloadData = wx.getStorageSync("downloadData");
         console.log(downloadData)
         var array = []
@@ -65,7 +69,7 @@ Page({
           patternsData: array
         })
       }, fail: function (err) {
-
+        wx.hideLoading()
       }
     })
     

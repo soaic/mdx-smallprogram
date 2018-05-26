@@ -2,5 +2,6 @@
   "usingComponents": {
     "ec-canvas": "../../ec-canvas/ec-canvas"
   },
-  "navigationBarTitleText": "我的音效"
+  "navigationBarTitleText": "我的音效",
+  "disableScroll": true
 }
