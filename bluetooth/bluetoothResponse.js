@@ -17,7 +17,8 @@ bluetoothResponse.parseResponse = function(arrayBuffer){
   console.log("rsp.byteLength != 0x55=" + (rsp.getUint8(0) != 0x55))
   if (rsp.getUint8(0) != 0x55 || isrsp) {
     return null;
-  } console.log("parseResponse------4----start")
+  } 
+  console.log("parseResponse------4----start")
   var response = {};
   var len = rsp.getUint8(1);
   var cmdH = rsp.getUint8(2);
@@ -26,24 +27,27 @@ bluetoothResponse.parseResponse = function(arrayBuffer){
   response.cmd = (cmdH << 8 | cmdL) & 0xffff;
   response.cmdSerial = rsp.getUint8(4);
 
-  console.log("rsp.cmd = 0x%04x", response.cmd);
-  console.log("rsp.serial = 0x%02x", response.cmdSerial);
+  console.log("len = ", len);
+  console.log("cmdH = ", cmdH);
+  console.log("cmdL = ", cmdL);
+  console.log("rsp.cmd = ", response.cmd);
+  console.log("rsp.serial = ", response.cmdSerial);
 
   switch (response.cmd) {
-    case HandShakeRsp:
+    case bluetoothResponse.HandShakeRsp:
       response.playLoad = getPlayload(rsp, 5);
       break;
-    case GetIDRsp:
+    case bluetoothResponse.GetIDRsp:
       response.playLoad = getPlayload(rsp, 5);
       break;
-    case GetEqModeRsp:
+    case bluetoothResponse.GetEqModeRsp:
       if (rsp.byteLength > 8) {
         response.position = rsp[5];
         response.ptype = rsp[6];
         response.playLoad = getPlayload(rsp, 7);
       }
       break;
-    case SetEqModeRsp:
+    case bluetoothResponse.SetEqModeRsp:
       response.playLoad = getPlayload(rsp, 5);
       break;
     default:

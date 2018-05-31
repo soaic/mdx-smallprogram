@@ -3,13 +3,13 @@
     "pages/main/main",
     "pages/hot/hot",
     "pages/add/add",
-    "pages/bluetoothdemo/bluetoothdemo",
     "pages/btooth/btooth",
     "pages/save/save",
     "pages/detail/detail",
     "pages/setting/setting",
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/bluetoothdemo/bluetoothdemo"
   ],
   "window": {
     "backgroundTextStyle": "light",

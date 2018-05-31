@@ -3,6 +3,7 @@ import patterns from '../../config/patterns.js' ;
 import util from '../../utils/util.js';
 import btutil from '../../bluetooth/blueToothUtil.js';
 import btrequest from '../../bluetooth/bluetoothRequest.js';
+import btresponse from '../../bluetooth/bluetoothResponse.js';
 import audioTable from '../../db/audioTable.js';
 
 const app = getApp();
@@ -15,6 +16,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    isConnected:false,
     item_width: 0,
     item_height: 0,
     image_width: 0,
@@ -69,10 +71,78 @@ Page({
           patternsData: array
         })
       }, fail: function (err) {
+        console.error(err)
         wx.hideLoading()
       }
     })
     
+    if (btutil.isResetConnect()) {
+      btutil.startConnect()
+    }
+    //设置连接监听
+    btutil.setOnConnectListener(function (isConnect) {
+      that.setData({
+        isConnected: isConnect
+      })
+      if(isConnect){
+        btutil.send(btrequest.handShakeReq())
+      }
+    })
+    //设置数据接收监听
+    btutil.setOnReciverListener(function (res) {
+      var rsp = btresponse.data.parseResponse(res.value);
+
+      if (rsp) {
+        console.log("rsp = ", rsp);
+        switch (rsp.cmd) {
+          case btresponse.data.HandShakeRsp: {
+            // KvStorage.getInstance().putString(BluetoothContants.LastConnectBluetooth, Bluetooth.getConnectedDeviceAddress()).commit();
+            
+            //ConfigManager.setHeadsetId("");
+            // if (mOnBluetoothistener1 != null) {
+            //   mOnBluetoothistener1.onBluetoothStateChanged(BluetoothState.STATE_HAND_SHAKED);
+            // }
+            // if (mOnBluetoothistener2 != null) {
+            //   mOnBluetoothistener2.onBluetoothStateChanged(BluetoothState.STATE_HAND_SHAKED);
+            // }
+            btutil.send(btrequest.getID());
+
+            btutil.send(btrequest.getEqReq());
+            break;
+          }
+
+          case btresponse.data.GetIDRsp: {
+            var playload = rsp.playLoad;
+            var fullId = playload.toString();
+            LogUtil.d(TAG, "getIdRsp = " , fullId);
+            if (fullId) {
+              var pos = fullId.indexOf('0');
+              var id = fullId.substring(0, pos);
+              console.log("headset.id = " , id);
+              if (id) {
+                //ConfigManager.setHeadsetId(id);
+                //ConfigManager.fetchHeadsetConfigs();
+              }
+              // if (mOnBluetoothistener1 != null) {
+              //   mOnBluetoothistener1.onBluetoothStateChanged(BluetoothState.STATE_GOT_ID);
+              // }
+
+              // if (mOnBluetoothistener2 != null) {
+              //   mOnBluetoothistener2.onBluetoothStateChanged(BluetoothState.STATE_GOT_ID);
+              // }
+            }
+            break;
+          }
+        }
+        // if (mOnBluetoothistener1 != null) {
+        //   mOnBluetoothistener1.onDataReceived(rsp);
+        // }
+
+        // if (mOnBluetoothistener2 != null) {
+        //   mOnBluetoothistener2.onDataReceived(rsp);
+        // }
+      }
+    })
   },
   //音效点击
   onItemClick: function(e){
@@ -85,8 +155,8 @@ Page({
       detailViewDisplay: 'show'
     });
     //把pattern数据转成ArrayBuffer,然后通过蓝牙发送数据
-    // var btData = btrequest.createPeakingEQ(pattern)
-    // btutil.send(btData)
+    var btData = btrequest.createPeakingEQ(pattern)
+    btutil.send(btData)
     if (that.detailDisplayTimer){
       clearTimeout(that.detailDisplayTimer)
     }

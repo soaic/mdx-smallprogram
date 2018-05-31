@@ -35,7 +35,7 @@ function getID() {
   SN = 1;
   dataView.setUint8(4, SN & 0xff);
   fillChecksum(dataView);
-  return bytes;
+  return buffer;
 }
 
 function getEqReq() {
@@ -60,11 +60,13 @@ function createPeakingEQ(pattern) {
   if (pattern.byPass) {
     peakingEQList = patterns.getData(0);
   } else {
-    peakingEQList = pattern.peakingEQList;
+    peakingEQList = JSON.parse(pattern.peakingEQList);
   }
   console.log(peakingEQList)
+  console.log("peakingEQList.length", peakingEQList.length)
   var payloadLen = peakingEQList.length * 5 + 3;
 
+  console.log("payloadLen", payloadLen)
   var buffer = new ArrayBuffer(payloadLen + 6);
   var dataView = new DataView(buffer)
   

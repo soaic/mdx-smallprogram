@@ -1,5 +1,5 @@
 <!-- 我的音效 -->
-<view class='contion_tip'>设备已连接，你可以开始设置你的设备了!</view>
+<view class='contion_tip'>{{isConnected?'设备已连接，你可以开始设置你的设备了!':'设备未连接!'}}</view>
 <scroll-view style='height:{{winHeight - 100}}px'  scroll-y='true' >
   <view class='grid_view'>
       <block wx:for="{{patternsData}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">

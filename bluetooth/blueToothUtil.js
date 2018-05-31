@@ -11,14 +11,15 @@ const systemError = 10008
 const systemNotSupport = 10009
 
 const NAME_FIRST = 'MDX'
-const UUID = '00006666-0000-1000-8000-00805F9B34FB'
+const UUID_SERV_1 = '00006666-0000-1000-8000-00805F9B34FB'
+const UUID_SERV_2 = '00007777-0000-1000-8000-00805F9B34FB'
 var resetNum = 0
 var getDeviceFoundTimer, getConnectedTimer, discoveryDevicesTimer
 var isConnectting = false, connected = false
 var available, discovering
-var deviceId, characteristicId
+var deviceId
 var onReciverListener,onConnectListener
-
+var characteristicId_r, characteristicId_w
 
 //开启适配，如果失败提示设备蓝牙不可用，同时开启蓝牙适配器状态监听
 function startConnect() {
@@ -117,7 +118,7 @@ function startBluetoothDevicesDiscovery() {
     title: '蓝牙搜索中...' + (resetNum == 0 ? "" : resetNum)
   });
   wx.startBluetoothDevicesDiscovery({
-    services: [UUID],
+    services: [UUID_SERV_1, UUID_SERV_2],
     allowDuplicatesKey: true,
     success: function (res) {
       console.log("startBluetoothDevicesDiscovery",res)
@@ -148,7 +149,7 @@ function startBluetoothDevicesDiscovery() {
 //获取已配对的蓝牙设备
 function getConnectedBluetoothDevices() {
   wx.getConnectedBluetoothDevices({
-    services: [UUID],
+    services: [UUID_SERV_1, UUID_SERV_2],
     success: function (res) {
       console.log("getConnectedBluetoothDevices success",res)
       var devices = res['devices'], flag = false, index = 0, conDevList = [];
@@ -211,8 +212,8 @@ function onBluetoothDeviceFound() {
     if (devs) {
       var name = devs['name'];
       var localName = devs['localName'];
-      if ((name != '' && name.indexOf(NAME_FIRST) != -1) ||
-        (localName != '' && localName.indexOf(NAME_FIRST) != -1)) {
+      if ((name && name.indexOf(NAME_FIRST) != -1) ||
+        (localName && localName.indexOf(NAME_FIRST) != -1)) {
         deviceId = devs['deviceId'];
         //取消搜索
         clearInterval(getDeviceFoundTimer);
@@ -279,35 +280,48 @@ function getService() {
     deviceId: deviceId,
     success: function (res) {
       console.log('services===',res)
-      getCharacter();
+
+      if(res.services){
+        for(var i = 0; i <res.services.length; i++){
+          getCharacter(res.services[i].uuid);
+        }
+      }
     }
   })
 }
 
 //读取服务的特征值
-function getCharacter() {
+function getCharacter(uuid) {
   wx.getBLEDeviceCharacteristics({
     deviceId: deviceId,
-    serviceId: UUID,
+    serviceId: uuid,
     success: function (res) {
       console.log(res)
-      characteristicId = res.characteristics[0].uuid
+      
+      if(res.serviceId == UUID_SERV_1){
+        characteristicId_r = res.characteristics[0].uuid
+      }
+
+      if(res.serviceId == UUID_SERV_2){
+        characteristicId_w = res.characteristics[0].uuid
+      }
+
       connected = true
       isConnectting = false;
       notifyBLECharacteristicValueChange();
 
-
-      console.log("characteristicId=" + characteristicId)
-      console.log("uuid="+UUID)
+      console.log("characteristicId_r=" + characteristicId_r)
+      console.log("characteristicId_w=" + characteristicId_w)
 
       wx.showToast({
         title: '配对成功',
         icon: 'success',
         duration: 5000
       })
-
-      if (onConnectListener instanceof Function){
-        onConnectListener(true)
+      if (characteristicId_r && characteristicId_w){
+        if (onConnectListener instanceof Function){
+          onConnectListener(true)
+        }
       }
     },
     fail: function (err) {
@@ -330,10 +344,11 @@ function notifyBLECharacteristicValueChange() {
   wx.notifyBLECharacteristicValueChange({
     state: true,
     deviceId: deviceId,
-    serviceId: UUID,
-    characteristicId: characteristicId,
+    serviceId: UUID_SERV_2,
+    characteristicId: characteristicId_r,
     complete(res) {
       wx.onBLECharacteristicValueChange(function (res) {
+        console.log("read",arrayBufferToHexString(res.value))
         if (onReciverListener instanceof Function)
           onReciverListener(res)
         console.log('notifyBLECharacteristicValueChange',res)
@@ -346,13 +361,14 @@ function notifyBLECharacteristicValueChange() {
 }
 
 function read(){
+  console.log("start read")
   wx.readBLECharacteristicValue({
     // 这里的 deviceId 需要已经通过 createBLEConnection 与对应设备建立链接  [**new**]
     deviceId: deviceId,
     // 这里的 serviceId 需要在上面的 getBLEDeviceServices 接口中获取
-    serviceId: UUID,
+    serviceId: UUID_SERV_1,
     // 这里的 characteristicId 需要在上面的 getBLEDeviceCharacteristics 接口中获取
-    characteristicId: characteristicId,
+    characteristicId: characteristicId_r,
     success: function (res) {
       console.log('readBLECharacteristicValue:', res)
     }
@@ -360,19 +376,21 @@ function read(){
 }
 
 function send(arrayBuffer) {
-  console.log(arrayBufferToHexString(arrayBuffer))
+  console.log("send", arrayBufferToHexString(arrayBuffer))
   wx.writeBLECharacteristicValue({
     // 这里的 deviceId 需要在上面的 getBluetoothDevices 或 onBluetoothDeviceFound 接口中获取
     deviceId: deviceId,
     // 这里的 serviceId 需要在上面的 getBLEDeviceServices 接口中获取
-    serviceId: UUID,
+    serviceId: UUID_SERV_2,
     // 这里的 characteristicId 需要在上面的 getBLEDeviceCharacteristics 接口中获取
-    characteristicId: characteristicId,
+    characteristicId: characteristicId_w,
     // 这里的value是ArrayBuffer类型
     value: arrayBuffer,
     success: function (res) {
       console.log('writeBLECharacteristicValue success', res)
-      read()
+      setTimeout(function(){
+        read()
+      },1000)
     }
   })
 }
