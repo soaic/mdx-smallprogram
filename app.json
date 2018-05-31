@@ -1,10 +1,10 @@
 {
   "pages": [
-    "pages/add/add",
     "pages/main/main",
+    "pages/hot/hot",
+    "pages/add/add",
     "pages/bluetoothdemo/bluetoothdemo",
     "pages/btooth/btooth",
-    "pages/hot/hot",
     "pages/save/save",
     "pages/detail/detail",
     "pages/setting/setting",

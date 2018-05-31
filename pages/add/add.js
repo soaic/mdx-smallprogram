@@ -148,16 +148,17 @@ Page({
   }, 
   onResetClick: function(e){
     isRunReset = true
-    //patterns.initData();
     that.patternData = JSON.parse(that.originStrData);
-    let data = getPatternXYData(JSON.parse(that.patternData.peakingEQList));
+    var peq = typeof that.patternData.peakingEQList == 'string' ? JSON.parse(that.patternData.peakingEQList) : that.patternData.peakingEQList
+    let data = getPatternXYData(peq);
     that.setData({
       peakingEQList: data,
       ctrlViewIndex: -1
     });
     setTimeout(function(){
       isRunReset = false
-    },2000);
+    },1000);
+    setOptionAll(that.chartAll, getAllOption());
   },
   onSaveClick: function(e){
     that.patternData.peakingEQList = that.data.peakingEQList;

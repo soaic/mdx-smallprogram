@@ -1,0 +1,16 @@
+<template name="itemTemp">
+  <view class='h center_v' id="{{item.objectId}}" data-index="{{idx}}" bindtap='onItemClick'>
+      <view style="height:55px;width:3px;background:{{item.objectId==curSelectItem?'#FB3A46':'#FFFFFF'}}"></view>
+      <image style='background-color:grey;width:35px;height:35px;margin-left:20px' src='{{item.uphoto?item.uphoto:"/images/icon_logo.png"}}'></image>
+      <view style='flex:1; margin-left:10px;' class='v'>
+        <view class='h center_v'>
+          <view style='font-size:16px;color:#2e2e2e'>{{item.name_zh_cn}}</view>
+          <image style='width:15px;height:15px;margin-left:5px;' src='/images/{{item.icon}}.png'></image>
+          <image style='width:15px;height:15px;margin-left:5px;' src='/images/icon_praise.png'></image>
+          <view style='margin-left:5px;color:#989898;font-size:12px'>{{item.nicknum}}</view>  
+        </view>
+        <view style='color:#989898;font-size:12px'>由{{item.uname}}创建 | {{item.descript}}</view>
+        <view style='background-color:#989898;height:1px;width:100%;margin-top:5px;'></view>
+      </view>
+    </view>
+</template>

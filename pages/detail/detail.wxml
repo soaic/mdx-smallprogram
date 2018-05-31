@@ -19,12 +19,12 @@
 
   <view class='v' style='width:100%; '>
     <view class='h center_h'>
-      <image src='/images/icon_logo.png' class='logo_img'></image>
+      <image src='{{patter.uphoto?patter.uphoto:"/images/icon_logo.png"}}' class='logo_img'></image>
     </view>
-    <view class='h center_h text_view' style='margin-top:20px;'>名称: {{name}}</view>
-    <view class='h center_h text_view'>介绍: {{description}}</view>
-    <view class='h center_h text_view'>调音师: {{tuner}}</view>
-    <view class='h center_h text_view'>获得点赞: {{supportnum}}</view>
+    <view class='h center_h text_view' style='margin-top:20px;'>名称: {{patter.name_zh_cn}}</view>
+    <view class='h center_h text_view'>介绍: {{patter.descript}}</view>
+    <view class='h center_h text_view'>调音师: {{patter.uname}}</view>
+    <view class='h center_h text_view'>获得点赞: {{patter.nicknum}}</view>
   </view>
 
   <view catchtap='onDeleteClick' class='a h center'  style='bottom:20px;width:88px;height:56px;'>

@@ -1,4 +1,5 @@
 <!--pages/hot.wxml-->
+<import src="item.wxml" /> 
 <view class='root_view'>
   <view class="h center switch_bar" style='position: fixed; top: 0;right: 0;width: 100%; z-idnex:10'>
     <view style='flex:1;' class='v center_v' id="0" catchtap="swichNav">
@@ -16,66 +17,39 @@
   </view>
 
 
-  <view class='h center_v' style='width:100%; height:40px; top:60px;position: fixed; z-idnex:10'>
+  <view  class='h center_v'  style='width:100%; height:40px; top:60px;position: fixed; z-idnex:10'>
     <view bindtap='onOfficialClick' class='h center' style='flex:1'>官方分享</view>
     <view bindtap='onUserClick' class='h center' style='flex:1'>网友分享</view>
   </view>
 
   <view style='width: 100%;height:30px;top:100px;z-idnex:10;position: fixed;' class='h center'>
-    <input confirm-type="search" bindconfirm='searchInput' class='h center search_input' placeholder="搜索" placeholder-style="color:#2e2e2e;"></input>
+    <input confirm-type="search" bindconfirm='searchInput' class='h search_input' placeholder="搜索"></input>
   </view>
 
-  <swiper current="{{curSelect}}"  bindchange="swiperChange" style='margin-top:140px;margin-bottom-10px;height:{{windowHeight - 150}}px' duration='300'>
+  <swiper catchtouchmove='true' current="{{curSelect}}"  bindchange="swiperChange" style='padding-top:140px;margin-bottom-10px;height:{{windowHeight - 150}}px' duration='300'>
     <swiper-item currentIndex="0" >
       <scroll-view  style='height:{{windowHeight - 150}}px' scroll-y='true'>
       <block wx:for="{{officialData}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
-        <view class='h center_v' id="{{item.objectId}}" data-index="{{idx}}" bindtap='onItemClick'>
-          <view style="height:50px;width:3px;background:{{item.objectId==curSelectItem?'#FB3A46':'#FFFFFF'}}"></view>
-          <image style='background-color:grey;width:35px;height:35px;margin-left:20px' src='{{item.uphoto?item.uphoto:"/images/icon_logo.png"}}'></image>
-          <view style='flex:1; margin-left:5px;' class='v'>
-            <view class='h center_v'>
-              <view>{{item.name_zh_cn}}</view>
-              <image style='width:15px;height:15px;margin-left:5px;' src='/images/{{item.icon}}.png'></image>
-              <image style='width:15px;height:15px;margin-left:5px;' src='/images/icon_praise.png'></image>
-              <view style='margin-left:5px;'>{{item.nicknum}}</view>  
-            </view>
-            <view >由{{item.uname}}创建 | {{item.descript}}</view>
-            <view style='background-color:#666666;height:1px;width:100%'></view>
-          </view>
-        </view>
+        <template is="itemTemp" data="{{item,curSelectItem,idx}}"></template>
       </block>
       </scroll-view>
     </swiper-item>
     <swiper-item currentIndex="1" >
       <scroll-view style='height:{{windowHeight - 150}}px' scroll-y='true'> 
       <block wx:for="{{usersData}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
-        <view class='h center_v' id="{{item.objectId}}" data-index="{{idx}}" bindtap='onItemClick'>
-          <view style="height:50px;width:3px;background:{{item.objectId==curSelectItem?'#FB3A46':'#FFFFFF'}}"></view>
-          <image style='background-color:grey;width:35px;height:35px;margin-left:20px' src='{{item.uphoto?item.uphoto:"/images/icon_logo.png"}}'></image>
-          <view style='flex:1; margin-left:5px;' class='v'>
-            <view class='h center_v'>
-              <view>{{item.name_zh_cn}}</view>
-              <image style='width:15px;height:15px;margin-left:5px;' src='/images/{{item.icon}}.png'></image>
-              <image style='width:15px;height:15px;margin-left:5px;' src='/images/icon_praise.png'></image>
-              <view style='margin-left:5px;'>{{item.nicknum}}</view>  
-            </view>
-            <view >由{{item.uname}}创建 | {{item.descript}}</view>
-            <view style='background-color:#666666;height:1px;width:100%'></view>
-          </view>
-        </view>
+        <template is="itemTemp" data="{{item,curSelectItem,idx}}"></template>
       </block>
       </scroll-view>
     </swiper-item>
   </swiper>
+</view>
 
-  <view catchtap='onDownloadClick' class='a h center'  style='bottom:20px;width:88px;height:56px;display:{{curSelectItem?"show":"none"}}'>
-    <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_left.png'></image>
-    <text class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>下载</text>
-  </view>
+<view catchtap='onDownloadClick' catchtouchmove='true' class='a h center'  style='bottom:20px;width:88px;height:56px;display:{{curSelectItem?"show":"none"}}'>
+  <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_left.png'></image>
+  <text class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>下载</text>
+</view>
 
-  <view catchtap='onLikeClick' class='a h center' style='bottom:20px;right:0px;width:88px;height:56px;display:{{curSelectItem?"show":"none"}}'>
-    <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_right.png'></image>
-    <view class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>点赞</view>
-  </view>
-
+<view catchtap='onLikeClick' catchtouchmove='true' class='a h center' style='bottom:20px;right:0px;width:88px;height:56px;display:{{curSelectItem?"show":"none"}}'>
+  <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_right.png'></image>
+  <view class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>点赞</view>
 </view>
