@@ -107,11 +107,11 @@ Page({
         item.frequency = getFreqByPointX(item.x, true);
         item.gain = getGainByPointY(item.y);
 
-        // that.setData({
-        //   curFreq: util.getFreqFormat(item.frequency),
-        //   curGain: util.getGainFormat(item.gain),
-        //   curQuality: item.quality.toFixed(1)
-        // })
+        that.setData({
+          curFreq: util.getFreqFormat(item.frequency),
+          curGain: util.getGainFormat(item.gain),
+          curQuality: item.quality.toFixed(1)
+        })
 
         data[i] = item;
         break;
