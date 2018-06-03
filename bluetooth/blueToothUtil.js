@@ -1,3 +1,4 @@
+import btrequest from 'bluetoothRequest.js';
 const ok = 0
 const notInit = 10000
 const notAvailable = 10001
@@ -15,7 +16,7 @@ const UUID_SERV_1 = '00006666-0000-1000-8000-00805F9B34FB'
 const UUID_SERV_2 = '00007777-0000-1000-8000-00805F9B34FB'
 var resetNum = 0
 var getDeviceFoundTimer, getConnectedTimer, discoveryDevicesTimer
-var isConnectting = false, connected = false
+var connected = false
 var available, discovering
 var deviceId
 var onReciverListener,onConnectListener
@@ -67,7 +68,6 @@ function openBluetoothAdapter() {
           if (onConnectListener instanceof Function) {
             onConnectListener(res.available)
           }
-          isConnectting = false
           connected = false
         }
       })
@@ -227,7 +227,6 @@ function onBluetoothDeviceFound() {
 
 //开始配对设备
 function startConnectDevices() {
-  isConnectting = true
   wx.showLoading({
     title: '开始配对...'
   });
@@ -307,7 +306,6 @@ function getCharacter(uuid) {
       }
 
       connected = true
-      isConnectting = false;
       notifyBLECharacteristicValueChange();
 
       console.log("characteristicId_r=" + characteristicId_r)
@@ -319,6 +317,8 @@ function getCharacter(uuid) {
         duration: 5000
       })
       if (characteristicId_r && characteristicId_w){
+        //发送蓝牙耳机信息配对校验
+        send(btrequest.handShakeReq())
         if (onConnectListener instanceof Function){
           onConnectListener(true)
         }
@@ -468,10 +468,9 @@ function versionLowDialog(){
   })
 }
 
-function isResetConnect(){
-  console.log("isConnectting=" + isConnectting)
+function isConnected(){
   console.log("connected=" + connected)
-  return !isConnectting && !connected
+  return connected
 }
 
 function setOnConnectListener(listner){
@@ -484,9 +483,8 @@ function setOnReciverListener(listener){
 
 module.exports = {
   startConnect: startConnect,
-  isResetConnect: isResetConnect,
+  isConnected: isConnected,
   send: send,
-  read: read,
   setOnConnectListener: setOnConnectListener,
   setOnReciverListener: setOnReciverListener
 }

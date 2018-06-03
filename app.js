@@ -1,7 +1,5 @@
 //app.js
-
 import blueTooth from '/bluetooth/blueToothUtil.js'
-
 const AV = require('libs/av-weapp-min.js');
 AV.init({
   appId: 'nSNhFcJCeysT9vRXgfNvtbQF-gzGzoHsz',
@@ -11,19 +9,15 @@ console.log(AV);
 
 App({
   onLaunch: function () {
-    
-    AV.User.loginWithWeapp().then(user => {
-      this.globalData.user = user.toJSON();
-
-      wx.setStorageSync('uid', this.globalData.user.objectId)
-
-    }).catch(console.error);
-    
+    // AV.User.loginWithWeapp().then(user => {
+    //   this.globalData.user = user.toJSON();
+    //   wx.setStorageSync('uid', this.globalData.user.objectId)
+    // }).catch(console.error);
   },
   onShow: function () {
-    // if (blueTooth.isResetConntct()) {
-    //   blueTooth.startConnect()
-    // }
+    if (!blueTooth.isConnected()) {
+      blueTooth.startConnect()
+    }
   },
   globalData: {
     

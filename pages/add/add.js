@@ -2,6 +2,8 @@ import * as echarts from '../../ec-canvas/echarts';
 import BiQuadFilter from '../../utils/biqfilter.js';
 import patterns from '../../config/patterns.js';
 import util from '../../utils/util.js'
+import btrequest from '../../bluetooth/bluetoothRequest.js';
+import btutil from '../../bluetooth/blueToothUtil.js';
 
 const MinFreq = 20;
 const MaxFreq = 20000;
@@ -66,6 +68,7 @@ Page({
     //获取屏幕宽度
     viewWidth = res.windowWidth - 30;
     var peq;
+    console.log("option.data", option.data)
     if (option.data){
       that.patternData = JSON.parse(option.data);
       that.originStrData = option.data;
@@ -87,6 +90,7 @@ Page({
       tipFreq20KMargin: getPointXByFreq(20000),
     });
   },
+  //圆点移动
   viewMoveChange: function(e){
     if (isRunReset) return
     let x = e.detail.x + 4;
@@ -97,7 +101,6 @@ Page({
         ctrlViewIndex: index
       })
     }
-    
     let data = that.data.peakingEQList;
     for (let i = 0; i < data.length; i++){
       if(data[i].index == index){
@@ -120,6 +123,7 @@ Page({
     setOptionAll(that.chartAll, getAllOption());
     //drawLine(x, y, that.data.curQuality);
   },
+  //圆点点击
   onCtrlViewClick: function(e){
     let indexId = e.currentTarget.id;
     let x = e.detail.x + 4;
@@ -140,12 +144,14 @@ Page({
       }
     }
   },
+  //移动区域点击 取消选中
   onMoveAreaClick: function (e) {
     //setOption(that.chart, []);
     that.setData({
       ctrlViewIndex: -1
     })
   }, 
+  //复位
   onResetClick: function(e){
     isRunReset = true
     that.patternData = JSON.parse(that.originStrData);
@@ -157,16 +163,17 @@ Page({
     });
     setTimeout(function(){
       isRunReset = false
-    },1000);
+    },2000);
     setOptionAll(that.chartAll, getAllOption());
   },
+  //保存
   onSaveClick: function(e){
     that.patternData.peakingEQList = that.data.peakingEQList;
     var patternData = JSON.stringify(that.patternData)
     util.redirectPage('../save/save?data=' + patternData)
   },
+  //控制左右滑动圆移动
   onTouchMove: function(e){
-    //控制左右滑动圆
     var mType = e.currentTarget.dataset.type
     var changeX = 0
     if(mType == 'left'){
@@ -195,9 +202,11 @@ Page({
     }
     setOptionAll(that.chartAll, getAllOption());
   },
+  //控制左右滑动圆开始滑动
   onTouchStart: function(e){
     that.clientX = e.touches[0].clientX
   },
+  //控制左右滑动圆结束滑动
   onTouchEnd: function(e){
     that.clientX = 0
   },
@@ -212,6 +221,11 @@ Page({
         util.redirectPage('../hot/hot')
       }
     }
+  },
+  //对比
+  onCompareClick: function(e){
+    var btData = btrequest.createPeakingEQ(that.patternData)
+    btutil.send(btData)
   }
 });
 

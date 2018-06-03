@@ -54,13 +54,23 @@ function getEqReq() {
   return buffer;
 }
 
+function isJson(obj) {
+  var isjson = typeof (obj) == "object" && Object.prototype.toString.call(obj).toLowerCase() == "[object object]" && !obj.length;
+  return isjson;
+}  
+
 function createPeakingEQ(pattern) {
   var peakingEQList;
+  console.log(pattern)
   console.log("isByPass = " + pattern.byPass)
   if (pattern.byPass) {
     peakingEQList = patterns.getData(0);
   } else {
-    peakingEQList = JSON.parse(pattern.peakingEQList);
+    if (typeof pattern.peakingEQList == 'string'){
+      peakingEQList = JSON.parse(pattern.peakingEQList);
+    }else{
+      peakingEQList = pattern.peakingEQList;
+    }
   }
   console.log(peakingEQList)
   console.log("peakingEQList.length", peakingEQList.length)

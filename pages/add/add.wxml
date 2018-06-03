@@ -86,7 +86,7 @@
     </view>
   </view>
 
-  <view class='a h center' style='bottom:20px;right:0px;width:88px;height:56px;'>
+  <view catchtap='onCompareClick' class='a h center' style='bottom:20px;right:0px;width:88px;height:56px;'>
     <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_right.png'></image>
     <view class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>对比</view>
   </view>

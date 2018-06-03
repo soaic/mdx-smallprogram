@@ -50,7 +50,8 @@ Page({
       item_width: windowWidth / 4 - 5,
       item_height: windowWidth / 4,
       image_width: windowWidth / 4 - 36,
-      image_height: (windowWidth / 4 - 36) * 197 / 188
+      image_height: (windowWidth / 4 - 36) * 197 / 188,
+      isConnected: btutil.isConnected()
     });
     wx.showLoading({
       title: '加载中...',
@@ -76,17 +77,11 @@ Page({
       }
     })
     
-    if (btutil.isResetConnect()) {
-      btutil.startConnect()
-    }
     //设置连接监听
     btutil.setOnConnectListener(function (isConnect) {
       that.setData({
         isConnected: isConnect
       })
-      if(isConnect){
-        btutil.send(btrequest.handShakeReq())
-      }
     })
     //设置数据接收监听
     btutil.setOnReciverListener(function (res) {
@@ -106,7 +101,6 @@ Page({
             //   mOnBluetoothistener2.onBluetoothStateChanged(BluetoothState.STATE_HAND_SHAKED);
             // }
             btutil.send(btrequest.getID());
-
             btutil.send(btrequest.getEqReq());
             break;
           }
@@ -155,8 +149,10 @@ Page({
       detailViewDisplay: 'show'
     });
     //把pattern数据转成ArrayBuffer,然后通过蓝牙发送数据
-    var btData = btrequest.createPeakingEQ(pattern)
-    btutil.send(btData)
+    if (that.data.isConnected){
+      var btData = btrequest.createPeakingEQ(pattern)
+      btutil.send(btData)
+    }
     if (that.detailDisplayTimer){
       clearTimeout(that.detailDisplayTimer)
     }
@@ -174,9 +170,8 @@ Page({
     });
     util.redirectPage('../detail/detail?data=' + JSON.stringify(that.data.patternsData[that.data.selectPosition]))
   },
-  //删除
   onHomeClick: function (e) {
-    btutil.read()
+    
   },
   //页面改变
   bindChange: function (e) {
