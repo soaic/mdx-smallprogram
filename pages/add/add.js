@@ -92,14 +92,28 @@ Page({
   },
   //圆点移动
   viewMoveChange: function(e){
+    
     if (isRunReset) return
     let x = e.detail.x + 4;
     let y = e.detail.y + 4;
     let index = e.target.dataset.id;
+    if(!that.curX || !that.curY){
+      that.curX = x;
+      that.curY = y;
+    }
     if (index != that.data.ctrlViewIndex){
       that.setData({
         ctrlViewIndex: index
       })
+    }else{
+      if (Math.abs(that.curX - x) >= 10 || Math.abs(that.curY - y) >= 10){
+        that.curX = x;
+        that.curY = y;
+      }else{
+        return;
+      }
+      
+      //console.log(that.curX + '--------------' + that.curY)
     }
     let data = that.data.peakingEQList;
     for (let i = 0; i < data.length; i++){
@@ -189,7 +203,7 @@ Page({
     that.setData({
       circleWidth: cw,
       curQuality: cq.toFixed(1)
-    })
+    }) 
     that.clientX = e.touches[0].clientX
 
     let data = that.data.peakingEQList;
