@@ -5,6 +5,7 @@ import util from '../../utils/util.js'
 import btrequest from '../../bluetooth/bluetoothRequest.js';
 import btutil from '../../bluetooth/blueToothUtil.js';
 
+const AV = require('../../libs/av-weapp-min.js');
 const MinFreq = 20;
 const MaxFreq = 20000;
 const MinQuality = 0.3;
@@ -22,6 +23,9 @@ var that;
 var viewWidth;
 var curPosition;
 var isRunReset = false;
+
+var isSend = false;  //是否需要发送
+var isCompareing = false; //是否对比
 
 Page({
   data: {
@@ -92,29 +96,29 @@ Page({
   },
   //圆点移动
   viewMoveChange: function(e){
-    
     if (isRunReset) return
+    isSend = true;  //控制可以发送蓝牙数据
     let x = e.detail.x + 4;
     let y = e.detail.y + 4;
     let index = e.target.dataset.id;
-    if(!that.curX || !that.curY){
-      that.curX = x;
-      that.curY = y;
-    }
+    // if(!that.curX || !that.curY){
+    //   that.curX = x;
+    //   that.curY = y;
+    // }
     if (index != that.data.ctrlViewIndex){
       that.setData({
         ctrlViewIndex: index
       })
-    }else{
-      if (Math.abs(that.curX - x) >= 10 || Math.abs(that.curY - y) >= 10){
-        that.curX = x;
-        that.curY = y;
-      }else{
-        return;
-      }
-      
-      //console.log(that.curX + '--------------' + that.curY)
     }
+    // else{
+    //   if (Math.abs(that.curX - x) >= 10 || Math.abs(that.curY - y) >= 10){
+    //     that.curX = x;
+    //     that.curY = y;
+    //   }else{
+    //     return;
+    //   }
+    //   //console.log(that.curX + '--------------' + that.curY)
+    // }
     let data = that.data.peakingEQList;
     for (let i = 0; i < data.length; i++){
       if(data[i].index == index){
@@ -168,6 +172,7 @@ Page({
   //复位
   onResetClick: function(e){
     isRunReset = true
+    isSend = true
     that.patternData = JSON.parse(that.originStrData);
     var peq = typeof that.patternData.peakingEQList == 'string' ? JSON.parse(that.patternData.peakingEQList) : that.patternData.peakingEQList
     let data = getPatternXYData(peq);
@@ -181,10 +186,30 @@ Page({
     setOptionAll(that.chartAll, getAllOption());
   },
   //保存
-  onSaveClick: function(e){
-    that.patternData.peakingEQList = that.data.peakingEQList;
-    var patternData = JSON.stringify(that.patternData)
-    util.redirectPage('../save/save?data=' + patternData)
+  bindGetUserInfo: function(e){
+    console.log(e)
+    const user = AV.User.current();
+    user.set(e.detail.userInfo).save().then(user => {
+      app.globalData.user = user.toJSON();
+    }).catch(console.error);
+
+    // if (!app.globalData.user || that.patter.uid != app.globalData.user.objectId) {
+    //   wx.showActionSheet({
+    //     itemList: ['你无权分享非原著作品'],
+    //     success: function (res) {
+    //       if(res.tapIndex == 0){
+
+    //       } else if (res.tapIndex == 1){
+
+    //       }
+    //     }
+    //   })
+    //   return
+    // }
+
+    // that.patternData.peakingEQList = that.data.peakingEQList;
+    // var patternData = JSON.stringify(that.patternData)
+    // util.redirectPage('../save/save?data=' + patternData)
   },
   //控制左右滑动圆移动
   onTouchMove: function(e){
@@ -214,6 +239,7 @@ Page({
         break;
       }
     }
+    isSend = true;//控制可以发送蓝牙数据
     setOptionAll(that.chartAll, getAllOption());
   },
   //控制左右滑动圆开始滑动
@@ -238,8 +264,35 @@ Page({
   },
   //对比
   onCompareClick: function(e){
-    var btData = btrequest.createPeakingEQ(that.patternData)
-    btutil.send(btData)
+    if (!btutil.isConnected()) {
+      btutil.startConnect()
+      return
+    }
+
+    if (isCompareing){
+      isCompareing = false
+    }else{
+      isSend = true;
+      isCompareing = true
+    }
+
+    if (that.sendDataTimer) {
+      clearInterval(that.sendDataTimer)
+    }
+    if (isCompareing){
+      that.sendDataTimer = setInterval(function () {
+        if (isSend) {
+          isSend = false
+          that.patternData.position = 0
+          let btData = btrequest.createPeakingEQ(that.patternData)
+          btutil.send(btData)
+        }
+      }, 1000);
+    }else{
+      let btData = btrequest.createPeakingEQ(JSON.parse(that.originStrData))
+      btutil.send(btData)
+    }
+    
   }
 });
 

@@ -1,3 +1,5 @@
 {
-  "navigationBarTitleText": "保存"
+  "navigationBarTitleText": "保存",
+  "disableScroll": true
+
 }

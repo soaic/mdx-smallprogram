@@ -4,6 +4,7 @@ import util from '../../utils/util.js';
 import audioTable from '../../db/audioTable.js';
 
 var that;
+var app = getApp();
 Page({
 
   /**
@@ -28,6 +29,15 @@ Page({
 
   },
   onDeleteClick: function(e) {
+    if (!app.globalData.user || that.patter.uid != app.globalData.user.objectId) {
+      wx.showActionSheet({
+        itemList: ['你无权删除非原著作品'],
+        success: function (res) {
+
+        }
+      })
+      return
+    }
     wx.showModal({
       content: '确定要删除 \'' + that.data.name + '\' 音效吗？',
       success: function (res) {
@@ -56,10 +66,27 @@ Page({
 
   },
   onModifyClick: function(options) {
+    if (!app.globalData.user || that.patter.uid != app.globalData.user.objectId){
+      wx.showActionSheet({
+        itemList: ['你无权修改非原著作品'],
+        success: function (res) {
+          
+        }
+      })
+      return
+    }
     util.redirectPage('../add/add?data=' + JSON.stringify(that.patter))
   },
   onShareClick: function(options) {
-    var that = this;
+    if (!app.globalData.user || that.patter.uid != app.globalData.user.objectId) {
+      wx.showActionSheet({
+        itemList: ['你无权分享非原著作品'],
+        success: function (res) {
+
+        }
+      })
+      return
+    }
     //分享
     if (that.patter.shareState != '0'){
       wx.showToast({

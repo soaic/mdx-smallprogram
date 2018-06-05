@@ -15,7 +15,7 @@ const NAME_FIRST = 'MDX'
 const UUID_SERV_1 = '00006666-0000-1000-8000-00805F9B34FB'
 const UUID_SERV_2 = '00007777-0000-1000-8000-00805F9B34FB'
 var resetNum = 0
-var getDeviceFoundTimer, getConnectedTimer, discoveryDevicesTimer
+var getConnectedTimer, discoveryDevicesTimer
 var connected = false
 var available, discovering
 var deviceId
@@ -25,10 +25,6 @@ var characteristicId_r, characteristicId_w
 //开启适配，如果失败提示设备蓝牙不可用，同时开启蓝牙适配器状态监听
 function startConnect() {
   wx.hideLoading()
-  if (getDeviceFoundTimer) {
-    clearInterval(getDeviceFoundTimer);
-    getDeviceFoundTimer = null;
-  }
   if (getConnectedTimer) {
     clearTimeout(getConnectedTimer);
     getConnectedTimer = null;
@@ -131,11 +127,6 @@ function startBluetoothDevicesDiscovery() {
         })
       } else {
         onBluetoothDeviceFound();
-        // getDeviceFoundTimer = setTimeout(function () {
-          
-        //   resetNum = resetNum + 1
-        // }, 5000);
-
       }
     },
     fail: function (err) {
@@ -216,8 +207,6 @@ function onBluetoothDeviceFound() {
         (localName && localName.indexOf(NAME_FIRST) != -1)) {
         deviceId = devs['deviceId'];
         //取消搜索
-        clearInterval(getDeviceFoundTimer);
-        getDeviceFoundTimer = null;
         startConnectDevices();
       }
 

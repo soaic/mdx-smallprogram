@@ -1,19 +1,19 @@
 <!--pages/save/save.wxml-->
 <view class='root_view v'>
-  <cover-view class="h center switch_bar" style='position: fixed; top: 0;right: 0;width: 100%;z-idnex:10'>
-    <cover-view style='flex:1;' class='v center_v' id="0" catchtap="swichNav">
-      <cover-view>我的音效</cover-view>
-      <cover-view style="font-size:20px;line-height:10px;height:10px"></cover-view>
-    </cover-view>
-    <cover-view style='flex:1' class='v center_v' id="1" catchtap="swichNav">
-      <cover-view>调音师</cover-view>
-      <cover-view style="font-size:20px;line-height:10px;height:10px">···</cover-view>
-    </cover-view>
-    <cover-view style='flex:1' class='v center_v' id="2" catchtap="swichNav">
-      <cover-view>热门音效</cover-view>
-      <cover-view style="font-size:20px;line-height:10px;height:10px"></cover-view>
-    </cover-view>
-  </cover-view>
+  <view class="h center switch_bar" style='position: fixed; top: 0;right: 0;width: 100%;z-idnex:10'>
+    <view style='flex:1;' class='v center_v' id="0" catchtap="swichNav">
+      <view>我的音效</view>
+      <view style="font-size:20px;line-height:10px;height:10px"></view>
+    </view>
+    <view style='flex:1' class='v center_v' id="1" catchtap="swichNav">
+      <view>调音师</view>
+      <view style="font-size:20px;line-height:10px;height:10px">···</view>
+    </view>
+    <view style='flex:1' class='v center_v' id="2" catchtap="swichNav">
+      <view>热门音效</view>
+      <view style="font-size:20px;line-height:10px;height:10px"></view>
+    </view>
+  </view>
   <view class='v center text_view' style='width:100%;margin-top:50px;'>
     <view style="width:{{winWidth-40}}px;margin-top:25px">名称</view>
     <input bindinput="bindNameInput" style="width:{{winWidth-40}}px;height:30px;padding-left:5px" maxlength="15" class='input_view' type='text' confirm-type='next' value='{{name}}'></input>
@@ -34,8 +34,9 @@
       </block>
     </view>
   </view>
+</view>
 
-  <view bindtap='onCancelClick' class='a h center'  style='bottom:20px;width:88px;height:56px;'>
+<view bindtap='onCancelClick' class='a h center'  style='bottom:20px;width:88px;height:56px;'>
     <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_left.png'></image>
     <text class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>取消</text>
   </view>
@@ -44,6 +45,3 @@
     <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_right.png'></image>
     <view class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>确定</view>
   </view>
-
-
-</view>
