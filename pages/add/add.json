@@ -3,5 +3,6 @@
     "ec-canvas": "../../ec-canvas/ec-canvas"
   },
   "navigationBarTitleText": "调音师",
-  "enablePullDownRefresh": false
+  "enablePullDownRefresh": false,
+  "disableScroll": true
 }

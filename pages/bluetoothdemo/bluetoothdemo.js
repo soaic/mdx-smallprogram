@@ -21,9 +21,9 @@ Page({
     that.setData({
       sendText: buf2hex(btrequest.handShakeReq())
     })
-    if (btutil.isResetConnect()) {
-      btutil.startConnect()
-    }
+    // if (btutil.isResetConnect()) {
+    //   btutil.startConnect()
+    // }
     btutil.setOnConnectListener(function(str){
       console.log("str="+str)
       that.setData({

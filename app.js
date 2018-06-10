@@ -9,10 +9,10 @@ console.log(AV);
 
 App({
   onLaunch: function () {
-    // AV.User.loginWithWeapp().then(user => {
-    //   this.globalData.user = user.toJSON();
-    //   wx.setStorageSync('uid', this.globalData.user.objectId)
-    // }).catch(console.error);
+    AV.User.loginWithWeapp().then(user => {
+      this.globalData.user = user.toJSON();
+      wx.setStorageSync('uid', this.globalData.user.objectId)
+    }).catch(console.error);
   },
   onShow: function () {
     if (!blueTooth.isConnected()) {

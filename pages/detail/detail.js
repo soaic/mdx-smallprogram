@@ -39,7 +39,7 @@ Page({
       return
     }
     wx.showModal({
-      content: '确定要删除 \'' + that.data.name + '\' 音效吗？',
+      content: '确定要删除 \'' + that.patter.name_zh_cn + '\' 音效吗？',
       success: function (res) {
         if (res.confirm) {
           patterns.removeData(that.data.selectPosition)

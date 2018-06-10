@@ -100,6 +100,26 @@ Page({
     that.partten.icon = that.data.icon
     that.partten['uname'] = app.globalData.user.nickName
     that.partten['uphoto'] = app.globalData.user.avatarUrl
+
+    if (!that.partten.name_zh_cn){
+      wx.showToast({
+        title: '请填写名称',
+      })
+      return
+    }
+    if (!that.partten.descript) {
+      wx.showToast({
+        title: '请填写介绍',
+      })
+      return
+    }
+    if (!that.partten.icon) {
+      wx.showToast({
+        title: '请选择图标',
+      })
+      return
+    }
+
     if(that.partten.id){
       //更新
       audioTable.update({

@@ -187,29 +187,35 @@ Page({
   },
   //保存
   bindGetUserInfo: function(e){
-    console.log(e)
-    const user = AV.User.current();
-    user.set(e.detail.userInfo).save().then(user => {
-      app.globalData.user = user.toJSON();
-    }).catch(console.error);
+    if (e.detail.userInfo){
+      const user = AV.User.current();
+      user.set(e.detail.userInfo).save().then(user => {
+        app.globalData.user = user.toJSON();
+      }).catch(console.error);
 
-    // if (!app.globalData.user || that.patter.uid != app.globalData.user.objectId) {
-    //   wx.showActionSheet({
-    //     itemList: ['你无权分享非原著作品'],
-    //     success: function (res) {
-    //       if(res.tapIndex == 0){
-
-    //       } else if (res.tapIndex == 1){
-
-    //       }
-    //     }
-    //   })
-    //   return
-    // }
-
-    // that.patternData.peakingEQList = that.data.peakingEQList;
-    // var patternData = JSON.stringify(that.patternData)
-    // util.redirectPage('../save/save?data=' + patternData)
+      if (that.patternData.objectId) {
+        wx.showActionSheet({
+          itemList: ['保存', '另存为'],
+          success: function (res) {
+            if (res.tapIndex == 0) {
+              that.patternData.peakingEQList = that.data.peakingEQList;
+              var patternData = JSON.stringify(that.patternData)
+              util.redirectPage('../save/save?data=' + patternData)
+            } else if (res.tapIndex == 1) {
+              var pdata = {}
+              pdata.position = '0'
+              pdata.peakingEQList = that.data.peakingEQList
+              var patternData = JSON.stringify(pdata)
+              util.redirectPage('../save/save?data=' + patternData)
+            }
+          }
+        })
+      } else {
+        that.patternData.peakingEQList = that.data.peakingEQList;
+        var patternData = JSON.stringify(that.patternData)
+        util.redirectPage('../save/save?data=' + patternData)
+      }
+    }
   },
   //控制左右滑动圆移动
   onTouchMove: function(e){

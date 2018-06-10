@@ -19,11 +19,12 @@
   <text class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>首页</text>
 </view>
 
-<view catchtap='onDetailClick' class='a v center_h' style="display:{{detailViewDisplay}};bottom:20px;left:50%;margin-left:-60px;width:120px;height:86px;">
+<view class='a v center_h' style="display:{{detailViewDisplay}};bottom:20px;left:50%;margin-left:-60px;width:120px;height:86px;">
   <text class='h center_h item_text' style="margin-bottom:10px;">{{selectName}}</text>
   <view class='h center' style='width:120px;height:56px;'>
     <image class='a' style='z-index:9;width:120px;height:56px' src='/images/button_center.png'></image>
-    <text class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>详情</text>
+    <view style='z-index:10;font-weight:bold;color:white;font-size:16px;'>详情</view>
+      <button open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" class='a h center' style='opacity:0;z-index:11;'>详情</button>
   </view>
 </view>
 

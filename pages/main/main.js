@@ -5,7 +5,7 @@ import btutil from '../../bluetooth/blueToothUtil.js';
 import btrequest from '../../bluetooth/bluetoothRequest.js';
 import btresponse from '../../bluetooth/bluetoothResponse.js';
 import audioTable from '../../db/audioTable.js';
-
+const AV = require('../../libs/av-weapp-min.js');
 const app = getApp();
 var that;
 var viewWidth;
@@ -53,14 +53,14 @@ Page({
       image_height: (windowWidth / 4 - 36) * 197 / 188,
       isConnected: btutil.isConnected()
     });
-    wx.showLoading({
-      title: '加载中...',
-    })
+    // wx.showLoading({
+    //   title: '加载中...',
+    // })
     const uid = wx.getStorageSync('uid')
     audioTable.requestMainEq({
       uid: uid,
       success: function (res) {
-        wx.hideLoading()
+        //wx.hideLoading()
         var downloadData = wx.getStorageSync("downloadData");
         console.log(downloadData)
         var array = []
@@ -73,7 +73,7 @@ Page({
         })
       }, fail: function (err) {
         console.error(err)
-        wx.hideLoading()
+        //wx.hideLoading()
       }
     })
     
@@ -108,7 +108,7 @@ Page({
           case btresponse.data.GetIDRsp: {
             var playload = rsp.playLoad;
             var fullId = playload.toString();
-            LogUtil.d(TAG, "getIdRsp = " , fullId);
+            console.log("getIdRsp = " , fullId);
             if (fullId) {
               var pos = fullId.indexOf('0');
               var id = fullId.substring(0, pos);
@@ -164,7 +164,13 @@ Page({
 
   },
   //详情
-  onDetailClick: function(e){
+  bindGetUserInfo: function(e){
+    if (e.detail.userInfo) {
+      const user = AV.User.current();
+      user.set(e.detail.userInfo).save().then(user => {
+        app.globalData.user = user.toJSON();
+      }).catch(console.error);
+    }
     that.setData({
       detailViewDisplay: 'none'
     });
