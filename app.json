@@ -8,8 +8,8 @@
     "pages/detail/detail",
     "pages/setting/setting",
     "pages/index/index",
-    "pages/logs/logs",
-    "pages/bluetoothdemo/bluetoothdemo"
+    "pages/bluetoothdemo/bluetoothdemo",
+    "pages/logs/logs"
   ],
   "window": {
     "backgroundTextStyle": "light",

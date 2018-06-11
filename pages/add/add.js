@@ -24,8 +24,9 @@ var viewWidth;
 var curPosition;
 var isRunReset = false;
 
-var isSend = false;  //是否需要发送
-var isCompareing = false; //是否对比
+var isSend = true;  //是否需要发送
+var isCompareing = true; //是否对比
+var isEdited = false; //是否编辑了
 
 Page({
   data: {
@@ -72,14 +73,13 @@ Page({
     //获取屏幕宽度
     viewWidth = res.windowWidth - 30;
     var peq;
-    console.log("option.data", option.data)
     if (option.data){
       that.patternData = JSON.parse(option.data);
       that.originStrData = option.data;
       peq = JSON.parse(that.patternData.peakingEQList)  //数据库存放的是json字符串，需要转换json对象
     }else{
-      that.patternData = patterns.defaultPattern;
-      that.originStrData = JSON.stringify(that.patternData)
+      that.originStrData = JSON.stringify(patterns.defaultPattern)
+      that.patternData = JSON.parse(that.originStrData)
       peq = that.patternData.peakingEQList
     }
     
@@ -93,10 +93,15 @@ Page({
       tipFreq10KMargin: getPointXByFreq(10000),
       tipFreq20KMargin: getPointXByFreq(20000),
     });
+    if (that.sendDataTimer) {
+      clearInterval(that.sendDataTimer)
+    }
+    that.sendDataTimer = setInterval(sendData, 200);
   },
   //圆点移动
   viewMoveChange: function(e){
     if (isRunReset) return
+    isEdited = true
     isSend = true;  //控制可以发送蓝牙数据
     let x = e.detail.x + 4;
     let y = e.detail.y + 4;
@@ -155,7 +160,7 @@ Page({
       if (data[i].index == indexId) {
         let item = data[i];
         that.setData({
-          circleWidth: item.quality * 20 + 50,
+          circleWidth: item.quality * 20 + 30,
           curQuality: item.quality.toFixed(1)
         })
         break;
@@ -171,6 +176,7 @@ Page({
   }, 
   //复位
   onResetClick: function(e){
+    isEdited = false
     isRunReset = true
     isSend = true
     that.patternData = JSON.parse(that.originStrData);
@@ -193,32 +199,12 @@ Page({
         app.globalData.user = user.toJSON();
       }).catch(console.error);
 
-      if (that.patternData.objectId) {
-        wx.showActionSheet({
-          itemList: ['保存', '另存为'],
-          success: function (res) {
-            if (res.tapIndex == 0) {
-              that.patternData.peakingEQList = that.data.peakingEQList;
-              var patternData = JSON.stringify(that.patternData)
-              util.redirectPage('../save/save?data=' + patternData)
-            } else if (res.tapIndex == 1) {
-              var pdata = {}
-              pdata.position = '0'
-              pdata.peakingEQList = that.data.peakingEQList
-              var patternData = JSON.stringify(pdata)
-              util.redirectPage('../save/save?data=' + patternData)
-            }
-          }
-        })
-      } else {
-        that.patternData.peakingEQList = that.data.peakingEQList;
-        var patternData = JSON.stringify(that.patternData)
-        util.redirectPage('../save/save?data=' + patternData)
-      }
+      saveData();
     }
   },
   //控制左右滑动圆移动
   onTouchMove: function(e){
+    isEdited = true
     var mType = e.currentTarget.dataset.type
     var changeX = 0
     if(mType == 'left'){
@@ -227,7 +213,7 @@ Page({
       changeX = e.touches[0].clientX - that.clientX
     }
     var cw = that.data.circleWidth + changeX
-    var cq = (cw - 50)/20
+    var cq = (cw - 30)/20
     if (cq < MinQuality || cq > MaxQuality){
       return;
     }
@@ -261,11 +247,34 @@ Page({
     if (that.data.currentTab == e.currentTarget.id) {
       return false;
     } else {
-      if (e.currentTarget.id == 0) {
-        util.redirectPage('../main/main')
-      } else if (e.currentTarget.id == 2) {
-        util.redirectPage('../hot/hot')
+      if (isEdited){
+        //提示是否保存
+        wx.showModal({
+          content: '是否保存?',
+          confirmText: '保存',
+          success: function (res) {
+            if (res.confirm) {
+              if(app.globalData.user){
+                saveData()
+              }
+            } else if (res.cancel) {
+              if (e.currentTarget.id == 0) {
+                util.redirectPage('../main/main')
+              } else if (e.currentTarget.id == 2) {
+                util.redirectPage('../hot/hot')
+              }
+            }
+          }
+        })
+      }else{
+        if (e.currentTarget.id == 0) {
+          util.redirectPage('../main/main')
+        } else if (e.currentTarget.id == 2) {
+          util.redirectPage('../hot/hot')
+        }
       }
+
+      
     }
   },
   //对比
@@ -286,14 +295,7 @@ Page({
       clearInterval(that.sendDataTimer)
     }
     if (isCompareing){
-      that.sendDataTimer = setInterval(function () {
-        if (isSend) {
-          isSend = false
-          that.patternData.position = 0
-          let btData = btrequest.createPeakingEQ(that.patternData)
-          btutil.send(btData)
-        }
-      }, 1000);
+      that.sendDataTimer = setInterval(sendData, 200);
     }else{
       let btData = btrequest.createPeakingEQ(JSON.parse(that.originStrData))
       btutil.send(btData)
@@ -301,6 +303,40 @@ Page({
     
   }
 });
+
+function saveData(){
+  if (that.patternData.objectId) {
+    wx.showActionSheet({
+      itemList: ['保存', '另存为'],
+      success: function (res) {
+        if (res.tapIndex == 0) {
+          that.patternData.peakingEQList = that.data.peakingEQList;
+          var patternData = JSON.stringify(that.patternData)
+          util.redirectPage('../save/save?data=' + patternData)
+        } else if (res.tapIndex == 1) {
+          var pdata = {}
+          pdata.position = '0'
+          pdata.peakingEQList = that.data.peakingEQList
+          var patternData = JSON.stringify(pdata)
+          util.redirectPage('../save/save?data=' + patternData)
+        }
+      }
+    })
+  } else {
+    that.patternData.peakingEQList = that.data.peakingEQList;
+    var patternData = JSON.stringify(that.patternData)
+    util.redirectPage('../save/save?data=' + patternData)
+  }
+}
+
+function sendData(){
+  if (isSend) {
+    isSend = false
+    that.patternData.position = 0
+    let btData = btrequest.createPeakingEQ(that.patternData)
+    btutil.send(btData)
+  }
+}
 
 function getAllOption(){
   var data = that.data.peakingEQList;
@@ -438,7 +474,10 @@ function drawLine(x, y, q) {
 function getBIQArrayDataByPointXY(x, y, q){
   var mGain = getGainByPointY(y);
   var mFreq = getFreqByPointX(x, false);
-  BiQuadFilter.biqfilter.create(BIQType, mFreq, SampleFreq, q, mGain);
+
+  var tempQ = (3.0 - (q - 0.3))
+
+  BiQuadFilter.biqfilter.create(BIQType, mFreq, SampleFreq, tempQ, mGain);
   var dataArray = new Array();
   let da
   for (var i = 0; i < MaxFreq; i = i + 100) {

@@ -2,7 +2,7 @@
 .input_view{
   border: 1px solid gray;
   width: 80%;
-  height: 150px;
+  height: 50px;
   margin-left: 5%;
   padding: 10px;
 }

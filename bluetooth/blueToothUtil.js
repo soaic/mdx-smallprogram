@@ -12,6 +12,7 @@ const systemError = 10008
 const systemNotSupport = 10009
 
 const NAME_FIRST = 'MDX'
+const NAME_FIRST_2 = '6007APP'
 const UUID_SERV_1 = '00006666-0000-1000-8000-00805F9B34FB'
 const UUID_SERV_2 = '00007777-0000-1000-8000-00805F9B34FB'
 const UUID_SERV_3 = '00001800-0000-1000-8000-00805F9B34FB'
@@ -127,7 +128,7 @@ function startBluetoothDevicesDiscovery() {
     title: '蓝牙搜索中...'
   });
   wx.startBluetoothDevicesDiscovery({
-    services: [UUID_SERV_1, UUID_SERV_2],
+    services: [UUID_SERV_1],
     allowDuplicatesKey: true,
     success: function (res) {
       console.log("startBluetoothDevicesDiscovery",res)
@@ -142,9 +143,9 @@ function startBluetoothDevicesDiscovery() {
                 var value = devices[index]
                 console.log("localName=", value['localName'])
                 console.log("name=", value['name'])
-                var isLocalName = value['localName'] && value['localName'].indexOf(NAME_FIRST) != -1
-                var name = value['name'] && value['name'].indexOf(NAME_FIRST) != -1
-                if (isLocalName || name) {
+                var isName1 = (value['localName'] && value['localName'].indexOf(NAME_FIRST) != -1) || (value['name'] && value['name'].indexOf(NAME_FIRST) != -1)
+                var isName2 = (value['localName'] && value['localName'].indexOf(NAME_FIRST_2) != -1) || (value['name'] && value['name'].indexOf(NAME_FIRST_2) != -1)
+                if (isName1 || isName2) {
                   // 如果存在包含NAME_FIRST字段的设备
                   flag = true
                   deviceId = value['deviceId'];
@@ -176,7 +177,7 @@ function startBluetoothDevicesDiscovery() {
 //获取已配对的蓝牙设备
 function getConnectedBluetoothDevices() {
   wx.getConnectedBluetoothDevices({
-    services: [UUID_SERV_1, UUID_SERV_2],
+    services: [UUID_SERV_1],
     success: function (res) {
       console.log("getConnectedBluetoothDevices success",res)
       var devices = res['devices'], flag = false
@@ -185,9 +186,9 @@ function getConnectedBluetoothDevices() {
           var value = devices[index]
           console.log("localName=", value['localName'])
           console.log("name=", value['name'])
-          var isLocalName = value['localName'] && value['localName'].indexOf(NAME_FIRST) != -1
-          var name = value['localName'] && value['localName'].indexOf(NAME_FIRST) != -1
-          if (isLocalName || name) {
+          var isName1 = (value['localName'] && value['localName'].indexOf(NAME_FIRST) != -1) || (value['name'] && value['name'].indexOf(NAME_FIRST) != -1)
+          var isName2 = (value['localName'] && value['localName'].indexOf(NAME_FIRST_2) != -1) || (value['name'] && value['name'].indexOf(NAME_FIRST_2) != -1)
+          if (isName1 || isName2) {
             // 如果存在包含NAME_FIRST字段的设备
             flag = true
             deviceId = value['deviceId'];
@@ -217,26 +218,26 @@ function onBluetoothDeviceFound() {
   });
   wx.onBluetoothDeviceFound(function (res) {
     console.log("onBluetoothDeviceFound",res)
-    var devs;
+    var value;
     if (res.deviceId) {
-      devs = res
+      value = res
     }else if (res.devices) {
       if(res.devices[0]){
-        devs = res.devices[0]
+        value = res.devices[0]
       }else{
-        devs = res.devices
+        value = res.devices
       }
     }else if (res[0]) {
-      devs = res[0]
+      value = res[0]
     }
-    if (devs) {
-      var name = devs['name'];
-      var localName = devs['localName'];
-      if ((name && name.indexOf(NAME_FIRST) != -1) ||
-        (localName && localName.indexOf(NAME_FIRST) != -1)) {
-        deviceId = devs['deviceId'];
+    if (value) {
+      var isName1 = (value['localName'] && value['localName'].indexOf(NAME_FIRST) != -1) || (value['name'] && value['name'].indexOf(NAME_FIRST) != -1)
+      var isName2 = (value['localName'] && value['localName'].indexOf(NAME_FIRST_2) != -1) || (value['name'] && value['name'].indexOf(NAME_FIRST_2) != -1)
+      if (isName1 || isName2) {
+        deviceId = value['deviceId'];
         //开始连接
         if (deviceId){
+          stopBluetoothDevicesDiscovery();
           startConnectDevices();
           return
         }

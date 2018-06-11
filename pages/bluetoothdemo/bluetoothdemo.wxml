@@ -5,10 +5,8 @@
 <view>{{sendTextHex}}</view>
 <textarea value='{{sendText}}' bindinput="onTextInputChange" class='input_view'></textarea>
 <view>接收到的数据:</view>
-<textarea value='{{receiveText}}' class='input_view'></textarea>
-<button bindtap='onSendClick' type='primary' style='margin-top:10px'>发送</button>
-<button wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
-<view wx:else>请升级微信版本</view>
+<view class='input_view' style="word-break:break-all;height:50%;">{{receiveText}}</view>
+<button bindtap='onSendClick' type='primary' class='a' style='width:100%; margin-top:10px; bottom:0;'>发送</button>
     
 
 
