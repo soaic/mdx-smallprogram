@@ -44,6 +44,13 @@ Page({
     var windowHeight = res.windowHeight;
     viewWidth = windowWidth - 30;
     
+    this.scaleAnimation = wx.createAnimation({
+      duration: 500,
+      timingFunction: 'ease',
+      delay: 0,
+      transformOrigin: "50% 50%"
+    })
+
     that.setData({
       winWidth: windowWidth,
       winHeight: windowHeight,
@@ -140,13 +147,18 @@ Page({
   },
   //音效点击
   onItemClick: function(e){
+
+    that.scaleAnimation.scale(1.1, 1.1).step().scale(1, 1).step()
+    
+
     let index = e.currentTarget.id
     let pattern = that.data.patternsData[index]
     pattern['id'] = pattern.objectId
     that.setData({
       selectPosition: index,
       selectName: pattern.name_zh_cn,
-      detailViewDisplay: 'show'
+      detailViewDisplay: 'show',
+      scaleAnimation: that.scaleAnimation.export()
     });
     //把pattern数据转成ArrayBuffer,然后通过蓝牙发送数据
     if (that.data.isConnected){
@@ -165,16 +177,16 @@ Page({
   },
   //详情
   bindGetUserInfo: function(e){
-    if (e.detail.userInfo) {
-      const user = AV.User.current();
-      user.set(e.detail.userInfo).save().then(user => {
-        app.globalData.user = user.toJSON();
-      }).catch(console.error);
-    }
+    // if (e.detail.userInfo) {
+    //   const user = AV.User.current();
+    //   user.set(e.detail.userInfo).save().then(user => {
+    //     app.globalData.user = user.toJSON();
+    //   }).catch(console.error);
+    // }
     that.setData({
       detailViewDisplay: 'none'
     });
-    util.redirectPage('../detail/detail?data=' + JSON.stringify(that.data.patternsData[that.data.selectPosition]))
+    util.intentPage('../detail/detail?data=' + JSON.stringify(that.data.patternsData[that.data.selectPosition]))
   },
   onHomeClick: function (e) {
     

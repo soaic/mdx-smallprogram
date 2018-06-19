@@ -1,6 +1,8 @@
 // pages/hot.js
 import util from '../../utils/util.js'
 import audioTable from '../../db/audioTable.js';
+import btutil from '../../bluetooth/blueToothUtil.js';
+import btrequest from '../../bluetooth/bluetoothRequest.js';
 
 var that;
 var app = getApp()
@@ -12,11 +14,11 @@ Page({
   data: {
     curSelect: 0,
     curSelctItemIndex: -1,
-    curSelctTop: 0,
     curSelectItem: null,
     officialData: [],
     usersData:[],
-    windowHeight: 0
+    windowHeight: 0,
+    windowWidth: 0
   },
 
   /**
@@ -24,28 +26,27 @@ Page({
    */
   onLoad: function (options) {
     that = this;
+    that.sort = 'createdAt'
+    that.translateAnimation = wx.createAnimation({
+      duration: 1000,
+      timingFunction: 'ease',
+    })
 
     var systemInfo = wx.getSystemInfoSync();
     that.setData({
-      windowHeight: systemInfo.windowHeight
+      windowHeight: systemInfo.windowHeight,
+      windowWidth: systemInfo.windowWidth
     })
 
     wx.showLoading({
       title: '加载中...',
     })
-    audioTable.queryOfficalShare({
-      success: function(res){
-        wx.hideLoading()
-        that.setData({
-          officialData: res
-        })
-      }, fial: function(res){
-        console.log(res)
-        wx.hideLoading()
-      }
-    })
+
+    queryOffice()
+    queryUser()
 
     audioTable.queryUserShare({
+      sort: that.sort,
       success: function (res) {
         that.setData({
           usersData: res
@@ -80,20 +81,35 @@ Page({
     } 
   },
   onItemClick: function(e){
+
+    // that.translateAnimation.translate(that.data.windowWidth, 0).step()
+    // that.translateAnimation.translate(0, 0).step({ duration: 0})
+
     that.setData({
       curSelectItem: e.currentTarget.id,
-      curSelctItemIndex: e.currentTarget.dataset.index,
-      curSelctTop: that.data.curSelect
+      curSelctItemIndex: e.currentTarget.dataset.index
     });
 
     if (that.operationDisplayTimer) {
-      clearTimeout(that.detailDisplayTimer)
+      clearTimeout(that.operationDisplayTimer)
     }
     that.operationDisplayTimer = setTimeout(function () {
       that.setData({
         curSelectItem: null
       })
     }, 3000);
+    var pattent
+    if (that.data.curSelect == 0) {
+      pattent = that.data.officialData[that.data.curSelctItemIndex]
+    } else if (that.data.curSelect == 1) {
+      pattent = that.data.usersData[that.data.curSelctItemIndex]
+    }
+    if (btutil.isConnected()) {
+      if (pattent) {
+        var btData = btrequest.createPeakingEQ(pattent.attributes)
+        btutil.send(btData)
+      }
+    }
   },
   
   onLikeClick: function(e){
@@ -107,13 +123,13 @@ Page({
           title: '点赞成功',
         })
         
-        if (that.data.curSelctTop == 0){
+        if (that.data.curSelect == 0){
           that.data.officialData[that.data.curSelctItemIndex] = res
           console.log(that.data.officialData)
           that.setData({
             officialData: that.data.officialData
           })
-        } else if (that.data.curSelctTop == 1){
+        } else if (that.data.curSelect == 1){
           that.data.usersData[that.data.curSelctItemIndex] = res
           that.setData({
             usersData: that.data.usersData
@@ -164,14 +180,14 @@ Page({
       downloadData = []
     }
 
-    if (that.data.curSelctTop == 0) {
+    if (that.data.curSelect == 0) {
       var curItem = that.data.officialData[that.data.curSelctItemIndex]
       downloadData.push(curItem)
       wx.setStorage({ key: 'downloadData', data: downloadData})
       wx.showToast({
         title: '下载成功',
       })
-    } else if (that.data.curSelctTop == 1) {
+    } else if (that.data.curSelect == 1) {
       var curItem = that.data.usersData[that.data.curSelctItemIndex]
       downloadData.push(curItem)
       wx.setStorage({ key: 'downloadData', data: downloadData })
@@ -182,5 +198,55 @@ Page({
     that.setData({
       curSelectItem: null
     })
+  },
+  sortClick: function(res){
+    wx.showActionSheet({
+      itemList: ['按时间','按点赞数'],
+      success: function(r){
+        if(r.tapIndex == 0){
+          that.sort = 'createdAt'
+          if (that.data.curSelect == 0) {
+            queryOffice()
+          } else if (that.data.curSelect == 1) {
+            queryUser()
+          }
+        } else if(r.tapIndex == 1){
+          that.sort = 'nicknum'
+          if (that.data.curSelect == 0) {
+            queryOffice()
+          } else if (that.data.curSelect == 1) {
+            queryUser()
+          }
+        }
+      }
+    })
   }
 })
+
+function queryOffice(){
+  audioTable.queryOfficalShare({
+    sort: that.sort,
+    success: function (res) {
+      wx.hideLoading()
+      that.setData({
+        officialData: res
+      })
+    }, fial: function (res) {
+      console.log(res)
+      wx.hideLoading()
+    }
+  })
+}
+
+function queryUser(){
+  audioTable.queryUserShare({
+    sort: that.sort,
+    success: function (res) {
+      that.setData({
+        usersData: res
+      })
+    }, fial: function (res) {
+      console.log(res)
+    }
+  })
+}

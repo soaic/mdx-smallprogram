@@ -25,9 +25,9 @@ var curPosition;
 var isRunReset = false;
 
 var isSend = true;  //是否需要发送
-var isCompareing = true; //是否对比
+var isCompareing = false; //是否对比
 var isEdited = false; //是否编辑了
-
+var isOriginSound = true;//是否是原声
 Page({
   data: {
     ctrlViewIndex : -1,
@@ -43,6 +43,7 @@ Page({
     tipFreq10KMargin: 0,
     tipFreq20KMargin: 0,
     circleWidth:70,
+    compareText: '原声',
     ec: {
       onInit: function (canvas, width, height) {
         const chart = echarts.init(canvas, null, {
@@ -279,6 +280,14 @@ Page({
   },
   //对比
   onCompareClick: function(e){
+    if (isOriginSound) {
+      isOriginSound = false;
+    } else {
+      isOriginSound = true;
+    }
+    that.setData({
+      compareText: isOriginSound ? '原声' : '音效'
+    })
     if (!btutil.isConnected()) {
       btutil.startConnect()
       return
@@ -291,6 +300,7 @@ Page({
       isCompareing = true
     }
 
+    
     if (that.sendDataTimer) {
       clearInterval(that.sendDataTimer)
     }
@@ -330,11 +340,11 @@ function saveData(){
 }
 
 function sendData(){
-  if (isSend) {
-    isSend = false
+  if (isSend && isCompareing) {
     that.patternData.position = 0
     let btData = btrequest.createPeakingEQ(that.patternData)
     btutil.send(btData)
+    isSend = false
   }
 }
 

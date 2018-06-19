@@ -24,7 +24,7 @@
     {{curFreq}}Hz  G:{{curGain}} Q:{{curQuality}}
   </view>
   <view class='r' style="height: 200px;width:{{winWidth-30}}px;padding-left:15px;padding-right:15px;">
-    <image src='/images/bg_eq.png' mode='center' class='a' style="z-index: 0; width:{{winWidth-30}}px;height:200px;"></image>
+    <image src='/images/bg_eq.png' mode='aspectFill' class='a' style="z-index: 0; width:{{winWidth-30}}px;height:200px;"></image>
     <ec-canvas class='a' style="height: 200px; width:{{winWidth-30}}px; z-index: 1;" id="mychart-dom-line-all" canvas-id="mychart-line-all" ec="{{ecAll}}"></ec-canvas>
     <!-- <ec-canvas class='a' style="height: 200px; width:{{winWidth-30}}px; z-index: 2;" id="mychart-dom-line" canvas-id="mychart-line" ec="{{ec}}"></ec-canvas> -->
   </view>
@@ -89,7 +89,7 @@
 
   <view catchtap='onCompareClick' class='a h center' style='bottom:20px;right:0px;width:88px;height:56px;'>
     <image class='a' style='z-index:9;width:88px;height:56px' src='/images/button_right.png'></image>
-    <view class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>对比</view>
+    <view class='a h center' style='font-weight:bold;z-index:10;color:white;font-size:16px;'>{{compareText}}</view>
   </view>
 
 </view>

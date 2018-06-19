@@ -1,6 +1,6 @@
 <template name="itemTemp">
   <view class='h center_v' id="{{item.objectId}}" data-index="{{idx}}" bindtap='onItemClick'>
-      <view style="height:55px;width:3px;background:{{item.objectId==curSelectItem?'#FB3A46':'#FFFFFF'}}"></view>
+      <view animation="{{item.objectId==curSelectItem?translateAnimation:null}}" style="height:55px;width:3px;background:{{item.objectId==curSelectItem?'#FB3A46':'#FFFFFF'}}"></view>
       <image style='background-color:grey;width:35px;height:35px;margin-left:20px' src='{{item.uphoto?item.uphoto:"/images/icon_logo.png"}}'></image>
       <view style='flex:1; margin-left:10px;' class='v'>
         <view class='h center_v'>

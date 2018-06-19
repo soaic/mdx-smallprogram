@@ -87,26 +87,39 @@ Page({
       })
       return
     }
-    //分享
-    if (that.patter.shareState != '0'){
-      wx.showToast({
-        title: '重复分享',
-      })
-      return;
-    }
-    console.log(that.patter.id)
-    audioTable.share({
-      id: that.patter.id,
+
+    wx.showActionSheet({
+      itemList: ['分享到热门音效','分享给好友'],
       success: function(res){
-        that.patter.shareState = res.attributes.shareState
-        wx.showToast({
-          title: '分享成功',
-        })
-      },
-      fail: function(err){
-        wx.showToast({
-          title: '分享失败,青重试',
-        })
+        if(res.tapIndex == 0){
+          //分享
+          if (that.patter.shareState != '0') {
+            wx.showToast({
+              title: '重复分享',
+            })
+            return;
+          }
+          console.log(that.patter.id)
+          audioTable.share({
+            id: that.patter.id,
+            success: function (res) {
+              that.patter.shareState = res.attributes.shareState
+              wx.showToast({
+                title: '分享成功',
+              })
+            },
+            fail: function (err) {
+              wx.showToast({
+                title: '分享失败,青重试',
+              })
+            }
+          })
+        }else if(res.tapIndex == 1){
+          wx.showModal({
+            title: '提示',
+            content: '请点击右上角菜单按钮分享给好友',
+          })
+        }
       }
     })
   },
@@ -118,6 +131,11 @@ Page({
     } else if (e.currentTarget.id == 2) {
       util.redirectPage('../hot/hot')
     } 
+  },
+  onShareAppMessage: function (options){
+    return {
+      title: that.patter.name_zh_cn,
+      path: '/pages/detail/detail?data=' + JSON.stringify(that.patter)
+    }
   }
-
 })

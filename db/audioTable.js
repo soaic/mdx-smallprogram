@@ -43,7 +43,7 @@ module.exports.searchEq = function searchEq(data){
 //查询用户分享
 module.exports.queryUserShare = function queryUserShare(data){
   if(!data) return 
-  AV.Query.doCloudQuery('select * from ' + tableName + ' where shareState = 2')
+  AV.Query.doCloudQuery('select * from ' + tableName + ' where shareState = 2 order by ' + data.sort + ' desc')
     .then(function (res) {
       var results = res.results;
       if (data.success) {
@@ -59,9 +59,9 @@ module.exports.queryUserShare = function queryUserShare(data){
 }
 
 //查询官方分享
-module.exports.queryOfficalShare = function queryOfficalShare(data){
+module.exports.queryOfficalShare = function queryOfficalShare(data, sort){
   if (!data) return 
-  AV.Query.doCloudQuery('select * from ' + tableName + ' where shareState = 1')
+  AV.Query.doCloudQuery('select * from ' + tableName + ' where shareState = 1 order by ' + data.sort + ' desc')
     .then(function (res) {
       var results = res.results;
       if (data.success) {

@@ -24,20 +24,21 @@
 
   <view style='width: 100%;height:30px;top:100px;z-idnex:10;position: fixed;' class='h center'>
     <input confirm-type="search" bindconfirm='searchInput' class='h search_input' placeholder="搜索"></input>
+    <view style='width:10%' catchtap='sortClick'>排序</view>
   </view>
 
   <swiper catchtouchmove='true' current="{{curSelect}}" bindchange="swiperChange" style='padding-top:140px;margin-bottom-10px;height:{{windowHeight - 150}}px' duration='300'>
     <swiper-item currentIndex="0">
       <scroll-view style='height:{{windowHeight - 150}}px' scroll-y='true'>
         <block wx:for="{{officialData}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
-          <template is="itemTemp" data="{{item,curSelectItem,idx}}"></template>
+          <template is="itemTemp" data="{{item,curSelectItem,idx,translateAnimation}}"></template>
         </block>
       </scroll-view>
     </swiper-item>
     <swiper-item currentIndex="1">
       <scroll-view style='height:{{windowHeight - 150}}px' scroll-y='true'>
         <block wx:for="{{usersData}}" wx:key="item" wx:for-index="idx" data-idx="{{idx}}">
-          <template is="itemTemp" data="{{item,curSelectItem,idx}}"></template>
+          <template is="itemTemp" data="{{item,curSelectItem,idx,translateAnimation}}"></template>
         </block>
       </scroll-view>
     </swiper-item>
